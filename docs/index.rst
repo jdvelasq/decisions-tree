@@ -11,10 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 4
 
-
-   tutorial
-   decisiontree
-
+plpt
 
 Indices and tables
 ===============================================================================
