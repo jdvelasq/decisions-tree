@@ -17,13 +17,12 @@ class DecisionTree:
     """
 
     def __init__(self, tree_name):
-        # pass
         self.datatree = TreeNode('DMTREE')
-        # self.variables = new_node(parent=self.datatree, tag='VARS')
-        # self.treenodes = new_node(parent=self.datatree, tag='TREENODES')
-        # self.tree_name = tree_name
-        # self.root = None
-        # self.globals = {}
+        self.variables = new_node(parent=self.datatree, tag='VARS')
+        self.treenodes = new_node(parent=self.datatree, tag='TREENODES')
+        self.tree_name = tree_name
+        self.root = None
+        self.globals = {}
     #
     # def terminal_node(self, expr=None):
     #     """Creates a tree's terminal node
