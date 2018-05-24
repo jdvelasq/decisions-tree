@@ -83,34 +83,34 @@ class TreeNode:
 
 
     # metodos que operan sobre los atributos (dict)
-#     def clear(self):
-#         self.text = None
-#         self.attrib.clear()
-#         self.children = []
-#
-#
-#     def get(self, key, default=None):
-#         return self.attrib.get(key, default)
-#
-#
-#     def set(self, key, value):
-#         self.attrib[key] = value
-#
-#
-#     def keys(self):
-#         return self.attrib.keys()
-#
-#
-#     def values(self):
-#         return self.attrib.values()
-#
-#
-#     def items(self):
-#         return self.attrib.items()
-#
-#
-#
-#
+    def clear(self):
+        self.text = None
+        self.attrib.clear()
+        self.children = []
+
+
+    def get(self, key, default=None):
+        return self.attrib.get(key, default)
+
+
+    def set(self, key, value):
+        self.attrib[key] = value
+
+
+    def keys(self):
+        return self.attrib.keys()
+
+
+    def values(self):
+        return self.attrib.values()
+
+
+    def items(self):
+        return self.attrib.items()
+
+
+
+
 # def new_node(parent, tag, attrib={}):
 #     """Returns a new node"""
 #     parent.append(TreeNode(tag, attrib))
