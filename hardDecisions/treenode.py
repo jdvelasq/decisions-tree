@@ -25,36 +25,36 @@ class TreeNode:
     def __delitem__(self, index):
         del self.children[index]
 
-#     def __str__(self):
-#         txt = '{0}'.format(self.tag)
-#         if len(self.attrib):
-#             txt += ' '
-#             keys = sorted(list(self.attrib.keys()))
-#             txt += '{'
-#             for k in keys:
-#                 txt += k + ': '
-#                 txt += str(self.attrib[k])
-#                 if k != keys[-1]:
-#                     txt += ', '
-#             txt += '}'
-#         if not self.text is None:
-#             txt += ' :' + self.text
-#         return txt
-#
-#     def append(self, subnode):
-#         self.children.append(subnode)
-#
-#     def extend(self, subnodes):
-#         self.children.extend(subnodes)
-#
-#     def insert(self, index, subnode):
-#         self.children.insert(index, subnode)
-#
-#     def find(self, match):
-#         for node in self.children:
-#             if node.tag == match:
-#                 return node
-#         return None
+    def __str__(self):
+        txt = '{0}'.format(self.tag)
+        if len(self.attrib):
+            txt += ' '
+            keys = sorted(list(self.attrib.keys()))
+            txt += '{'
+            for k in keys:
+                txt += k + ': '
+                txt += str(self.attrib[k])
+                if k != keys[-1]:
+                    txt += ', '
+            txt += '}'
+        if not self.text is None:
+            txt += ' :' + self.text
+        return txt
+
+    def append(self, subnode):
+        self.children.append(subnode)
+
+    def extend(self, subnodes):
+        self.children.extend(subnodes)
+
+    def insert(self, index, subnode):
+        self.children.insert(index, subnode)
+
+    def find(self, match):
+        for node in self.children:
+            if node.tag == match:
+                return node
+        return None
 #
 #     def findall(self, match):
 #         result = []
