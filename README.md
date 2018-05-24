@@ -1,2 +1,2 @@
 # hardDecisions
-A library for hard decision making analysis using trees 
+A python implementation of decision making trees
