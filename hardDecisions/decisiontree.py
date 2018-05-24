@@ -23,22 +23,22 @@ class DecisionTree:
         self.tree_name = tree_name
         self.root = None
         self.globals = {}
-    #
-    # def terminal_node(self, expr=None):
-    #     """Creates a tree's terminal node
-    #
-    #     >>> m = DecisionModel(tree_name='tree-test')
-    #     >>> m.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
-    #     >>> print_as_tree(m.variables) # doctest: +NORMALIZE_WHITESPACE
-    #     +-- VARS
-    #         +-- E {expr: (BID-COST) * (1 if BID < COMPBID else 0), type: TERMINAL}
-    #
-    #     """
-    #     node = new_node(parent=self.variables,
-    #                     tag='E',
-    #                     attrib={'type':'TERMINAL', 'expr':expr})
-    #
-    #
+
+    def terminal_node(self, expr=None):
+        """Creates a tree's terminal node
+
+        >>> m = DecisionModel(tree_name='tree-test')
+        >>> m.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
+        >>> print_as_tree(m.variables) # doctest: +NORMALIZE_WHITESPACE
+        +-- VARS
+            +-- E {expr: (BID-COST) * (1 if BID < COMPBID else 0), type: TERMINAL}
+
+        """
+        node = new_node(parent=self.variables,
+                        tag='E',
+                        attrib={'type':'TERMINAL', 'expr':expr})
+
+
     # def chance_node(self, name=None, values=None):
     #     """Creates a tree's internal chance node
     #
