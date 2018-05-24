@@ -1,13 +1,9 @@
 """
-DecisionTree
-==================
+Functions in this Module
+==============================================================================
 
 
-plopt 
 
-.. image:: ./images/tree_example.png
-   :width: 550px
-   :align: center
 
 """
 from hardDecisions.treenode import *
