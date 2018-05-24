@@ -12,10 +12,7 @@ Contents:
    :maxdepth: 4
 
 
-.. automodule:: hardDecisions.decisiontree
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   decisiontree
 
 
 Indices and tables
