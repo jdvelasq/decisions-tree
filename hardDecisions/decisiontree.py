@@ -73,93 +73,93 @@ class DecisionTree:
                         attrib={'type':'DECISION', 'values':values, 'max':max})
 
 
-    # def display_variables(self):
-    #     """Display all the varibles in the tree
-    #
-    #     >>> m = DecisionModel(tree_name='tree-test')
-    #     >>> vbid = [(500,  1),
-    #     ...         (700,  1)]
-    #     >>> m.decision_node(name='BID', values=vbid, max=True)
-    #     >>> vcompbid = [(35.0,  400,  2),
-    #     ...             (50.0,  600,  2),
-    #     ...             (15.0,  800,  2)]
-    #     >>> m.chance_node(name='COMPBID', values=vcompbid)
-    #     >>> vcost = [(25.0,  200,  3),
-    #     ...          (50.0,  400,  3),
-    #     ...          (25.0,  600,  3)]
-    #     >>> m.chance_node(name = 'COST', values = vcost)
-    #     >>> m.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
-    #     >>> m.display_variables() # doctest: +NORMALIZE_WHITESPACE
-    #     Node 0
-    #     BID:
-    #         Type: DECISION - Maximum Payoff
-    #         Branches:
-    #                           Outcomes  Sucessor Node
-    #                            500.000  1
-    #                            700.000  1
-    #     <BLANKLINE>
-    #     Node 1
-    #     COMPBID:
-    #         Type: CHANCE
-    #         Branches:
-    #               Chance       Outcome  Sucessor Node
-    #                35.00       400.000  2
-    #                50.00       600.000  2
-    #                15.00       800.000  2
-    #     <BLANKLINE>
-    #     Node 2
-    #     COST:
-    #         Type: CHANCE
-    #         Branches:
-    #               Chance       Outcome  Sucessor Node
-    #                25.00       200.000  3
-    #                50.00       400.000  3
-    #                25.00       600.000  3
-    #     <BLANKLINE>
-    #     Node 3
-    #     E:
-    #         Type: TERMINAL
-    #         Expr: (BID-COST) * (1 if BID < COMPBID else 0)
-    #     <BLANKLINE>
-    #
-    #     """
-    #     txt = []
-    #     for index, var in enumerate(self.variables):
-    #         #
-    #         txt.append('Node {:d}'.format(index))
-    #         txt.append(var.tag + ':')
-    #         txt.append('    Type: ' + var.get('type'))
-    #         #
-    #         if  var.get('type') == 'DECISION':
-    #             #
-    #             if  var.get('max') is True:
-    #                 txt[-1] += ' - Maximum Payoff'
-    #             else:
-    #                 txt[-1] += ' - Minimum Payoff'
-    #             txt.append('    Branches:')
-    #             txt.append('                      Outcomes  Sucessor Node')
-    #             for (value, next_node) in var.get('values'):
-    #                 txt.append('                  {:12.3f}  {:d}'.format(value, next_node))
-    #             txt.append('')
-    #             #
-    #         elif  var.get('type') == 'CHANCE':
-    #             #
-    #             txt.append('    Branches:')
-    #             txt.append('          Chance       Outcome  Sucessor Node')
-    #             for (prob, value, next_node) in var.get('values'):
-    #                 txt.append('           {:5.2f}  {:12.3f}  {:d}'.format(prob, value, next_node))
-    #             txt.append('')
-    #             #
-    #         elif  var.get('type') == 'TERMINAL':
-    #             #
-    #             txt.append('    Expr: ' + var.get('expr'))
-    #             txt.append('')
-    #             #
-    #         else:
-    #             raise ValueError('Node type unknown: ' + var.tag + ', ' +  var.get('type'))
-    #     print('\n'.join(txt))
-    #
-    #
+    def display_variables(self):
+        """Display all the varibles in the tree
+
+        >>> m = DecisionModel(tree_name='tree-test')
+        >>> vbid = [(500,  1),
+        ...         (700,  1)]
+        >>> m.decision_node(name='BID', values=vbid, max=True)
+        >>> vcompbid = [(35.0,  400,  2),
+        ...             (50.0,  600,  2),
+        ...             (15.0,  800,  2)]
+        >>> m.chance_node(name='COMPBID', values=vcompbid)
+        >>> vcost = [(25.0,  200,  3),
+        ...          (50.0,  400,  3),
+        ...          (25.0,  600,  3)]
+        >>> m.chance_node(name = 'COST', values = vcost)
+        >>> m.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
+        >>> m.display_variables() # doctest: +NORMALIZE_WHITESPACE
+        Node 0
+        BID:
+            Type: DECISION - Maximum Payoff
+            Branches:
+                              Outcomes  Sucessor Node
+                               500.000  1
+                               700.000  1
+        <BLANKLINE>
+        Node 1
+        COMPBID:
+            Type: CHANCE
+            Branches:
+                  Chance       Outcome  Sucessor Node
+                   35.00       400.000  2
+                   50.00       600.000  2
+                   15.00       800.000  2
+        <BLANKLINE>
+        Node 2
+        COST:
+            Type: CHANCE
+            Branches:
+                  Chance       Outcome  Sucessor Node
+                   25.00       200.000  3
+                   50.00       400.000  3
+                   25.00       600.000  3
+        <BLANKLINE>
+        Node 3
+        E:
+            Type: TERMINAL
+            Expr: (BID-COST) * (1 if BID < COMPBID else 0)
+        <BLANKLINE>
+
+        """
+        txt = []
+        for index, var in enumerate(self.variables):
+            #
+            txt.append('Node {:d}'.format(index))
+            txt.append(var.tag + ':')
+            txt.append('    Type: ' + var.get('type'))
+            #
+            if  var.get('type') == 'DECISION':
+                #
+                if  var.get('max') is True:
+                    txt[-1] += ' - Maximum Payoff'
+                else:
+                    txt[-1] += ' - Minimum Payoff'
+                txt.append('    Branches:')
+                txt.append('                      Outcomes  Sucessor Node')
+                for (value, next_node) in var.get('values'):
+                    txt.append('                  {:12.3f}  {:d}'.format(value, next_node))
+                txt.append('')
+                #
+            elif  var.get('type') == 'CHANCE':
+                #
+                txt.append('    Branches:')
+                txt.append('          Chance       Outcome  Sucessor Node')
+                for (prob, value, next_node) in var.get('values'):
+                    txt.append('           {:5.2f}  {:12.3f}  {:d}'.format(prob, value, next_node))
+                txt.append('')
+                #
+            elif  var.get('type') == 'TERMINAL':
+                #
+                txt.append('    Expr: ' + var.get('expr'))
+                txt.append('')
+                #
+            else:
+                raise ValueError('Node type unknown: ' + var.tag + ', ' +  var.get('type'))
+        print('\n'.join(txt))
+
+
     # def build_tree(self):
     #     """
     #
