@@ -116,14 +116,14 @@ def new_node(parent, tag, attrib={}):
     parent.append(TreeNode(tag, attrib))
     return parent.children[-1]
 
-# def print_as_tree(node):
-#     """Prints the tree in text"""
-#     def print_tree_node(prefix, node, last_node):
-#         print(prefix + '+-- ' + str(node))
-#         for index, children in enumerate(node.children):
-#             is_last_node = True if index == len(node.children) - 1 else False
-#             if last_node is True:
-#                 print_tree_node(prefix + '    ', children, is_last_node)
-#             else:
-#                 print_tree_node(prefix + '|   ', children, is_last_node)
-#     print_tree_node('', node, True)
+def print_as_tree(node):
+    """Prints the tree in text"""
+    def print_tree_node(prefix, node, last_node):
+        print(prefix + '+-- ' + str(node))
+        for index, children in enumerate(node.children):
+            is_last_node = True if index == len(node.children) - 1 else False
+            if last_node is True:
+                print_tree_node(prefix + '    ', children, is_last_node)
+            else:
+                print_tree_node(prefix + '|   ', children, is_last_node)
+    print_tree_node('', node, True)
