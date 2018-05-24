@@ -5,7 +5,7 @@ DecisionTree
 Este es un demo
 
 .. image:: ./images/tree_example.png
-   :width: 350px
+   :width: 550px
    :align: center
 
 """

@@ -5,9 +5,9 @@ class TreeNode:
         self.children = []
         self.text = None
 
-#     def __repr__(self):
-#         return '<Node {}>'.format(repr(self.tag))
-#
+    def __repr__(self):
+        return '<Node {}>'.format(repr(self.tag))
+
 #     # methods operating over subelements
 #     def __len__(self):
 #         """Returns the number of children nodes"""
