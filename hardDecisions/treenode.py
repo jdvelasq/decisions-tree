@@ -13,18 +13,18 @@ class TreeNode:
         """Returns the number of children nodes"""
         return len(self.children)
 
-#     def __iter__(self):
-#         return self.children.__iter__()
-#
-#     def __getitem__(self, index):
-#         return self.children[index]
-#
-#     def __setitem__(self, index, value):
-#         self.children[index] = value
-#
-#     def __delitem__(self, index):
-#         del self.children[index]
-#
+    def __iter__(self):
+        return self.children.__iter__()
+
+    def __getitem__(self, index):
+        return self.children[index]
+
+    def __setitem__(self, index, value):
+        self.children[index] = value
+
+    def __delitem__(self, index):
+        del self.children[index]
+
 #     def __str__(self):
 #         txt = '{0}'.format(self.tag)
 #         if len(self.attrib):
