@@ -160,264 +160,264 @@ class DecisionTree:
         print('\n'.join(txt))
 
 
-    # def build_tree(self):
-    #     """
-    #
-    #     >>> m = DecisionModel(tree_name='tree-test')
-    #     >>> vbid = [(500,  1),
-    #     ...         (700,  1)]
-    #     >>> m.decision_node(name = 'BID', values = vbid)
-    #     >>> vcompbid = [(35.0,  400,  2),
-    #     ...             (50.0,  600,  2),
-    #     ...             (15.0,  800,  2)]
-    #     >>> m.chance_node(name='COMPBID', values=vcompbid)
-    #     >>> vcost = [(25.0,  200,  3),
-    #     ...          (50.0,  400,  3),
-    #     ...          (25.0,  600,  3)]
-    #     >>> m.chance_node(name = 'COST', values = vcost)
-    #     >>> m.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
-    #     >>> m.build_tree()
-    #     >>> print_as_tree(m.treenodes) # doctest: +NORMALIZE_WHITESPACE
-    #     +-- TREENODES
-    #         +-- 0 {expval: None, max: True, next_node: [1, 14], node_number: 0, type: DECISION, var: tree-test}
-    #         +-- 1 {expval: None, next_node: [2, 6, 10], node_number: 1, type: CHANCE, value: 500, var: BID}
-    #         +-- 2 {expval: None, next_node: [3, 4, 5], node_number: 2, prob: 35.0, type: CHANCE, value: 400, var: COMPBID}
-    #         +-- 3 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
-    #         +-- 4 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
-    #         +-- 5 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
-    #         +-- 6 {expval: None, next_node: [7, 8, 9], node_number: 3, prob: 50.0, type: CHANCE, value: 600, var: COMPBID}
-    #         +-- 7 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
-    #         +-- 8 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
-    #         +-- 9 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
-    #         +-- 10 {expval: None, next_node: [11, 12, 13], node_number: 4, prob: 15.0, type: CHANCE, value: 800, var: COMPBID}
-    #         +-- 11 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
-    #         +-- 12 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
-    #         +-- 13 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
-    #         +-- 14 {expval: None, next_node: [15, 19, 23], node_number: 5, type: CHANCE, value: 700, var: BID}
-    #         +-- 15 {expval: None, next_node: [16, 17, 18], node_number: 6, prob: 35.0, type: CHANCE, value: 400, var: COMPBID}
-    #         +-- 16 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
-    #         +-- 17 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
-    #         +-- 18 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
-    #         +-- 19 {expval: None, next_node: [20, 21, 22], node_number: 7, prob: 50.0, type: CHANCE, value: 600, var: COMPBID}
-    #         +-- 20 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
-    #         +-- 21 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
-    #         +-- 22 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
-    #         +-- 23 {expval: None, next_node: [24, 25, 26], node_number: 8, prob: 15.0, type: CHANCE, value: 800, var: COMPBID}
-    #         +-- 24 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
-    #         +-- 25 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
-    #         +-- 26 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
-    #
-    #
-    #     """
-    #
-    #     def build_node(parent, var):
-    #
-    #         if var.get('type') == 'TERMINAL':
-    #             parent.set('type', var.get('type'))
-    #             parent.set(key='expr', value=var.get('expr'))
-    #             parent.set(key='expval', value=None)
-    #
-    #         if var.get('type') == 'CHANCE':
-    #             parent.set('type', var.get('type'))
-    #             parent.set(key='node_number', value=self.node_number)
-    #             parent.set(key='expval', value=None)
-    #             self.node_number += 1
-    #             for child in var.get('values'):
-    #                 prob, value, next_node = child
-    #                 tree_node = new_node(self.treenodes, tag=len(self.treenodes))
-    #                 tree_node.set(key='var', value=var.tag)
-    #                 tree_node.set(key='value', value=value)
-    #                 tree_node.set(key='prob', value=prob)
-    #                 if 'next_node' in parent.keys():
-    #                     parent.get(key='next_node').append(len(self.treenodes)- 1)
-    #                 else:
-    #                     parent.set(key='next_node', value=[len(self.treenodes) - 1])
-    #                 build_node(parent=tree_node, var=self.variables[next_node])
-    #
-    #         if var.get('type') == 'DECISION':
-    #             parent.set('type', var.get('type'))
-    #             parent.set('max', var.get('max'))
-    #             parent.set(key='node_number', value=self.node_number)
-    #             parent.set(key='expval', value=None)
-    #             self.node_number += 1
-    #             for child in var.get('values'):
-    #                 value, next_node = child
-    #                 tree_node = new_node(self.treenodes, tag=len(self.treenodes))
-    #                 tree_node.set(key='var', value=var.tag)
-    #                 tree_node.set(key='value', value=value)
-    #                 tree_node.set(key='expval', value=None)
-    #                 if 'next_node' in parent.keys():
-    #                     parent.get(key='next_node').append(len(self.treenodes) - 1)
-    #                 else:
-    #                     parent.set(key='next_node', value=[len(self.treenodes) - 1])
-    #                 build_node(parent=tree_node, var=self.variables[next_node])
-    #
-    #
-    #
-    #     self.node_number = 0
-    #     parent = new_node(self.treenodes, tag=0)
-    #     parent.set('var', self.tree_name)
-    #     build_node(parent=parent, var=self.variables[0])
-    #
-    #
-    #
-    # def display_tree(self, maxdeep=None, policy_suggestion=False):
-    #     """
-    #     >>> m = DecisionModel(tree_name='tree-test')
-    #     >>> vbid = [(500,  1),
-    #     ...         (700,  1)]
-    #     >>> m.decision_node(name = 'BID', values = vbid)
-    #     >>> vcompbid = [(35.0,  400,  2),
-    #     ...             (50.0,  600,  2),
-    #     ...             (15.0,  800,  2)]
-    #     >>> m.chance_node(name='COMPBID', values=vcompbid)
-    #     >>> vcost = [(25.0,  200,  3),
-    #     ...          (50.0,  400,  3),
-    #     ...          (25.0,  600,  3)]
-    #     >>> m.chance_node(name = 'COST', values = vcost)
-    #     >>> m.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
-    #     >>> m.build_tree()
-    #     >>> m.display_tree() # doctest: +NORMALIZE_WHITESPACE
-    #     +--[D-0] tree-test
-    #         +--[C-1] BID=500
-    #         |   +--[C-2] COMPBID=400, Prob=35.00
-    #         |   |   +--[T] COST=200, Prob=25.00
-    #         |   |   +--[T] COST=400, Prob=50.00
-    #         |   |   +--[T] COST=600, Prob=25.00
-    #         |   +--[C-3] COMPBID=600, Prob=50.00
-    #         |   |   +--[T] COST=200, Prob=25.00
-    #         |   |   +--[T] COST=400, Prob=50.00
-    #         |   |   +--[T] COST=600, Prob=25.00
-    #         |   +--[C-4] COMPBID=800, Prob=15.00
-    #         |       +--[T] COST=200, Prob=25.00
-    #         |       +--[T] COST=400, Prob=50.00
-    #         |       +--[T] COST=600, Prob=25.00
-    #         +--[C-5] BID=700
-    #             +--[C-6] COMPBID=400, Prob=35.00
-    #             |   +--[T] COST=200, Prob=25.00
-    #             |   +--[T] COST=400, Prob=50.00
-    #             |   +--[T] COST=600, Prob=25.00
-    #             +--[C-7] COMPBID=600, Prob=50.00
-    #             |   +--[T] COST=200, Prob=25.00
-    #             |   +--[T] COST=400, Prob=50.00
-    #             |   +--[T] COST=600, Prob=25.00
-    #             +--[C-8] COMPBID=800, Prob=15.00
-    #                 +--[T] COST=200, Prob=25.00
-    #                 +--[T] COST=400, Prob=50.00
-    #                 +--[T] COST=600, Prob=25.00
-    #
-    #     >>> m.display_tree(maxdeep=0) # doctest: +NORMALIZE_WHITESPACE
-    #     +--[D-0] tree-test
-    #
-    #     >>> m.display_tree(maxdeep=1) # doctest: +NORMALIZE_WHITESPACE
-    #     +--[D-0] tree-test
-    #         +--[C-1] BID=500
-    #         +--[C-5] BID=700
-    #
-    #     >>> m.display_tree(maxdeep=2) # doctest: +NORMALIZE_WHITESPACE
-    #     +--[D-0] tree-test
-    #         +--[C-1] BID=500
-    #         |   +--[C-2] COMPBID=400, Prob=35.00
-    #         |   +--[C-3] COMPBID=600, Prob=50.00
-    #         |   +--[C-4] COMPBID=800, Prob=15.00
-    #         +--[C-5] BID=700
-    #             +--[C-6] COMPBID=400, Prob=35.00
-    #             +--[C-7] COMPBID=600, Prob=50.00
-    #             +--[C-8] COMPBID=800, Prob=15.00
-    #
-    #     >>> m.display_tree(maxdeep=3) # doctest: +NORMALIZE_WHITESPACE
-    #     +--[D-0] tree-test
-    #         +--[C-1] BID=500
-    #         |   +--[C-2] COMPBID=400, Prob=35.00
-    #         |   |   +--[T] COST=200, Prob=25.00
-    #         |   |   +--[T] COST=400, Prob=50.00
-    #         |   |   +--[T] COST=600, Prob=25.00
-    #         |   +--[C-3] COMPBID=600, Prob=50.00
-    #         |   |   +--[T] COST=200, Prob=25.00
-    #         |   |   +--[T] COST=400, Prob=50.00
-    #         |   |   +--[T] COST=600, Prob=25.00
-    #         |   +--[C-4] COMPBID=800, Prob=15.00
-    #         |       +--[T] COST=200, Prob=25.00
-    #         |       +--[T] COST=400, Prob=50.00
-    #         |       +--[T] COST=600, Prob=25.00
-    #         +--[C-5] BID=700
-    #             +--[C-6] COMPBID=400, Prob=35.00
-    #             |   +--[T] COST=200, Prob=25.00
-    #             |   +--[T] COST=400, Prob=50.00
-    #             |   +--[T] COST=600, Prob=25.00
-    #             +--[C-7] COMPBID=600, Prob=50.00
-    #             |   +--[T] COST=200, Prob=25.00
-    #             |   +--[T] COST=400, Prob=50.00
-    #             |   +--[T] COST=600, Prob=25.00
-    #             +--[C-8] COMPBID=800, Prob=15.00
-    #                 +--[T] COST=200, Prob=25.00
-    #                 +--[T] COST=400, Prob=50.00
-    #                 +--[T] COST=600, Prob=25.00
-    #
-    #
-    #     """
-    #
-    #     def print_node(prefix, node, last_node):
-    #
-    #         txt = prefix
-    #         node_number = node.get(key='node_number')
-    #         var = node.get(key='var')
-    #         type = node.get(key='type')
-    #
-    #         if type == 'DECISION':
-    #             txt += '+--[D-{:d}] '.format(node_number)
-    #         if type == 'CHANCE':
-    #             txt += '+--[C-{:d}] '.format(node_number)
-    #         if type == 'TERMINAL':
-    #             txt += '+--[T] '
-    #
-    #         if 'value' in node.keys():
-    #             txt += var + "=" + str(node.get(key='value'))
-    #         else:
-    #             txt += var
-    #
-    #         if 'prob' in node.keys():
-    #             txt += ", Prob={:1.2f}".format(node.get(key='prob'))
-    #
-    #         if 'cprob' in node.keys():
-    #             txt += ", CProb={:1.2f}".format(node.get(key='cprob'))
-    #
-    #         if 'expval' in node.keys() and node.get(key='expval') is not None:
-    #             txt += ", ExpVal={:1.2f}".format(node.get(key='expval'))
-    #
-    #         print(txt)
-    #
-    #         next_node = node.get(key='next_node') if 'next_node' in node.keys() else None
-    #
-    #
-    #         if maxdeep is not None and self.current_deep == maxdeep:
-    #             return
-    #
-    #         self.current_deep += 1
-    #
-    #         if next_node is not None:
-    #
-    #             if policy_suggestion is True and type == 'DECISION':
-    #                 optbranch = node.get(key='optbranch')
-    #                 # raise ValueError(optbranch.__repr__())
-    #                 print_node(prefix + '    ', self.treenodes[next_node[optbranch]], last_node=True)
-    #             else:
-    #                 for index, node in enumerate(next_node):
-    #                     is_last_node = True if index == len(next_node) - 1 else False
-    #                     if last_node is True:
-    #                         print_node(prefix + '    ', self.treenodes[node], last_node=is_last_node)
-    #                     else:
-    #                         print_node(prefix + '|   ', self.treenodes[node], last_node=is_last_node)
-    #
-    #         self.current_deep -= 1
-    #
-    #
-    #     self.current_deep = 0
-    #     print_node(prefix='', node=self.treenodes[0], last_node=True)
-    #
-    #
-    #
-    #
+    def build_tree(self):
+        """
+
+        >>> m = DecisionModel(tree_name='tree-test')
+        >>> vbid = [(500,  1),
+        ...         (700,  1)]
+        >>> m.decision_node(name = 'BID', values = vbid)
+        >>> vcompbid = [(35.0,  400,  2),
+        ...             (50.0,  600,  2),
+        ...             (15.0,  800,  2)]
+        >>> m.chance_node(name='COMPBID', values=vcompbid)
+        >>> vcost = [(25.0,  200,  3),
+        ...          (50.0,  400,  3),
+        ...          (25.0,  600,  3)]
+        >>> m.chance_node(name = 'COST', values = vcost)
+        >>> m.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
+        >>> m.build_tree()
+        >>> print_as_tree(m.treenodes) # doctest: +NORMALIZE_WHITESPACE
+        +-- TREENODES
+            +-- 0 {expval: None, max: True, next_node: [1, 14], node_number: 0, type: DECISION, var: tree-test}
+            +-- 1 {expval: None, next_node: [2, 6, 10], node_number: 1, type: CHANCE, value: 500, var: BID}
+            +-- 2 {expval: None, next_node: [3, 4, 5], node_number: 2, prob: 35.0, type: CHANCE, value: 400, var: COMPBID}
+            +-- 3 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
+            +-- 4 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
+            +-- 5 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
+            +-- 6 {expval: None, next_node: [7, 8, 9], node_number: 3, prob: 50.0, type: CHANCE, value: 600, var: COMPBID}
+            +-- 7 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
+            +-- 8 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
+            +-- 9 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
+            +-- 10 {expval: None, next_node: [11, 12, 13], node_number: 4, prob: 15.0, type: CHANCE, value: 800, var: COMPBID}
+            +-- 11 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
+            +-- 12 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
+            +-- 13 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
+            +-- 14 {expval: None, next_node: [15, 19, 23], node_number: 5, type: CHANCE, value: 700, var: BID}
+            +-- 15 {expval: None, next_node: [16, 17, 18], node_number: 6, prob: 35.0, type: CHANCE, value: 400, var: COMPBID}
+            +-- 16 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
+            +-- 17 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
+            +-- 18 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
+            +-- 19 {expval: None, next_node: [20, 21, 22], node_number: 7, prob: 50.0, type: CHANCE, value: 600, var: COMPBID}
+            +-- 20 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
+            +-- 21 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
+            +-- 22 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
+            +-- 23 {expval: None, next_node: [24, 25, 26], node_number: 8, prob: 15.0, type: CHANCE, value: 800, var: COMPBID}
+            +-- 24 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 200, var: COST}
+            +-- 25 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 50.0, type: TERMINAL, value: 400, var: COST}
+            +-- 26 {expr: (BID-COST) * (1 if BID < COMPBID else 0), expval: None, prob: 25.0, type: TERMINAL, value: 600, var: COST}
+
+
+        """
+
+        def build_node(parent, var):
+
+            if var.get('type') == 'TERMINAL':
+                parent.set('type', var.get('type'))
+                parent.set(key='expr', value=var.get('expr'))
+                parent.set(key='expval', value=None)
+
+            if var.get('type') == 'CHANCE':
+                parent.set('type', var.get('type'))
+                parent.set(key='node_number', value=self.node_number)
+                parent.set(key='expval', value=None)
+                self.node_number += 1
+                for child in var.get('values'):
+                    prob, value, next_node = child
+                    tree_node = new_node(self.treenodes, tag=len(self.treenodes))
+                    tree_node.set(key='var', value=var.tag)
+                    tree_node.set(key='value', value=value)
+                    tree_node.set(key='prob', value=prob)
+                    if 'next_node' in parent.keys():
+                        parent.get(key='next_node').append(len(self.treenodes)- 1)
+                    else:
+                        parent.set(key='next_node', value=[len(self.treenodes) - 1])
+                    build_node(parent=tree_node, var=self.variables[next_node])
+
+            if var.get('type') == 'DECISION':
+                parent.set('type', var.get('type'))
+                parent.set('max', var.get('max'))
+                parent.set(key='node_number', value=self.node_number)
+                parent.set(key='expval', value=None)
+                self.node_number += 1
+                for child in var.get('values'):
+                    value, next_node = child
+                    tree_node = new_node(self.treenodes, tag=len(self.treenodes))
+                    tree_node.set(key='var', value=var.tag)
+                    tree_node.set(key='value', value=value)
+                    tree_node.set(key='expval', value=None)
+                    if 'next_node' in parent.keys():
+                        parent.get(key='next_node').append(len(self.treenodes) - 1)
+                    else:
+                        parent.set(key='next_node', value=[len(self.treenodes) - 1])
+                    build_node(parent=tree_node, var=self.variables[next_node])
+
+
+
+        self.node_number = 0
+        parent = new_node(self.treenodes, tag=0)
+        parent.set('var', self.tree_name)
+        build_node(parent=parent, var=self.variables[0])
+
+
+
+    def display_tree(self, maxdeep=None, policy_suggestion=False):
+        """
+        >>> m = DecisionModel(tree_name='tree-test')
+        >>> vbid = [(500,  1),
+        ...         (700,  1)]
+        >>> m.decision_node(name = 'BID', values = vbid)
+        >>> vcompbid = [(35.0,  400,  2),
+        ...             (50.0,  600,  2),
+        ...             (15.0,  800,  2)]
+        >>> m.chance_node(name='COMPBID', values=vcompbid)
+        >>> vcost = [(25.0,  200,  3),
+        ...          (50.0,  400,  3),
+        ...          (25.0,  600,  3)]
+        >>> m.chance_node(name = 'COST', values = vcost)
+        >>> m.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
+        >>> m.build_tree()
+        >>> m.display_tree() # doctest: +NORMALIZE_WHITESPACE
+        +--[D-0] tree-test
+            +--[C-1] BID=500
+            |   +--[C-2] COMPBID=400, Prob=35.00
+            |   |   +--[T] COST=200, Prob=25.00
+            |   |   +--[T] COST=400, Prob=50.00
+            |   |   +--[T] COST=600, Prob=25.00
+            |   +--[C-3] COMPBID=600, Prob=50.00
+            |   |   +--[T] COST=200, Prob=25.00
+            |   |   +--[T] COST=400, Prob=50.00
+            |   |   +--[T] COST=600, Prob=25.00
+            |   +--[C-4] COMPBID=800, Prob=15.00
+            |       +--[T] COST=200, Prob=25.00
+            |       +--[T] COST=400, Prob=50.00
+            |       +--[T] COST=600, Prob=25.00
+            +--[C-5] BID=700
+                +--[C-6] COMPBID=400, Prob=35.00
+                |   +--[T] COST=200, Prob=25.00
+                |   +--[T] COST=400, Prob=50.00
+                |   +--[T] COST=600, Prob=25.00
+                +--[C-7] COMPBID=600, Prob=50.00
+                |   +--[T] COST=200, Prob=25.00
+                |   +--[T] COST=400, Prob=50.00
+                |   +--[T] COST=600, Prob=25.00
+                +--[C-8] COMPBID=800, Prob=15.00
+                    +--[T] COST=200, Prob=25.00
+                    +--[T] COST=400, Prob=50.00
+                    +--[T] COST=600, Prob=25.00
+
+        >>> m.display_tree(maxdeep=0) # doctest: +NORMALIZE_WHITESPACE
+        +--[D-0] tree-test
+
+        >>> m.display_tree(maxdeep=1) # doctest: +NORMALIZE_WHITESPACE
+        +--[D-0] tree-test
+            +--[C-1] BID=500
+            +--[C-5] BID=700
+
+        >>> m.display_tree(maxdeep=2) # doctest: +NORMALIZE_WHITESPACE
+        +--[D-0] tree-test
+            +--[C-1] BID=500
+            |   +--[C-2] COMPBID=400, Prob=35.00
+            |   +--[C-3] COMPBID=600, Prob=50.00
+            |   +--[C-4] COMPBID=800, Prob=15.00
+            +--[C-5] BID=700
+                +--[C-6] COMPBID=400, Prob=35.00
+                +--[C-7] COMPBID=600, Prob=50.00
+                +--[C-8] COMPBID=800, Prob=15.00
+
+        >>> m.display_tree(maxdeep=3) # doctest: +NORMALIZE_WHITESPACE
+        +--[D-0] tree-test
+            +--[C-1] BID=500
+            |   +--[C-2] COMPBID=400, Prob=35.00
+            |   |   +--[T] COST=200, Prob=25.00
+            |   |   +--[T] COST=400, Prob=50.00
+            |   |   +--[T] COST=600, Prob=25.00
+            |   +--[C-3] COMPBID=600, Prob=50.00
+            |   |   +--[T] COST=200, Prob=25.00
+            |   |   +--[T] COST=400, Prob=50.00
+            |   |   +--[T] COST=600, Prob=25.00
+            |   +--[C-4] COMPBID=800, Prob=15.00
+            |       +--[T] COST=200, Prob=25.00
+            |       +--[T] COST=400, Prob=50.00
+            |       +--[T] COST=600, Prob=25.00
+            +--[C-5] BID=700
+                +--[C-6] COMPBID=400, Prob=35.00
+                |   +--[T] COST=200, Prob=25.00
+                |   +--[T] COST=400, Prob=50.00
+                |   +--[T] COST=600, Prob=25.00
+                +--[C-7] COMPBID=600, Prob=50.00
+                |   +--[T] COST=200, Prob=25.00
+                |   +--[T] COST=400, Prob=50.00
+                |   +--[T] COST=600, Prob=25.00
+                +--[C-8] COMPBID=800, Prob=15.00
+                    +--[T] COST=200, Prob=25.00
+                    +--[T] COST=400, Prob=50.00
+                    +--[T] COST=600, Prob=25.00
+
+
+        """
+
+        def print_node(prefix, node, last_node):
+
+            txt = prefix
+            node_number = node.get(key='node_number')
+            var = node.get(key='var')
+            type = node.get(key='type')
+
+            if type == 'DECISION':
+                txt += '+--[D-{:d}] '.format(node_number)
+            if type == 'CHANCE':
+                txt += '+--[C-{:d}] '.format(node_number)
+            if type == 'TERMINAL':
+                txt += '+--[T] '
+
+            if 'value' in node.keys():
+                txt += var + "=" + str(node.get(key='value'))
+            else:
+                txt += var
+
+            if 'prob' in node.keys():
+                txt += ", Prob={:1.2f}".format(node.get(key='prob'))
+
+            if 'cprob' in node.keys():
+                txt += ", CProb={:1.2f}".format(node.get(key='cprob'))
+
+            if 'expval' in node.keys() and node.get(key='expval') is not None:
+                txt += ", ExpVal={:1.2f}".format(node.get(key='expval'))
+
+            print(txt)
+
+            next_node = node.get(key='next_node') if 'next_node' in node.keys() else None
+
+
+            if maxdeep is not None and self.current_deep == maxdeep:
+                return
+
+            self.current_deep += 1
+
+            if next_node is not None:
+
+                if policy_suggestion is True and type == 'DECISION':
+                    optbranch = node.get(key='optbranch')
+                    # raise ValueError(optbranch.__repr__())
+                    print_node(prefix + '    ', self.treenodes[next_node[optbranch]], last_node=True)
+                else:
+                    for index, node in enumerate(next_node):
+                        is_last_node = True if index == len(next_node) - 1 else False
+                        if last_node is True:
+                            print_node(prefix + '    ', self.treenodes[node], last_node=is_last_node)
+                        else:
+                            print_node(prefix + '|   ', self.treenodes[node], last_node=is_last_node)
+
+            self.current_deep -= 1
+
+
+        self.current_deep = 0
+        print_node(prefix='', node=self.treenodes[0], last_node=True)
+
+
+
+
     # def compute_prob(self):
     #     """
     #     >>> m = DecisionModel(tree_name='tree-test')
