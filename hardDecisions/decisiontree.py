@@ -3,6 +3,8 @@ DecisionTree
 ==================
 
 
+plopt 
+
 .. image:: ./images/tree_example.png
    :width: 550px
    :align: center
