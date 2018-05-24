@@ -17,8 +17,8 @@ class DecisionTree:
     """
 
     def __init__(self, tree_name):
-        pass
-        # self.datatree = TreeNode('DMTREE')
+        # pass
+        self.datatree = TreeNode('DMTREE')
         # self.variables = new_node(parent=self.datatree, tag='VARS')
         # self.treenodes = new_node(parent=self.datatree, tag='TREENODES')
         # self.tree_name = tree_name
