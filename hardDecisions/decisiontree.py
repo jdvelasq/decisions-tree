@@ -3,7 +3,7 @@ Functions in this Module
 ==============================================================================
 
 
-
+plot
 
 """
 from hardDecisions.treenode import *

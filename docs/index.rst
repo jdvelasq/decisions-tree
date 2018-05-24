@@ -6,6 +6,11 @@
 hardDecisions: A Package for modeling decision making trees using Python
 ===============================================================================
 
+
+
+library
+
+
 Contents:
 
 .. toctree::
