@@ -24,18 +24,18 @@ class DecisionTree:
         self.root = None
         self.globals = {}
 
-    def terminal_node(self, expr=None):
+    def terminal_node(self, name=None, expr=None):
         """Creates a tree's terminal node
 
         >>> m = DecisionTree(tree_name='tree-test')
-        >>> m.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
+        >>> m.terminal_node(name='EXPR', expr='(BID-COST) * (1 if BID < COMPBID else 0)')
         >>> print_as_tree(m.variables) # doctest: +NORMALIZE_WHITESPACE
         +-- VARS
-            +-- E {expr: (BID-COST) * (1 if BID < COMPBID else 0), type: TERMINAL}
+            +-- EXPR {expr: (BID-COST) * (1 if BID < COMPBID else 0), type: TERMINAL}
 
         """
         node = new_node(parent=self.variables,
-                        tag='E',
+                        tag=name,
                         attrib={'type':'TERMINAL', 'expr':expr})
 
 
@@ -88,7 +88,7 @@ class DecisionTree:
         ...          (50.0,  400,  3),
         ...          (25.0,  600,  3)]
         >>> m.chance_node(name = 'COST', values = vcost)
-        >>> m.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
+        >>> m.terminal_node(name='EXPR', expr='(BID-COST) * (1 if BID < COMPBID else 0)')
         >>> m.display_variables() # doctest: +NORMALIZE_WHITESPACE
         Node 0
         BID:
@@ -117,7 +117,7 @@ class DecisionTree:
                    25.00       600.000  3
         <BLANKLINE>
         Node 3
-        E:
+        EXPR:
             Type: TERMINAL
             Expr: (BID-COST) * (1 if BID < COMPBID else 0)
         <BLANKLINE>
