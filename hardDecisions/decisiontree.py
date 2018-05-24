@@ -39,40 +39,40 @@ class DecisionTree:
                         attrib={'type':'TERMINAL', 'expr':expr})
 
 
-    # def chance_node(self, name=None, values=None):
-    #     """Creates a tree's internal chance node
-    #
-    #     >>> m = DecisionModel(tree_name='tree-test')
-    #     >>> vcost = [(25.0,  200,  0),
-    #     ...          (50.0,  400,  0),
-    #     ...          (25.0,  600,  0)]
-    #     >>> m.chance_node(name = 'COST', values = vcost)
-    #     >>> print_as_tree(m.variables) # doctest: +NORMALIZE_WHITESPACE
-    #     +-- VARS
-    #         +-- COST {type: CHANCE, values: [(25.0, 200, 0), (50.0, 400, 0), (25.0, 600, 0)]}
-    #     """
-    #     node = new_node(parent=self.variables,
-    #                     tag=name,
-    #                     attrib={'type':'CHANCE', 'values':values})
-    #
-    #
-    # def decision_node(self, name=None, values=None, max=True):
-    #     """Creates a tree's internal decision node
-    #
-    #     >>> m = DecisionModel(tree_name='tree-test')
-    #     >>> vbid = [(500,  0),
-    #     ...         (700,  0)]
-    #     >>> m.decision_node(name='BID', values=vbid, max=True)
-    #     >>> print_as_tree(m.variables) # doctest: +NORMALIZE_WHITESPACE
-    #     +-- VARS
-    #        +-- BID {max: True, type: DECISION, values: [(500, 0), (700, 0)]}
-    #
-    #     """
-    #     node = new_node(parent=self.variables,
-    #                     tag=name,
-    #                     attrib={'type':'DECISION', 'values':values, 'max':max})
-    #
-    #
+    def chance_node(self, name=None, values=None):
+        """Creates a tree's internal chance node
+
+        >>> m = DecisionModel(tree_name='tree-test')
+        >>> vcost = [(25.0,  200,  0),
+        ...          (50.0,  400,  0),
+        ...          (25.0,  600,  0)]
+        >>> m.chance_node(name = 'COST', values = vcost)
+        >>> print_as_tree(m.variables) # doctest: +NORMALIZE_WHITESPACE
+        +-- VARS
+            +-- COST {type: CHANCE, values: [(25.0, 200, 0), (50.0, 400, 0), (25.0, 600, 0)]}
+        """
+        node = new_node(parent=self.variables,
+                        tag=name,
+                        attrib={'type':'CHANCE', 'values':values})
+
+
+    def decision_node(self, name=None, values=None, max=True):
+        """Creates a tree's internal decision node
+
+        >>> m = DecisionModel(tree_name='tree-test')
+        >>> vbid = [(500,  0),
+        ...         (700,  0)]
+        >>> m.decision_node(name='BID', values=vbid, max=True)
+        >>> print_as_tree(m.variables) # doctest: +NORMALIZE_WHITESPACE
+        +-- VARS
+           +-- BID {max: True, type: DECISION, values: [(500, 0), (700, 0)]}
+
+        """
+        node = new_node(parent=self.variables,
+                        tag=name,
+                        attrib={'type':'DECISION', 'values':values, 'max':max})
+
+
     # def display_variables(self):
     #     """Display all the varibles in the tree
     #
