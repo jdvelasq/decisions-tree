@@ -55,34 +55,34 @@ class TreeNode:
             if node.tag == match:
                 return node
         return None
-#
-#     def findall(self, match):
-#         result = []
-#         for node in self.children:
-#             if node.tag == match:
-#                 result.append(node)
-#         return result
-#
-#     def search(self, match, key, value):
-#         for node in self.children:
-#             if node.tag == match and node.attrib[key] == value:
-#                 return node
-#         return None
-#
-#     def searchall(self, match, key, value):
-#         result = []
-#         for node in self.children:
-#             if node.tag == match and node.attrib[key] == value:
-#                 result.append(node)
-#         return result
-#
-#
-#     def iter(self, tag=None):
-#         for children in self.children:
-#             yield from children.iter(tag)
-#
-#
-#     # metodos que operan sobre los atributos (dict)
+
+    def findall(self, match):
+        result = []
+        for node in self.children:
+            if node.tag == match:
+                result.append(node)
+        return result
+
+    def search(self, match, key, value):
+        for node in self.children:
+            if node.tag == match and node.attrib[key] == value:
+                return node
+        return None
+
+    def searchall(self, match, key, value):
+        result = []
+        for node in self.children:
+            if node.tag == match and node.attrib[key] == value:
+                result.append(node)
+        return result
+
+
+    def iter(self, tag=None):
+        for children in self.children:
+            yield from children.iter(tag)
+
+
+    # metodos que operan sobre los atributos (dict)
 #     def clear(self):
 #         self.text = None
 #         self.attrib.clear()
