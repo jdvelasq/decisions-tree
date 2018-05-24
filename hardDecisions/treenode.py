@@ -8,11 +8,11 @@ class TreeNode:
     def __repr__(self):
         return '<Node {}>'.format(repr(self.tag))
 
-#     # methods operating over subelements
-#     def __len__(self):
-#         """Returns the number of children nodes"""
-#         return len(self.children)
-#
+    # methods operating over subelements
+    def __len__(self):
+        """Returns the number of children nodes"""
+        return len(self.children)
+
 #     def __iter__(self):
 #         return self.children.__iter__()
 #
