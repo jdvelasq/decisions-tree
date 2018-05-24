@@ -111,11 +111,11 @@ class TreeNode:
 
 
 
-# def new_node(parent, tag, attrib={}):
-#     """Returns a new node"""
-#     parent.append(TreeNode(tag, attrib))
-#     return parent.children[-1]
-#
+def new_node(parent, tag, attrib={}):
+    """Returns a new node"""
+    parent.append(TreeNode(tag, attrib))
+    return parent.children[-1]
+
 # def print_as_tree(node):
 #     """Prints the tree in text"""
 #     def print_tree_node(prefix, node, last_node):
