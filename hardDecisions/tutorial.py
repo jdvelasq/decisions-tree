@@ -104,6 +104,156 @@ T2:
     +-- E {type: CHANCE, values: [(70, 0, 8), (30, -120, 8)]}
     +-- T2 {expr: A+B+C+D, type: TERMINAL}
 
+
+>>> tree.build_tree()
+
+
+>>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
++--[D-0] tree-test
+   +--[C-1] A=-50
+   |   +--[D-2] B=250, Prob=50.00
+   |   |   +--[T] C=-120
+   |   |   +--[C-3] C=-50
+   |   |   |   +--[T] D=0, Prob=50.00
+   |   |   |   +--[T] D=-120, Prob=50.00
+   |   |   +--[C-4] C=-80
+   |   |       +--[T] E=0, Prob=70.00
+   |   |       +--[T] E=-120, Prob=30.00
+   |   +--[T] B=0, Prob=50.00
+   +--[T] A=0
+
+
+
+>>> tree.display_tree(maxdeep=2) # doctest: +NORMALIZE_WHITESPACE
++--[D-0] tree-test
+   +--[C-1] A=-50
+   |   +--[D-2] B=250, Prob=50.00
+   |   +--[T] B=0, Prob=50.00
+   +--[T] A=0
+
+
+>>> tree.compute_prob()
+>>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
++--[D-0] tree-test
+   +--[C-1] A=-50
+   |   +--[D-2] B=250, Prob=50.00
+   |   |   +--[T] C=-120, CProb=100.00
+   |   |   +--[C-3] C=-50
+   |   |   |   +--[T] D=0, Prob=50.00, CProb=50.00
+   |   |   |   +--[T] D=-120, Prob=50.00, CProb=50.00
+   |   |   +--[C-4] C=-80
+   |   |       +--[T] E=0, Prob=70.00, CProb=70.00
+   |   |       +--[T] E=-120, Prob=30.00, CProb=30.00
+   |   +--[T] B=0, Prob=50.00, CProb=50.00
+   +--[T] A=0, CProb=100.00
+
+
+
+>>> tree.compute_values()
+>>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
++--[D-0] tree-test, ExpVal=20.00
+   +--[C-1] A=-50, ExpVal=20.00
+   |   +--[D-2] B=250, Prob=50.00, ExpVal=90.00
+   |   |   +--[T] C=-120, CProb=100.00, ExpVal=80.00
+   |   |   +--[C-3] C=-50, ExpVal=90.00
+   |   |   |   +--[T] D=0, Prob=50.00, CProb=50.00, ExpVal=150.00
+   |   |   |   +--[T] D=-120, Prob=50.00, CProb=50.00, ExpVal=30.00
+   |   |   +--[C-4] C=-80, ExpVal=0.00
+   |   |       +--[T] E=0, Prob=70.00, CProb=70.00, ExpVal=0.00
+   |   |       +--[T] E=-120, Prob=30.00, CProb=30.00, ExpVal=0.00
+   |   +--[T] B=0, Prob=50.00, CProb=50.00, ExpVal=-50.00
+   +--[T] A=0, CProb=100.00, ExpVal=0.00
+
+
+
+# >>> tree.risk_profile(node_number=0, cumulative=False,
+# ... all_branches=False) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+# >>> tree.risk_profile(node_number=0, cumulative=True,
+# ... all_branches=False) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+# >>> tree.risk_profile(node_number=0, cumulative=False,
+# ... all_branches=True) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+
+# >>> tree.risk_profile(node_number=0, cumulative=True,
+# ... all_branches=True) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+
+# >>> tree.risk_profile(node_number=5, cumulative=False,
+# ... all_branches=False) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+# >>> tree.risk_profile(node_number=5, cumulative=True,
+# ... all_branches=False) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+# >>> tree.risk_profile(node_number=0, cumulative=True, all_branches=False,
+# ... noprint=False) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+# >>> tree.risk_profile(node_number=0, cumulative=False, all_branches=True,
+# ... noprint = False) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+# >>> tree.risk_profile(node_number=0, cumulative=True, all_branches=True,
+# ... noprint = False) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+Risk profile for chance node C-5, 'all_branches' has no sense for chance nodes.
+
+
+# >>> tree.risk_profile(node_number=5, cumulative=False, all_branches=False,
+# ... noprint = False) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+
+# >>> tree.risk_profile(node_number=5, cumulative=True, all_branches=False,
+# ... noprint = False) # doctest: +NORMALIZE_WHITESPACE
+
+
+
+
+
+variation as a percent, from -25% to 25%, with 11 steps
+option with variation between suministred maximum and minimum
+or with maximum change and minium change
+# >>> m.one_way_sensititity(node_number=5, changing_node=8, changing_branch=0,
+# values=[x for x in range=])
+
+input     output
+value     value
+150       46.875
+160       46.5
+170       46.125
+180       45.75
+190       45.375
+200       45
+210       44.625
+220       44.25
+230       43.875
+240       43.5
+250       43.125
+
+# >>> m.two_way_sensititity(node_number=5,
+# ...           changing_node_x=8, changing_branch_x=0, values_x=[x for x in range=],
+# .             changing_node_y=8, changing_branch_y=0, values_x=[x for x in range=])
+
+
 """
 if __name__ == "__main__":
     import doctest

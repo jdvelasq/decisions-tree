@@ -672,7 +672,8 @@ class DecisionTree:
 
 
         self.riskprof_node = node_number
-        self.Evaluate()
+        self.compute_prob()
+        self.compute_values()
         self.riskprof_node = None
 
         # for decision chances simple=True reports only for the optimal branch
