@@ -2,7 +2,6 @@
 DecisionTree
 ==================
 
-Este es un demo
 
 .. image:: ./images/tree_example.png
    :width: 550px
