@@ -597,126 +597,126 @@ class DecisionTree:
 
         compute_node_value(node=self.treenodes[0])
 
-    # def risk_profile(self, node_number, cumulative=False, all_branches=False, noprint=True):
-    #     """
-    #
-    #
-    #     """
-    #
-    #
-    #
-    #
-    #     ### 
-    #     def compute_cumprob(data):
-    #         """Computes the cumulative probability for data (dict)"""
-    #         retval = data
-    #         acumprob = None
-    #         for key in sorted(retval.keys()):
-    #             if acumprob is None:
-    #                 acumprob = retval[key]
-    #             else:
-    #                 retval[key] += acumprob
-    #                 acumprob = retval[key]
-    #         return retval
-    #
-    #     def reduce_node(parent_node):
-    #         retval = {}
-    #         for parent_key in sorted(parent_node.keys()):
-    #             child_branch = parent_node[parent_key]
-    #             for child_key in sorted(child_branch.keys()):
-    #                 if child_key in retval.keys():
-    #                     retval[child_key] += child_branch[child_key]
-    #                 else:
-    #                     retval[child_key] = child_branch[child_key]
-    #         return retval
-    #
-    #
-    #     def print_report(letter, xdict, key=None):
-    #
-    #         if letter == 'C':
-    #             fmt = 'Risk profile for chance node [C-{:d}] {:s}'
-    #             print(fmt.format(node_number, self.riskprof_nodename))
-    #         elif letter == 'D':
-    #             fmt = 'Risk profile for decision node [D-{:d}] {:s}={:1.2f}'
-    #             print(fmt.format(node_number, self.riskprof_nodename, key))
-    #         else:
-    #             raise ValueError('Invalid value for letter = ' + letter)
-    #
-    #         print('')
-    #         print('         Value   Prob.')
-    #         print('----------------------')
-    #
-    #         xmean = None
-    #         xstd = None
-    #         xmax = None
-    #         xmin = None
-    #
-    #         for key in sorted(xdict.keys()):
-    #             print('  {:12.2f} {:6.2f}% '.format(key, xdict[key]))
-    #             if xmean is None:
-    #                 xmean = key * xdict[key] / 100
-    #                 xmax = key
-    #                 xmin = key
-    #                 xstd = key ** 2 * xdict[key] / 100
-    #             else:
-    #                 xmean += key * xdict[key] / 100
-    #                 xmax = key if key > xmax else xmax
-    #                 xmin = key if key < xmin else xmin
-    #                 xstd += key ** 2 * xdict[key] / 100
-    #         xstd -= xmean ** 2
-    #         xstd = xstd ** 0.5
-    #
-    #         if cumulative is False:
-    #             print('')
-    #             print('mean    = {:8.2f}'. format(xmean))
-    #             print('std dev = {:8.2f}'. format(xstd))
-    #             print('maximum = {:8.2f}'. format(xmax))
-    #             print('minimum = {:8.2f}'. format(xmin))
-    #
-    #
-    #     self.riskprof_node = node_number
-    #     self.Evaluate()
-    #     self.riskprof_node = None
-    #
-    #     # for decision chances simple=True reports only for the optimal branch
-    #     # for simple=False reports all branches
-    #     if self.riskprof_nodetype == 'DECISION':
-    #         #
-    #         if all_branches is False:
-    #             retval = {}
-    #             key = self.riskprof_opt_branch_key
-    #             retval[key] = self.riskprof_data[key]
-    #             if cumulative is True:
-    #                 retval[self.riskprof_opt_branch_key] = compute_cumprob(retval[self.riskprof_opt_branch_key])
-    #         else:
-    #             retval = self.riskprof_data
-    #             if cumulative is True:
-    #                 for parent_key in self.riskprof_data.keys():
-    #                     retval[parent_key] = compute_cumprob(retval[parent_key])
-    #         #
-    #     elif self.riskprof_nodetype == 'CHANCE':
-    #         #
-    #         retval = reduce_node(self.riskprof_data)
-    #         if cumulative is True:
-    #             retval = compute_cumprob(retval)
-    #     else:
-    #         pass
-    #
-    #     if noprint is True:
-    #         return retval
-    #
-    #     if self.riskprof_nodetype == 'DECISION':
-    #         for key in sorted(retval.keys()):
-    #             print_report(letter='D', xdict=retval[key], key=key)
-    #
-    #     elif self.riskprof_nodetype == 'CHANCE':
-    #         print_report(letter='C', xdict=retval)
+    def risk_profile(self, node_number, cumulative=False, all_branches=False, noprint=True):
+        """
+
+
+        """
+
+
+
+
+        ### 
+        def compute_cumprob(data):
+            """Computes the cumulative probability for data (dict)"""
+            retval = data
+            acumprob = None
+            for key in sorted(retval.keys()):
+                if acumprob is None:
+                    acumprob = retval[key]
+                else:
+                    retval[key] += acumprob
+                    acumprob = retval[key]
+            return retval
+
+        def reduce_node(parent_node):
+            retval = {}
+            for parent_key in sorted(parent_node.keys()):
+                child_branch = parent_node[parent_key]
+                for child_key in sorted(child_branch.keys()):
+                    if child_key in retval.keys():
+                        retval[child_key] += child_branch[child_key]
+                    else:
+                        retval[child_key] = child_branch[child_key]
+            return retval
+
+
+        def print_report(letter, xdict, key=None):
+
+            if letter == 'C':
+                fmt = 'Risk profile for chance node [C-{:d}] {:s}'
+                print(fmt.format(node_number, self.riskprof_nodename))
+            elif letter == 'D':
+                fmt = 'Risk profile for decision node [D-{:d}] {:s}={:1.2f}'
+                print(fmt.format(node_number, self.riskprof_nodename, key))
+            else:
+                raise ValueError('Invalid value for letter = ' + letter)
+
+            print('')
+            print('         Value   Prob.')
+            print('----------------------')
+
+            xmean = None
+            xstd = None
+            xmax = None
+            xmin = None
+
+            for key in sorted(xdict.keys()):
+                print('  {:12.2f} {:6.2f}% '.format(key, xdict[key]))
+                if xmean is None:
+                    xmean = key * xdict[key] / 100
+                    xmax = key
+                    xmin = key
+                    xstd = key ** 2 * xdict[key] / 100
+                else:
+                    xmean += key * xdict[key] / 100
+                    xmax = key if key > xmax else xmax
+                    xmin = key if key < xmin else xmin
+                    xstd += key ** 2 * xdict[key] / 100
+            xstd -= xmean ** 2
+            xstd = xstd ** 0.5
+
+            if cumulative is False:
+                print('')
+                print('mean    = {:8.2f}'. format(xmean))
+                print('std dev = {:8.2f}'. format(xstd))
+                print('maximum = {:8.2f}'. format(xmax))
+                print('minimum = {:8.2f}'. format(xmin))
+
+
+        self.riskprof_node = node_number
+        self.Evaluate()
+        self.riskprof_node = None
+
+        # for decision chances simple=True reports only for the optimal branch
+        # for simple=False reports all branches
+        if self.riskprof_nodetype == 'DECISION':
+            #
+            if all_branches is False:
+                retval = {}
+                key = self.riskprof_opt_branch_key
+                retval[key] = self.riskprof_data[key]
+                if cumulative is True:
+                    retval[self.riskprof_opt_branch_key] = compute_cumprob(retval[self.riskprof_opt_branch_key])
+            else:
+                retval = self.riskprof_data
+                if cumulative is True:
+                    for parent_key in self.riskprof_data.keys():
+                        retval[parent_key] = compute_cumprob(retval[parent_key])
+            #
+        elif self.riskprof_nodetype == 'CHANCE':
+            #
+            retval = reduce_node(self.riskprof_data)
+            if cumulative is True:
+                retval = compute_cumprob(retval)
+        else:
+            pass
+
+        if noprint is True:
+            return retval
+
+        if self.riskprof_nodetype == 'DECISION':
+            for key in sorted(retval.keys()):
+                print_report(letter='D', xdict=retval[key], key=key)
+
+        elif self.riskprof_nodetype == 'CHANCE':
+            print_report(letter='C', xdict=retval)
 
 
 
 
 
 
-# if __name__ == "__main__":
-#     import doctest
-#     doctest.testmod()
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
