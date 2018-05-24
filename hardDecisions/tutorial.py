@@ -23,6 +23,75 @@ Tutorial
 >>> tree.chance_node(name='D', values=[(50, 0,  8), (50, -120, 8)])
 >>> tree.chance_node(name='E', values=[(70, 0,  8), (30, -120, 8)])
 >>> tree.terminal_node(name='T2', expr='A+B+C+D')
+
+
+
+
+>>> tree.display_variables() # doctest: +NORMALIZE_WHITESPACE
+Node 0
+A:
+   Type: DECISION - Maximum Payoff
+   Branches:
+                     Outcomes  Sucessor Node
+                      -50.000  1
+                        0.000  2
+<BLANKLINE>
+Node 1
+B:
+   Type: CHANCE
+   Branches:
+         Chance       Outcome  Sucessor Node
+          50.00       250.000  3
+          50.00         0.000  4
+<BLANKLINE>
+Node 2
+T4:
+   Type: TERMINAL
+   Expr: A
+<BLANKLINE>
+Node 3
+C:
+   Type: DECISION - Maximum Payoff
+   Branches:
+                     Outcomes  Sucessor Node
+                     -120.000  5
+                      -50.000  6
+                      -80.000  7
+<BLANKLINE>
+Node 4
+T3:
+   Type: TERMINAL
+   Expr: A+B
+<BLANKLINE>
+Node 5
+T1:
+   Type: TERMINAL
+   Expr: A+B+C
+<BLANKLINE>
+Node 6
+D:
+   Type: CHANCE
+   Branches:
+         Chance       Outcome  Sucessor Node
+          50.00         0.000  8
+          50.00      -120.000  8
+<BLANKLINE>
+Node 7
+E:
+   Type: CHANCE
+   Branches:
+         Chance       Outcome  Sucessor Node
+          70.00         0.000  8
+          30.00      -120.000  8
+<BLANKLINE>
+Node 8
+T2:
+   Type: TERMINAL
+   Expr: A+B+C+D
+<BLANKLINE>
+
+
+
 >>> print_as_tree(tree.variables) # doctest: +NORMALIZE_WHITESPACE
 +-- VARS
     +-- A {max: True, type: DECISION, values: [(-50, 1), (0, 2)]}
