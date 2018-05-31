@@ -89,6 +89,7 @@ class DecisionTree:
                 current_node['node_number'] = self.node_number
                 current_node['expr'] = var ['expr']
                 current_node['expval'] = None
+                current_node['terminal'] = var['tag']
                 self.node_number += 1
 
             if var.get('type') == 'CHANCE':
@@ -185,27 +186,24 @@ class DecisionTree:
                     txt = "|   {:8.2f} {:5.2f}".format(key, node['risk_profile'][key])
                     print(prefix + txt)
 
+            next_node = node['next_node'] if 'next_node' in node.keys() else None
+
             if last_node:
                 if type == 'DECISION':
-                    txt = '+-------[D-{:d}] '.format(node_number)
                     txt = '\-------[D]'
                 if type == 'CHANCE':
-                    txt = '+-------[C-{:d}] '.format(node_number)
                     txt = '\-------[C]'
                 if type == 'TERMINAL':
-                    txt = '\-------[T] '
+                    txt = '\-------[T] {:s}={:s}'.format(node['terminal'], node['expr'])
             else:
                 if type == 'DECISION':
-                    txt = '+-------[D-{:d}] '.format(node_number)
                     txt = '+-------[D]'
                 if type == 'CHANCE':
-                    txt = '+-------[C-{:d}] '.format(node_number)
                     txt = '+-------[C]'
                 if type == 'TERMINAL':
-                    txt = '+-------[T] '
+                    txt = '+-------[T] {:s}={:s}'.format(node['terminal'], node['expr'])
             print(prefix + txt)
 
-            next_node = node['next_node'] if 'next_node' in node.keys() else None
 
 
             if maxdeep is not None and self.current_deep == maxdeep:
@@ -217,7 +215,10 @@ class DecisionTree:
 
                 if policy_suggestion is True and type == 'DECISION':
                     optbranch = node['optbranch']
-                    print_node(prefix + ' ' * 9, self.tree[next_node[optbranch]], last_node=True)
+                    if last_node is True:
+                        print_node(prefix + ' ' * 9, self.tree[next_node[optbranch]], last_node=True)
+                    else:
+                        print_node(prefix + '|' + ' ' * 8, self.tree[next_node[optbranch]], last_node=True)
                 else:
                     for index, node in enumerate(next_node):
                         is_last_node = True if index == len(next_node) - 1 else False
