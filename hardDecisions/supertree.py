@@ -593,7 +593,7 @@ Node 3
                            \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
 
 
->>> tree.display_tree(policy_suggestion=True) # doctest: +NORMALIZE_WHITESPACE
+>>> tree.display_tree(selected_strategy=True) # doctest: +NORMALIZE_WHITESPACE
 |
 | #0
 | ExpVal=65.00
@@ -918,7 +918,7 @@ Node 3
                            | PathProb=0.00
                            | ExpVal=100.00
                            \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
- 
+
 
 
 
@@ -935,10 +935,11 @@ Probabilistic senstitivity
 ...    b500.append(tree.tree[1]['expval'])
 ...    b700.append(tree.tree[14]['expval'])
 
-# >>> b500
+>>> b500
+[-65.0, -39.0, -13.0, 13.0, 39.0, 65.0, 91.0, 117.0, 143.0, 169.0, 195.0]
 
-# >>> b700
-
+>>> b700
+[15.0, 21.0, 27.0, 33.0, 39.0, 45.0, 51.0, 57.0, 63.0, 69.0, 75.0]
 
 
 

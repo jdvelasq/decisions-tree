@@ -143,7 +143,7 @@ class DecisionTree:
         build_node(current_node=self.tree[0], var=self.variables[0])
 
 
-    def display_tree(self, maxdeep=None, policy_suggestion=False):
+    def display_tree(self, maxdeep=None, selected_strategy=False):
         """Prints the tree as text.
         """
 
@@ -191,6 +191,11 @@ class DecisionTree:
                 txt = "| (selected strategy)"
                 print(prefix + txt)
 
+            if 'forced_path' in node.keys() and node['forced_path'] is not None:
+                txt = "| (forced path = {:1d})".format(node['forced_path'])
+                print(prefix + txt)
+
+
             next_node = node['next_node'] if 'next_node' in node.keys() else None
 
             if last_node:
@@ -218,7 +223,7 @@ class DecisionTree:
 
             if next_node is not None:
 
-                if policy_suggestion is True and type == 'DECISION':
+                if selected_strategy is True and type == 'DECISION':
                     optbranch = node['opt_branch']
                     if last_node is True:
                         print_node(prefix + ' ' * 9, self.tree[next_node[optbranch]], last_node=True)
@@ -302,7 +307,7 @@ class DecisionTree:
             """Computes the probabilities in all tree branches.
             """
             def compute_node_prob(node, probability, sel_strategy):
-                
+
                 if node['type'] == 'DECISION':
                     node['sel_strategy'] = sel_strategy
                     if sel_strategy is True:

@@ -534,7 +534,7 @@ Node 17
                   \-------[T] T2=TEST+DRILL4
 
 >>> tree.compute_risk_profile()
->>> tree.display_tree(policy_suggestion=True) # doctest: +NORMALIZE_WHITESPACE
+>>> tree.display_tree(selected_strategy=True) # doctest: +NORMALIZE_WHITESPACE
 |
 | #0
 | ExpVal=544.92
