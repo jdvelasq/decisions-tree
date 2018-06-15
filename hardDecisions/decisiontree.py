@@ -90,6 +90,7 @@ class DecisionTree:
                 current_node['expr'] = var ['expr']
                 current_node['expval'] = None
                 current_node['terminal'] = var['tag']
+                current_node['sel_strategy'] = None
                 self.node_number += 1
 
             if var.get('type') == 'CHANCE':
@@ -97,6 +98,7 @@ class DecisionTree:
                 current_node['type'] = var['type']
                 current_node['node_number'] = self.node_number
                 current_node['expval']  = None
+                current_node['sel_strategy'] = None
                 #
                 self.node_number += 1
                 for child in var.get('values'):
@@ -118,6 +120,8 @@ class DecisionTree:
                 current_node['max'] = var.get('max')
                 current_node['node_number'] = self.node_number
                 current_node['expval'] = None
+                current_node['forced_path'] = None
+                current_node['sel_strategy'] = None
                 #
                 self.node_number += 1
                 for child in var.get('values'):
@@ -141,11 +145,9 @@ class DecisionTree:
 
     def display_tree(self, maxdeep=None, policy_suggestion=False):
         """Prints the tree as text.
-
         """
 
         def print_node(prefix, node, last_node):
-
 
             print(prefix + '|')
 
@@ -156,7 +158,6 @@ class DecisionTree:
 
 
             ## prints the name and value of the variable
-
             if 'var' in node.keys():
                 var = node['var']
                 if 'value' in node.keys():
@@ -171,8 +172,8 @@ class DecisionTree:
                 print(prefix + txt)
 
             ## prints the cumulative probability
-            if 'cprob' in node.keys():
-                txt = "| CProb={:1.2f}".format(node['cprob'])
+            if type == 'TERMINAL' and 'pathprob' in node.keys():
+                txt = "| PathProb={:1.2f}".format(node['pathprob'])
                 print(prefix + txt)
 
             if 'expval' in node.keys() and node['expval'] is not None:
@@ -185,6 +186,10 @@ class DecisionTree:
                 for key in sorted(node['risk_profile']):
                     txt = "|   {:8.2f} {:5.2f}".format(key, node['risk_profile'][key])
                     print(prefix + txt)
+
+            if 'sel_strategy' in node.keys() and node['sel_strategy'] is True:
+                txt = "| (selected strategy)"
+                print(prefix + txt)
 
             next_node = node['next_node'] if 'next_node' in node.keys() else None
 
@@ -214,7 +219,7 @@ class DecisionTree:
             if next_node is not None:
 
                 if policy_suggestion is True and type == 'DECISION':
-                    optbranch = node['optbranch']
+                    optbranch = node['opt_branch']
                     if last_node is True:
                         print_node(prefix + ' ' * 9, self.tree[next_node[optbranch]], last_node=True)
                     else:
@@ -236,92 +241,125 @@ class DecisionTree:
     def evaluate(self):
         """Evalute the tree. First, the cumulative probabilities in all nodes
         are calculated. Finally, the algorithm computes the expected values."""
-        self.compute_prob()
-        self.compute_values()
 
-    def compute_prob(self):
-        """Computes the probabilities in all tree branches.
-        """
-        def compute_node_prob(node, probability):
-            type = node['type']
-            if type == 'DECISION':
-                next_node = node['next_node']
-                for numnode in next_node:
-                    compute_node_prob(node=self.tree[numnode], probability=1.0)
-            if type == 'CHANCE':
-                next_node = node['next_node']
-                for numnode in next_node:
-                    prob = self.tree[numnode]['prob']
-                    compute_node_prob(node=self.tree[numnode], probability=probability * prob/100)
-            if type == 'TERMINAL':
-                node['cprob'] = probability * 100
-        compute_node_prob(node=self.tree[0], probability=1.0)
+        def compute_values():
+            """computes expected values.
+            """
+            def compute_node_value(node):
+
+                type = node['type']
+
+                if type == 'DECISION':
+                    if 'var' in node.keys():
+                        var = node['var']
+                        value = node['value']
+                        self.globals[var] = value
+                    next_node = node['next_node']
+                    ismax = node['max']
+                    expval = None
+
+                    for index, numnode in enumerate(next_node):
+                        compute_node_value(node=self.tree[numnode])
+                        if node['forced_path'] is None:
+                            if expval is None:
+                                expval = self.tree[numnode].get('expval')
+                                node['opt_branch'] = index
+                            if ismax is True and expval < self.tree[numnode].get('expval'):
+                                expval = self.tree[numnode].get('expval')
+                                node['opt_branch'] = index
+                            if ismax is False and expval > self.tree[numnode].get('expval'):
+                                expval = self.tree[numnode].get('expval')
+                                node['opt_branch'] = index
+                        else:
+                            if index == node['forced_path']:
+                                expval = self.tree[numnode].get('expval')
+                                node['opt_branch'] = index
+
+                    node['expval'] = expval
 
 
-    def compute_values(self):
-        """Compute expectes values.
-        """
-        def compute_node_value(node):
-
-            type = node['type']
-
-            if type == 'DECISION':
-                if 'var' in node.keys():
+                if type == 'CHANCE':
                     var = node['var']
                     value = node['value']
                     self.globals[var] = value
-                next_node = node['next_node']
-                ismax = node['max']
-                expval = None
+                    next_node = node['next_node']
+                    expval = 0
+                    for numnode in next_node:
+                        compute_node_value(node=self.tree[numnode])
+                        expval += self.tree[numnode].get('expval') * self.tree[numnode].get('prob') / 100
+                    node['expval'] = expval
 
-                for index, numnode in enumerate(next_node):
-                    compute_node_value(node=self.tree[numnode])
-                    if expval is None:
-                        expval = self.tree[numnode].get('expval')
-                        node['optbranch'] = index
-                    if ismax is True and expval < self.tree[numnode].get('expval'):
-                        expval = self.tree[numnode].get('expval')
-                        node['optbranch'] = index
-                    if ismax is False and expval > self.tree[numnode].get('expval'):
-                        expval = self.tree[numnode].get('expval')
-                        node['optbranch'] = index
-                node['expval'] = expval
+                if type == 'TERMINAL':
+                    var = node['var']
+                    value = node['value']
+                    self.globals[var] = value
+                    node['expval'] = eval(node['expr'], self.globals.copy())
+
+            compute_node_value(node=self.tree[0])
 
 
-            if type == 'CHANCE':
-                var = node['var']
-                value = node['value']
-                self.globals[var] = value
-                next_node = node['next_node']
-                expval = 0
-                for numnode in next_node:
-                    compute_node_value(node=self.tree[numnode])
-                    expval += self.tree[numnode].get('expval') * self.tree[numnode].get('prob') / 100
-                node['expval'] = expval
+        def compute_prob():
+            """Computes the probabilities in all tree branches.
+            """
+            def compute_node_prob(node, probability, sel_strategy):
+                
+                if node['type'] == 'DECISION':
+                    node['sel_strategy'] = sel_strategy
+                    if sel_strategy is True:
+                        for index, numnode in enumerate(node['next_node']):
+                            if index == node['opt_branch']:
+                                compute_node_prob(node=self.tree[numnode],
+                                                  probability=probability,
+                                                  sel_strategy=True)
+                            else:
+                                compute_node_prob(node=self.tree[numnode],
+                                                  probability=0,
+                                                  sel_strategy=False)
+                    else:
+                        if sel_strategy is True:
+                            current_prob = probability
+                        else:
+                            current_prob = 0
+                        for numnode in node['next_node']:
+                            compute_node_prob(node=self.tree[numnode],
+                                              probability=current_prob,
+                                              sel_strategy=False)
+                if node['type'] == 'CHANCE':
+                    node['sel_strategy'] = sel_strategy
+                    for numnode in node['next_node']:
+                        prob = self.tree[numnode]['prob']
+                        compute_node_prob(node=self.tree[numnode],
+                                          probability=probability * prob/100,
+                                          sel_strategy = sel_strategy)
+                if node['type'] == 'TERMINAL':
+                    node['sel_strategy'] = sel_strategy
+                    node['pathprob'] = probability * 100
+            #
+            compute_node_prob(node=self.tree[0], probability=1.0, sel_strategy=True)
 
-            if type == 'TERMINAL':
-                var = node['var']
-                value = node['value']
-                self.globals[var] = value
-                node['expval'] = eval(node['expr'], self.globals.copy())
-
-        compute_node_value(node=self.tree[0])
-
+        compute_values()
+        compute_prob()
 
 
 
     def compute_risk_profile(self):
-        """
+        """Computes the risk profile for the selected strategy.
         """
 
         def collect(node):
 
+            if node['sel_strategy'] is False:
+                return
+
             if node['type'] == 'DECISION':
                 for index, numnode in enumerate(node['next_node']):
                     collect(node=self.tree[numnode])
-                optbranch = node['next_node'][node['optbranch']]
-                node['risk_profile'] = self.tree[optbranch]['risk_profile']
-
+                #opt_branch = node['next_node'][node['opt_branch']]
+                #node['risk_profile'] = self.tree[optbranch]['risk_profile']
+                #opt_branch = node['opt_branch']
+                #collect(node=self.tree[opt_branch])
+                next_opt_branch = node['next_node'][node['opt_branch']]
+                node['risk_profile'] = self.tree[next_opt_branch]['risk_profile']
 
             if node['type'] == 'CHANCE':
                 for index, numnode in enumerate(node['next_node']):
@@ -335,58 +373,14 @@ class DecisionTree:
                         else:
                             node['risk_profile'][key] = dict[key]
 
-                sum_values = sum(node['risk_profile'].values())
-                for key in sorted(node['risk_profile']):
-                    node['risk_profile'][key] = (node['risk_profile'][key] / sum_values) * 100
-
-
+                #sum_values = sum(node['risk_profile'].values())
+                #for key in sorted(node['risk_profile']):
+                #    node['risk_profile'][key] = (node['risk_profile'][key] / sum_values) * 100
 
 
             if node['type'] == 'TERMINAL':
-                node['risk_profile'] = {node['expval']: node['cprob']}
+                node['risk_profile'] = {node['expval']: node['pathprob']}
 
-            #
-            #
-            # ##---!!!!----
-            # if type == 'DECISION':
-            #     if 'var' in node.keys():
-            #         var = node['var']
-            #         value = node['value']
-            #         self.globals[var] = value
-            #     next_node = node['next_node']
-            #     ismax = node['max']
-            #     expval = None
-            #
-            #     for index, numnode in enumerate(next_node):
-            #         compute_node_value(node=self.tree[numnode])
-            #         if expval is None:
-            #             expval = self.tree[numnode].get('expval')
-            #             node['optbranch'] = index
-            #         if ismax is True and expval < self.tree[numnode].get('expval'):
-            #             expval = self.tree[numnode].get('expval')
-            #             node['optbranch'] = index
-            #         if ismax is False and expval > self.tree[numnode].get('expval'):
-            #             expval = self.tree[numnode].get('expval')
-            #             node['optbranch'] = index
-            #     node['expval'] = expval
-            #
-            #
-            # if type == 'CHANCE':
-            #     var = node['var']
-            #     value = node['value']
-            #     self.globals[var] = value
-            #     next_node = node['next_node']
-            #     expval = 0
-            #     for numnode in next_node:
-            #         compute_node_value(node=self.tree[numnode])
-            #         expval += self.tree[numnode].get('expval') * self.tree[numnode].get('prob') / 100
-            #     node['expval'] = expval
-            #
-            # if type == 'TERMINAL':
-            #     var = node['var']
-            #     value = node['value']
-            #     self.globals[var] = value
-            #     node['expval'] = eval(node['expr'], self.globals.copy())
 
         collect(node=self.tree[0])
         #print(self.tree[0]['risk_profile'])

@@ -209,145 +209,89 @@ Node 9
 
 
 
->>> tree.compute_prob()
->>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
-|
-| #0
-\-------[D]
-        |
-        | #1
-        | A=-50
-        +-------[C]
-        |        |
-        |        | #2
-        |        | B=250
-        |        | Prob=50.00
-        |        +-------[D]
-        |        |        |
-        |        |        | #3
-        |        |        | C=-120
-        |        |        | CProb=100.00
-        |        |        +-------[T] T1=A+B+C
-        |        |        |
-        |        |        | #4
-        |        |        | C=-50
-        |        |        +-------[C]
-        |        |        |        |
-        |        |        |        | #5
-        |        |        |        | D=0
-        |        |        |        | Prob=50.00
-        |        |        |        | CProb=50.00
-        |        |        |        +-------[T] T2=A+B+C+D
-        |        |        |        |
-        |        |        |        | #6
-        |        |        |        | D=-120
-        |        |        |        | Prob=50.00
-        |        |        |        | CProb=50.00
-        |        |        |        \-------[T] T2=A+B+C+D
-        |        |        |
-        |        |        | #7
-        |        |        | C=-80
-        |        |        \-------[C]
-        |        |                 |
-        |        |                 | #8
-        |        |                 | E=0
-        |        |                 | Prob=70.00
-        |        |                 | CProb=70.00
-        |        |                 +-------[T] T3=A+B+C+E
-        |        |                 |
-        |        |                 | #9
-        |        |                 | E=-120
-        |        |                 | Prob=30.00
-        |        |                 | CProb=30.00
-        |        |                 \-------[T] T3=A+B+C+E
-        |        |
-        |        | #10
-        |        | B=0
-        |        | Prob=50.00
-        |        | CProb=50.00
-        |        \-------[T] T4=A+B
-        |
-        | #11
-        | A=0
-        | CProb=100.00
-        \-------[T] T5=A
 
 
-
->>> tree.compute_values()
+>>> tree.evaluate()
 >>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
 |
 | #0
 | ExpVal=20.00
+| (selected strategy)
 \-------[D]
-        |
-        | #1
-        | A=-50
-        | ExpVal=20.00
-        +-------[C]
-        |        |
-        |        | #2
-        |        | B=250
-        |        | Prob=50.00
-        |        | ExpVal=90.00
-        |        +-------[D]
-        |        |        |
-        |        |        | #3
-        |        |        | C=-120
-        |        |        | CProb=100.00
-        |        |        | ExpVal=80.00
-        |        |        +-------[T] T1=A+B+C
-        |        |        |
-        |        |        | #4
-        |        |        | C=-50
-        |        |        | ExpVal=90.00
-        |        |        +-------[C]
-        |        |        |        |
-        |        |        |        | #5
-        |        |        |        | D=0
-        |        |        |        | Prob=50.00
-        |        |        |        | CProb=50.00
-        |        |        |        | ExpVal=150.00
-        |        |        |        +-------[T] T2=A+B+C+D
-        |        |        |        |
-        |        |        |        | #6
-        |        |        |        | D=-120
-        |        |        |        | Prob=50.00
-        |        |        |        | CProb=50.00
-        |        |        |        | ExpVal=30.00
-        |        |        |        \-------[T] T2=A+B+C+D
-        |        |        |
-        |        |        | #7
-        |        |        | C=-80
-        |        |        | ExpVal=84.00
-        |        |        \-------[C]
-        |        |                 |
-        |        |                 | #8
-        |        |                 | E=0
-        |        |                 | Prob=70.00
-        |        |                 | CProb=70.00
-        |        |                 | ExpVal=120.00
-        |        |                 +-------[T] T3=A+B+C+E
-        |        |                 |
-        |        |                 | #9
-        |        |                 | E=-120
-        |        |                 | Prob=30.00
-        |        |                 | CProb=30.00
-        |        |                 | ExpVal=0.00
-        |        |                 \-------[T] T3=A+B+C+E
-        |        |
-        |        | #10
-        |        | B=0
-        |        | Prob=50.00
-        |        | CProb=50.00
-        |        | ExpVal=-50.00
-        |        \-------[T] T4=A+B
-        |
-        | #11
-        | A=0
-        | CProb=100.00
-        | ExpVal=0.00
-        \-------[T] T5=A
+         |
+         | #1
+         | A=-50
+         | ExpVal=20.00
+         | (selected strategy)
+         +-------[C]
+         |        |
+         |        | #2
+         |        | B=250
+         |        | Prob=50.00
+         |        | ExpVal=90.00
+         |        | (selected strategy)
+         |        +-------[D]
+         |        |        |
+         |        |        | #3
+         |        |        | C=-120
+         |        |        | PathProb=0.00
+         |        |        | ExpVal=80.00
+         |        |        +-------[T] T1=A+B+C
+         |        |        |
+         |        |        | #4
+         |        |        | C=-50
+         |        |        | ExpVal=90.00
+         |        |        | (selected strategy)
+         |        |        +-------[C]
+         |        |        |        |
+         |        |        |        | #5
+         |        |        |        | D=0
+         |        |        |        | Prob=50.00
+         |        |        |        | PathProb=25.00
+         |        |        |        | ExpVal=150.00
+         |        |        |        | (selected strategy)
+         |        |        |        +-------[T] T2=A+B+C+D
+         |        |        |        |
+         |        |        |        | #6
+         |        |        |        | D=-120
+         |        |        |        | Prob=50.00
+         |        |        |        | PathProb=25.00
+         |        |        |        | ExpVal=30.00
+         |        |        |        | (selected strategy)
+         |        |        |        \-------[T] T2=A+B+C+D
+         |        |        |
+         |        |        | #7
+         |        |        | C=-80
+         |        |        | ExpVal=84.00
+         |        |        \-------[C]
+         |        |                 |
+         |        |                 | #8
+         |        |                 | E=0
+         |        |                 | Prob=70.00
+         |        |                 | PathProb=0.00
+         |        |                 | ExpVal=120.00
+         |        |                 +-------[T] T3=A+B+C+E
+         |        |                 |
+         |        |                 | #9
+         |        |                 | E=-120
+         |        |                 | Prob=30.00
+         |        |                 | PathProb=0.00
+         |        |                 | ExpVal=0.00
+         |        |                 \-------[T] T3=A+B+C+E
+         |        |
+         |        | #10
+         |        | B=0
+         |        | Prob=50.00
+         |        | PathProb=50.00
+         |        | ExpVal=-50.00
+         |        | (selected strategy)
+         |        \-------[T] T4=A+B
+         |
+         | #11
+         | A=0
+         | PathProb=0.00
+         | ExpVal=0.00
+         \-------[T] T5=A
 
 
 
@@ -355,44 +299,51 @@ Node 9
 |
 | #0
 | ExpVal=20.00
+| (selected strategy)
 \-------[D]
-        |
-        | #1
-        | A=-50
-        | ExpVal=20.00
-        \-------[C]
-                 |
-                 | #2
-                 | B=250
-                 | Prob=50.00
-                 | ExpVal=90.00
-                 +-------[D]
-                 |        |
-                 |        | #4
-                 |        | C=-50
-                 |        | ExpVal=90.00
-                 |        \-------[C]
-                 |                 |
-                 |                 | #5
-                 |                 | D=0
-                 |                 | Prob=50.00
-                 |                 | CProb=50.00
-                 |                 | ExpVal=150.00
-                 |                 +-------[T] T2=A+B+C+D
-                 |                 |
-                 |                 | #6
-                 |                 | D=-120
-                 |                 | Prob=50.00
-                 |                 | CProb=50.00
-                 |                 | ExpVal=30.00
-                 |                 \-------[T] T2=A+B+C+D
-                 |
-                 | #10
-                 | B=0
-                 | Prob=50.00
-                 | CProb=50.00
-                 | ExpVal=-50.00
-                 \-------[T] T4=A+B
+         |
+         | #1
+         | A=-50
+         | ExpVal=20.00
+         | (selected strategy)
+         \-------[C]
+                  |
+                  | #2
+                  | B=250
+                  | Prob=50.00
+                  | ExpVal=90.00
+                  | (selected strategy)
+                  +-------[D]
+                  |        |
+                  |        | #4
+                  |        | C=-50
+                  |        | ExpVal=90.00
+                  |        | (selected strategy)
+                  |        \-------[C]
+                  |                 |
+                  |                 | #5
+                  |                 | D=0
+                  |                 | Prob=50.00
+                  |                 | PathProb=25.00
+                  |                 | ExpVal=150.00
+                  |                 | (selected strategy)
+                  |                 +-------[T] T2=A+B+C+D
+                  |                 |
+                  |                 | #6
+                  |                 | D=-120
+                  |                 | Prob=50.00
+                  |                 | PathProb=25.00
+                  |                 | ExpVal=30.00
+                  |                 | (selected strategy)
+                  |                 \-------[T] T2=A+B+C+D
+                  |
+                  | #10
+                  | B=0
+                  | Prob=50.00
+                  | PathProb=50.00
+                  | ExpVal=-50.00
+                  | (selected strategy)
+                  \-------[T] T4=A+B
 
 
 
@@ -413,64 +364,68 @@ Node 9
 |
 | #0
 \-------[D]
-        |
-        | #1
-        | A=-300
-        +-------[C]
-        |        |
-        |        | #2
-        |        | B=600
-        |        | Prob=60.00
-        |        +-------[T] T2=A+B
-        |        |
-        |        | #3
-        |        | B=100
-        |        | Prob=40.00
-        |        \-------[T] T2=A+B
-        |
-        | #4
-        | A=0
-        \-------[T] T1=A
+         |
+         | #1
+         | A=-300
+         +-------[C]
+         |        |
+         |        | #2
+         |        | B=600
+         |        | Prob=60.00
+         |        +-------[T] T2=A+B
+         |        |
+         |        | #3
+         |        | B=100
+         |        | Prob=40.00
+         |        \-------[T] T2=A+B
+         |
+         | #4
+         | A=0
+         \-------[T] T1=A
 
->>> tree17.compute_prob()
->>> tree17.compute_values()
+>>> tree17.evaluate()
 >>> tree17.display_tree() # doctest: +NORMALIZE_WHITESPACE
 |
 | #0
 | ExpVal=100.00
+| (selected strategy)
 \-------[D]
-        |
-        | #1
-        | A=-300
-        | ExpVal=100.00
-        +-------[C]
-        |        |
-        |        | #2
-        |        | B=600
-        |        | Prob=60.00
-        |        | CProb=60.00
-        |        | ExpVal=300.00
-        |        +-------[T] T2=A+B
-        |        |
-        |        | #3
-        |        | B=100
-        |        | Prob=40.00
-        |        | CProb=40.00
-        |        | ExpVal=-200.00
-        |        \-------[T] T2=A+B
-        |
-        | #4
-        | A=0
-        | CProb=100.00
-        | ExpVal=0.00
-        \-------[T] T1=A
+         |
+         | #1
+         | A=-300
+         | ExpVal=100.00
+         | (selected strategy)
+         +-------[C]
+         |        |
+         |        | #2
+         |        | B=600
+         |        | Prob=60.00
+         |        | PathProb=60.00
+         |        | ExpVal=300.00
+         |        | (selected strategy)
+         |        +-------[T] T2=A+B
+         |        |
+         |        | #3
+         |        | B=100
+         |        | Prob=40.00
+         |        | PathProb=40.00
+         |        | ExpVal=-200.00
+         |        | (selected strategy)
+         |        \-------[T] T2=A+B
+         |
+         | #4
+         | A=0
+         | PathProb=0.00
+         | ExpVal=0.00
+         \-------[T] T1=A
+
+
 
 >>> sensitivity = []
 >>> for p in range(0, 101, 10):
 ...    tree17.variables[1]['values'] = [(p,  600,  3), (100-p,  100,  3)]
 ...    tree17.build_tree()
-...    tree17.compute_prob()
-...    tree17.compute_values()
+...    tree17.evaluate()
 ...    sensitivity.append(tree17.tree[0]['expval'])
 >>> sensitivity
 [0, 0, 0, 0, 0.0, 50.0, 100.0, 150.0, 200.0, 250.0, 300.0]
@@ -484,9 +439,8 @@ Node 9
 ...         tree.variables[6]['values'] = [(p1,  0,  8), (100-p1, -120,  8)]
 ...         tree.variables[7]['values'] = [(p2,  0,  9), (100-p2, -120,  9)]
 ...         tree.build_tree()
-...         tree.compute_prob()
-...         tree.compute_values()
-...         aux.append(tree.tree[2]['optbranch'])
+...         tree.evaluate()
+...         aux.append(tree.tree[2]['opt_branch'])
 ...     sensitivity.append(aux)
 >>> for x in sensitivity:
 ...     print(x) # doctest: +NORMALIZE_WHITESPACE
