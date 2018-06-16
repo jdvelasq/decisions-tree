@@ -348,7 +348,7 @@ Node 9
 
 
 
->>> tree.tree[2]['forced_path'] = 2
+>>> tree.tree[2]['forced_branch'] = 2
 >>> tree.evaluate()
 >>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
 |
@@ -368,7 +368,7 @@ Node 9
          |        | Prob=50.00
          |        | ExpVal=84.00
          |        | (selected strategy)
-         |        | (forced path = 2)
+         |        | (forced branch = 2)
          |        +-------[D]
          |        |        |
          |        |        | #3
@@ -432,24 +432,25 @@ Node 9
          | ExpVal=0.00
          \-------[T] T5=A
 
->>> tree.tree[2]['forced_path'] = None
+>>> tree.tree[2]['forced_branch'] = None
+>>> tree.evaluate()
 >>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
 |
 | #0
-| ExpVal=17.00
+| ExpVal=20.00
 | (selected strategy)
 \-------[D]
          |
          | #1
          | A=-50
-         | ExpVal=17.00
+         | ExpVal=20.00
          | (selected strategy)
          +-------[C]
          |        |
          |        | #2
          |        | B=250
          |        | Prob=50.00
-         |        | ExpVal=84.00
+         |        | ExpVal=90.00
          |        | (selected strategy)
          |        +-------[D]
          |        |        |
@@ -462,42 +463,42 @@ Node 9
          |        |        | #4
          |        |        | C=-50
          |        |        | ExpVal=90.00
+         |        |        | (selected strategy)
          |        |        +-------[C]
          |        |        |        |
          |        |        |        | #5
          |        |        |        | D=0
          |        |        |        | Prob=50.00
-         |        |        |        | PathProb=0.00
+         |        |        |        | PathProb=25.00
          |        |        |        | ExpVal=150.00
+         |        |        |        | (selected strategy)
          |        |        |        +-------[T] T2=A+B+C+D
          |        |        |        |
          |        |        |        | #6
          |        |        |        | D=-120
          |        |        |        | Prob=50.00
-         |        |        |        | PathProb=0.00
+         |        |        |        | PathProb=25.00
          |        |        |        | ExpVal=30.00
+         |        |        |        | (selected strategy)
          |        |        |        \-------[T] T2=A+B+C+D
          |        |        |
          |        |        | #7
          |        |        | C=-80
          |        |        | ExpVal=84.00
-         |        |        | (selected strategy)
          |        |        \-------[C]
          |        |                 |
          |        |                 | #8
          |        |                 | E=0
          |        |                 | Prob=70.00
-         |        |                 | PathProb=35.00
+         |        |                 | PathProb=0.00
          |        |                 | ExpVal=120.00
-         |        |                 | (selected strategy)
          |        |                 +-------[T] T3=A+B+C+E
          |        |                 |
          |        |                 | #9
          |        |                 | E=-120
          |        |                 | Prob=30.00
-         |        |                 | PathProb=15.00
+         |        |                 | PathProb=0.00
          |        |                 | ExpVal=0.00
-         |        |                 | (selected strategy)
          |        |                 \-------[T] T3=A+B+C+E
          |        |
          |        | #10
@@ -513,6 +514,180 @@ Node 9
          | PathProb=0.00
          | ExpVal=0.00
          \-------[T] T5=A
+
+
+
+>>> tree.tree[1]['forced_branch'] = 0
+>>> tree.tree[4]['forced_branch'] = 0
+>>> tree.evaluate()
+>>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
+|
+| #0
+| ExpVal=150.00
+| (selected strategy)
+\-------[D]
+         |
+         | #1
+         | A=-50
+         | ExpVal=150.00
+         | (selected strategy)
+         | (forced branch = 0)
+         +-------[C]
+         |        |
+         |        | #2
+         |        | B=250
+         |        | Prob=50.00
+         |        | ExpVal=150.00
+         |        | (selected strategy)
+         |        +-------[D]
+         |        |        |
+         |        |        | #3
+         |        |        | C=-120
+         |        |        | PathProb=0.00
+         |        |        | ExpVal=80.00
+         |        |        +-------[T] T1=A+B+C
+         |        |        |
+         |        |        | #4
+         |        |        | C=-50
+         |        |        | ExpVal=150.00
+         |        |        | (selected strategy)
+         |        |        | (forced branch = 0)
+         |        |        +-------[C]
+         |        |        |        |
+         |        |        |        | #5
+         |        |        |        | D=0
+         |        |        |        | Prob=50.00
+         |        |        |        | PathProb=100.00
+         |        |        |        | ExpVal=150.00
+         |        |        |        | (selected strategy)
+         |        |        |        +-------[T] T2=A+B+C+D
+         |        |        |        |
+         |        |        |        | #6
+         |        |        |        | D=-120
+         |        |        |        | Prob=50.00
+         |        |        |        | PathProb=0.00
+         |        |        |        | ExpVal=30.00
+         |        |        |        \-------[T] T2=A+B+C+D
+         |        |        |
+         |        |        | #7
+         |        |        | C=-80
+         |        |        | ExpVal=84.00
+         |        |        \-------[C]
+         |        |                 |
+         |        |                 | #8
+         |        |                 | E=0
+         |        |                 | Prob=70.00
+         |        |                 | PathProb=0.00
+         |        |                 | ExpVal=120.00
+         |        |                 +-------[T] T3=A+B+C+E
+         |        |                 |
+         |        |                 | #9
+         |        |                 | E=-120
+         |        |                 | Prob=30.00
+         |        |                 | PathProb=0.00
+         |        |                 | ExpVal=0.00
+         |        |                 \-------[T] T3=A+B+C+E
+         |        |
+         |        | #10
+         |        | B=0
+         |        | Prob=50.00
+         |        | PathProb=0.00
+         |        | ExpVal=-50.00
+         |        \-------[T] T4=A+B
+         |
+         | #11
+         | A=0
+         | PathProb=0.00
+         | ExpVal=0.00
+         \-------[T] T5=A
+
+
+
+
+>>> tree.tree[1]['forced_branch'] = None
+>>> tree.tree[4]['forced_branch'] = None
+>>> tree.evaluate()
+>>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
+|
+| #0
+| ExpVal=20.00
+| (selected strategy)
+\-------[D]
+         |
+         | #1
+         | A=-50
+         | ExpVal=20.00
+         | (selected strategy)
+         +-------[C]
+         |        |
+         |        | #2
+         |        | B=250
+         |        | Prob=50.00
+         |        | ExpVal=90.00
+         |        | (selected strategy)
+         |        +-------[D]
+         |        |        |
+         |        |        | #3
+         |        |        | C=-120
+         |        |        | PathProb=0.00
+         |        |        | ExpVal=80.00
+         |        |        +-------[T] T1=A+B+C
+         |        |        |
+         |        |        | #4
+         |        |        | C=-50
+         |        |        | ExpVal=90.00
+         |        |        | (selected strategy)
+         |        |        +-------[C]
+         |        |        |        |
+         |        |        |        | #5
+         |        |        |        | D=0
+         |        |        |        | Prob=50.00
+         |        |        |        | PathProb=25.00
+         |        |        |        | ExpVal=150.00
+         |        |        |        | (selected strategy)
+         |        |        |        +-------[T] T2=A+B+C+D
+         |        |        |        |
+         |        |        |        | #6
+         |        |        |        | D=-120
+         |        |        |        | Prob=50.00
+         |        |        |        | PathProb=25.00
+         |        |        |        | ExpVal=30.00
+         |        |        |        | (selected strategy)
+         |        |        |        \-------[T] T2=A+B+C+D
+         |        |        |
+         |        |        | #7
+         |        |        | C=-80
+         |        |        | ExpVal=84.00
+         |        |        \-------[C]
+         |        |                 |
+         |        |                 | #8
+         |        |                 | E=0
+         |        |                 | Prob=70.00
+         |        |                 | PathProb=0.00
+         |        |                 | ExpVal=120.00
+         |        |                 +-------[T] T3=A+B+C+E
+         |        |                 |
+         |        |                 | #9
+         |        |                 | E=-120
+         |        |                 | Prob=30.00
+         |        |                 | PathProb=0.00
+         |        |                 | ExpVal=0.00
+         |        |                 \-------[T] T3=A+B+C+E
+         |        |
+         |        | #10
+         |        | B=0
+         |        | Prob=50.00
+         |        | PathProb=50.00
+         |        | ExpVal=-50.00
+         |        | (selected strategy)
+         |        \-------[T] T4=A+B
+         |
+         | #11
+         | A=0
+         | PathProb=0.00
+         | ExpVal=0.00
+         \-------[T] T5=A
+
 
 
 
