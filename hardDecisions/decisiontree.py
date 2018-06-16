@@ -15,6 +15,7 @@ class DecisionTree:
         self.variables = []
         self.tree = []
         self.globals = {}
+        self.cumvalue = 0
 
     def terminal_node(self, name=None, expr=None):
         """Creates a decision tree's terminal node.
@@ -70,7 +71,10 @@ class DecisionTree:
                 #
             elif  var.get('type') == 'TERMINAL':
                 #
-                txt.append('    Expr: ' + var.get('expr'))
+                if var.get('expr') is None:
+                    txt.append('    Expr: (cumulative)')
+                else:
+                    txt.append('    Expr: ' + var.get('expr'))
                 txt.append('')
                 #
             else:
@@ -82,15 +86,27 @@ class DecisionTree:
         """Builds the decision tree using the information in the variables.
         """
 
-        def build_node(current_node, var):
+        def build_node(current_node, var, var_list):
 
             if var.get('type') == 'TERMINAL':
                 current_node['type'] = var['type']
                 current_node['node_number'] = self.node_number
-                current_node['expr'] = var ['expr']
+                current_node['expr'] = var['expr']
                 current_node['expval'] = None
                 current_node['terminal'] = var['tag']
                 current_node['sel_strategy'] = None
+                #
+                if 'var' in current_node.keys():
+                    var_list.append(current_node['var'])
+                #
+                if var['expr'] is None:
+                    expr = ''
+                    for index, v in enumerate(var_list):
+                        if index == 0:
+                            expr = v
+                        else:
+                            expr += '+' + v
+                    current_node['expr'] = expr
                 self.node_number += 1
 
             if var.get('type') == 'CHANCE':
@@ -100,6 +116,9 @@ class DecisionTree:
                 current_node['expval']  = None
                 current_node['sel_strategy'] = None
                 current_node['forced_branch'] = None
+                #
+                if 'var' in current_node.keys():
+                    var_list.append(current_node['var'])
                 #
                 self.node_number += 1
                 for child in var.get('values'):
@@ -113,7 +132,7 @@ class DecisionTree:
                         current_node['next_node'].append(len(self.tree)- 1)
                     else:
                         current_node['next_node'] = [len(self.tree) - 1]
-                    build_node(current_node=tree_node, var=self.variables[next_node])
+                    build_node(current_node=tree_node, var=self.variables[next_node], var_list=var_list.copy())
 
             if var.get('type') == 'DECISION':
                 #
@@ -123,6 +142,9 @@ class DecisionTree:
                 current_node['expval'] = None
                 current_node['forced_branch'] = None
                 current_node['sel_strategy'] = None
+                #
+                if 'var' in current_node.keys():
+                    var_list.append(current_node['var'])
                 #
                 self.node_number += 1
                 for child in var.get('values'):
@@ -136,12 +158,13 @@ class DecisionTree:
                         current_node['next_node'].append(len(self.tree) - 1)
                     else:
                         current_node['next_node'] = [len(self.tree) - 1]
-                    build_node(current_node=tree_node, var=self.variables[next_node])
+                    build_node(current_node=tree_node, var=self.variables[next_node], var_list=var_list.copy())
 
         self.tree = []
         self.node_number = 0
         self.tree.append({'tag':0})
-        build_node(current_node=self.tree[0], var=self.variables[0])
+        var_list = []
+        build_node(current_node=self.tree[0], var=self.variables[0], var_list=var_list.copy())
 
 
     def display_tree(self, maxdeep=None, selected_strategy=False):
@@ -365,6 +388,7 @@ class DecisionTree:
             #
             compute_node_prob(node=self.tree[0], probability=1.0, sel_strategy=True)
 
+        self.cumvalue = 0
         compute_values()
         compute_prob()
 
