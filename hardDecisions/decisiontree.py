@@ -24,20 +24,22 @@ class DecisionTree:
                                'type':'TERMINAL',
                                'expr':expr})
 
-    def chance_node(self, name=None, values=None):
+    def chance_node(self, name=None, values=None, ignore=False):
         """Creates a decisions tree's internal chance node.
         """
         self.variables.append({'tag':name,
                                'type':'CHANCE',
-                               'values':values})
+                               'values':values,
+                               'ignore':ignore})
 
-    def decision_node(self, name=None, values=None, max=True):
+    def decision_node(self, name=None, values=None, max=True, ignore=False):
         """Creates a decisions tree's internal decision node.
         """
         self.variables.append({'tag':name,
                                'type':'DECISION',
                                'values':values,
-                               'max':max})
+                               'max':max,
+                               'ignore':ignore})
 
     def display_variables(self):
         """Display all the varibles in the decision tree.
@@ -96,7 +98,7 @@ class DecisionTree:
                 current_node['terminal'] = var['tag']
                 current_node['sel_strategy'] = None
                 #
-                if 'var' in current_node.keys():
+                if 'var' in current_node.keys() and current_node['ignore'] is False:
                     var_list.append(current_node['var'])
                 #
                 if var['expr'] is None:
@@ -117,7 +119,7 @@ class DecisionTree:
                 current_node['sel_strategy'] = None
                 current_node['forced_branch'] = None
                 #
-                if 'var' in current_node.keys():
+                if 'var' in current_node.keys() and current_node['ignore'] is False:
                     var_list.append(current_node['var'])
                 #
                 self.node_number += 1
@@ -128,6 +130,9 @@ class DecisionTree:
                     tree_node['var'] = var['tag']
                     tree_node['value'] = value
                     tree_node['prob'] = prob
+                    #
+                    tree_node['ignore'] = var['ignore']
+                    #
                     if 'next_node' in current_node.keys():
                         current_node['next_node'].append(len(self.tree)- 1)
                     else:
@@ -143,7 +148,7 @@ class DecisionTree:
                 current_node['forced_branch'] = None
                 current_node['sel_strategy'] = None
                 #
-                if 'var' in current_node.keys():
+                if 'var' in current_node.keys() and current_node['ignore'] is False:
                     var_list.append(current_node['var'])
                 #
                 self.node_number += 1
@@ -152,8 +157,11 @@ class DecisionTree:
                     self.tree.append({'tag':len(self.tree)})
                     tree_node = self.tree[-1]
                     tree_node['var'] = var['tag']
-                    tree_node['value'] = value=value
-                    tree_node['expval'] = value=None
+                    tree_node['value'] = value
+                    tree_node['expval'] = None
+                    #
+                    tree_node['ignore'] = var['ignore']
+                    #
                     if 'next_node' in current_node.keys():
                         current_node['next_node'].append(len(self.tree) - 1)
                     else:
