@@ -27,12 +27,12 @@
 ...                    expr='(BID-COST) * (1 if BID < COMPBID else 0)')
 
 
->>> tree.display_variables() # doctest: +NORMALIZE_WHITESPACE
+>>> tree.display_data() # doctest: +NORMALIZE_WHITESPACE
 Node 0
     Name: BID
     Type: DECISION - Maximum Payoff
     Branches:
-                      Outcomes  Sucessor Var
+                      Outcomes  Sucessor Node
                        500.000  1
                        700.000  1
 <BLANKLINE>
@@ -40,7 +40,7 @@ Node 1
     Name: COMPBID
     Type: CHANCE
     Branches:
-          Chance       Outcome  Sucessor Var
+          Chance       Outcome  Sucessor Node
            35.00       400.000  2
            50.00       600.000  2
            15.00       800.000  2
@@ -49,7 +49,7 @@ Node 2
     Name: COST
     Type: CHANCE
     Branches:
-          Chance       Outcome  Sucessor Var
+          Chance       Outcome  Sucessor Node
            25.00       200.000  3
            50.00       400.000  3
            25.00       600.000  3
@@ -929,11 +929,11 @@ Probabilistic senstitivity
 >>> b500 = []
 >>> b700 = []
 >>> for p in range(0, 101, 10):
-...    tree.variables[2]['values'] = [(p,  200,  3), (0.0,  400,  3),  (100-p,  600,  3)]
+...    tree.data[2]['values'] = [(p,  200,  3), (0.0,  400,  3),  (100-p,  600,  3)]
 ...    tree.build_tree()
 ...    tree.evaluate()
-...    b500.append(tree.tree[1]['expval'])
-...    b700.append(tree.tree[14]['expval'])
+...    b500.append(tree.tree[1]['exp_val'])
+...    b700.append(tree.tree[14]['exp_val'])
 
 >>> b500
 [-65.0, -39.0, -13.0, 13.0, 39.0, 65.0, 91.0, 117.0, 143.0, 169.0, 195.0]

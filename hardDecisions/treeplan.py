@@ -58,12 +58,12 @@ Tutorial
 
 
 
->>> tree.display_variables() # doctest: +NORMALIZE_WHITESPACE
+>>> tree.display_data() # doctest: +NORMALIZE_WHITESPACE
 Node 0
    Name: A
    Type: DECISION - Maximum Payoff
    Branches:
-                     Outcomes  Sucessor Var
+                     Outcomes  Sucessor Node
                       -50.000  1
                         0.000  2
 <BLANKLINE>
@@ -71,7 +71,7 @@ Node 1
    Name: B
    Type: CHANCE
    Branches:
-         Chance       Outcome  Sucessor Var
+         Chance       Outcome  Sucessor Node
           50.00       250.000  3
           50.00         0.000  4
 <BLANKLINE>
@@ -84,7 +84,7 @@ Node 3
    Name: C
    Type: DECISION - Maximum Payoff
    Branches:
-                     Outcomes  Sucessor Var
+                     Outcomes  Sucessor Node
                      -120.000  5
                       -50.000  6
                       -80.000  7
@@ -103,7 +103,7 @@ Node 6
    Name: D
    Type: CHANCE
    Branches:
-         Chance       Outcome  Sucessor Var
+         Chance       Outcome  Sucessor Node
           50.00         0.000  8
           50.00      -120.000  8
 <BLANKLINE>
@@ -111,7 +111,7 @@ Node 7
    Name: E
    Type: CHANCE
    Branches:
-         Chance       Outcome  Sucessor Var
+         Chance       Outcome  Sucessor Node
           70.00         0.000  9
           30.00      -120.000  9
 <BLANKLINE>
@@ -765,10 +765,10 @@ Node 9
 
 >>> sensitivity = []
 >>> for p in range(0, 101, 10):
-...    tree17.variables[1]['values'] = [(p,  600,  3), (100-p,  100,  3)]
+...    tree17.data[1]['values'] = [(p,  600,  3), (100-p,  100,  3)]
 ...    tree17.build_tree()
 ...    tree17.evaluate()
-...    sensitivity.append(tree17.tree[0]['expval'])
+...    sensitivity.append(tree17.tree[0]['exp_val'])
 >>> sensitivity
 [0, 0, 0, 0, 0.0, 50.0, 100.0, 150.0, 200.0, 250.0, 300.0]
 
@@ -778,8 +778,8 @@ Node 9
 >>> for p1 in range(100, -1, -10):
 ...     aux = []
 ...     for p2 in range(0, 101, 10):
-...         tree.variables[6]['values'] = [(p1,  0,  8), (100-p1, -120,  8)]
-...         tree.variables[7]['values'] = [(p2,  0,  9), (100-p2, -120,  9)]
+...         tree.data[6]['values'] = [(p1,  0,  8), (100-p1, -120,  8)]
+...         tree.data[7]['values'] = [(p2,  0,  9), (100-p2, -120,  9)]
 ...         tree.build_tree()
 ...         tree.evaluate()
 ...         aux.append(tree.tree[2]['opt_branch'])

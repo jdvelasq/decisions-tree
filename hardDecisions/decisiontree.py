@@ -12,167 +12,156 @@ class DecisionTree:
     def __init__(self):
         """Decision tree constructor.
         """
-        self.variables = []
+        self.data = []
         self.tree = []
         self.globals = {}
-        self.cumvalue = 0
 
     def terminal_node(self, name=None, expr=None):
         """Creates a decision tree's terminal node.
         """
-        self.variables.append({'tag':name,
-                               'type':'TERMINAL',
-                               'expr':expr})
+        self.data.append({'tag':name,
+                          'type':'TERMINAL',
+                          'expr':expr})
 
     def chance_node(self, name=None, values=None, ignore=False):
         """Creates a decisions tree's internal chance node.
         """
-        self.variables.append({'tag':name,
-                               'type':'CHANCE',
-                               'values':values,
-                               'ignore':ignore})
+        self.data.append({'tag':name,
+                          'type':'CHANCE',
+                          'values':values,
+                          'ignore':ignore})
 
     def decision_node(self, name=None, values=None, max=True, ignore=False):
         """Creates a decisions tree's internal decision node.
         """
-        self.variables.append({'tag':name,
-                               'type':'DECISION',
-                               'values':values,
-                               'max':max,
-                               'ignore':ignore})
+        self.data.append({'tag':name,
+                          'type':'DECISION',
+                          'values':values,
+                          'max':max,
+                          'ignore':ignore})
 
-    def display_variables(self):
+    def display_data(self):
         """Display all the varibles in the decision tree.
         """
         txt = []
-        for index, var in enumerate(self.variables):
+        for index, node in enumerate(self.data):
             #
             txt.append('Node {:d}'.format(index))
-            txt.append('    Name: ' + var.get('tag'))
-            txt.append('    Type: ' + var.get('type'))
+            txt.append('    Name: ' + node.get('tag'))
+            txt.append('    Type: ' + node.get('type'))
             #
-            if  var.get('type') == 'DECISION':
+            if  node.get('type') == 'DECISION':
                 #
-                if  var.get('max') is True:
-                    txt[-1] += ' - Maximum Payoff'
-                else:
-                    txt[-1] += ' - Minimum Payoff'
+                txt[-1] += ' - Maximum Payoff' if node.get('max') is True else ' - Minimum Payoff'
                 txt.append('    Branches:')
-                txt.append('                      Outcomes  Sucessor Var')
-                for (value, next_node) in var.get('values'):
+                txt.append('                      Outcomes  Sucessor Node')
+                for (value, next_node) in node.get('values'):
                     txt.append('                  {:12.3f}  {:d}'.format(value, next_node))
                 txt.append('')
                 #
-            elif  var.get('type') == 'CHANCE':
+            elif  node.get('type') == 'CHANCE':
                 #
                 txt.append('    Branches:')
-                txt.append('          Chance       Outcome  Sucessor Var')
-                for (prob, value, next_node) in var.get('values'):
+                txt.append('          Chance       Outcome  Sucessor Node')
+                for (prob, value, next_node) in node.get('values'):
                     txt.append('           {:5.2f}  {:12.3f}  {:d}'.format(prob, value, next_node))
                 txt.append('')
                 #
-            elif  var.get('type') == 'TERMINAL':
+            elif  node.get('type') == 'TERMINAL':
                 #
-                if var.get('expr') is None:
+                if node.get('expr') is None:
                     txt.append('    Expr: (cumulative)')
                 else:
-                    txt.append('    Expr: ' + var.get('expr'))
+                    txt.append('    Expr: ' + node.get('expr'))
                 txt.append('')
                 #
             else:
-                raise ValueError('Node type unknown: ' + var.tag + ', ' +  var.get('type'))
+                raise ValueError('Node type unknown: ' + node.tag + ', ' +  node.get('type'))
         print('\n'.join(txt))
 
-
+    ##
+    ##
+    ##
     def build_tree(self):
         """Builds the decision tree using the information in the variables.
         """
 
-        def build_node(current_node, var, var_list):
+        def new_branch():
+            """Creates a new branch in the tree.
+            """
+            self.tree.append({'exp_val':None,
+                              'sel_strategy':None,
+                              'node_number':len(self.tree)})
+            #
+            return (len(self.tree)- 1, self.tree[-1])
 
-            if var.get('type') == 'TERMINAL':
-                current_node['type'] = var['type']
-                current_node['node_number'] = self.node_number
-                current_node['expr'] = var['expr']
-                current_node['expval'] = None
-                current_node['terminal'] = var['tag']
-                current_node['sel_strategy'] = None
-                #
-                if 'var' in current_node.keys() and current_node['ignore'] is False:
-                    var_list.append(current_node['var'])
-                #
-                if var['expr'] is None:
-                    expr = ''
-                    for index, v in enumerate(var_list):
-                        if index == 0:
-                            expr = v
-                        else:
-                            expr += '+' + v
-                    current_node['expr'] = expr
-                self.node_number += 1
 
-            if var.get('type') == 'CHANCE':
-                #
-                current_node['type'] = var['type']
-                current_node['node_number'] = self.node_number
-                current_node['expval']  = None
-                current_node['sel_strategy'] = None
-                current_node['forced_branch'] = None
-                #
-                if 'var' in current_node.keys() and current_node['ignore'] is False:
-                    var_list.append(current_node['var'])
-                #
-                self.node_number += 1
-                for child in var.get('values'):
-                    prob, value, next_node = child
-                    self.tree.append({'tag':len(self.tree)})
-                    tree_node = self.tree[-1]
-                    tree_node['var'] = var['tag']
-                    tree_node['value'] = value
-                    tree_node['prob'] = prob
-                    #
-                    tree_node['ignore'] = var['ignore']
-                    #
-                    if 'next_node' in current_node.keys():
-                        current_node['next_node'].append(len(self.tree)- 1)
-                    else:
-                        current_node['next_node'] = [len(self.tree) - 1]
-                    build_node(current_node=tree_node, var=self.variables[next_node], var_list=var_list.copy())
+        def set_branch_data(this_branch, node, path):
 
-            if var.get('type') == 'DECISION':
-                #
-                current_node['type'] = var.get('type')
-                current_node['max'] = var.get('max')
-                current_node['node_number'] = self.node_number
-                current_node['expval'] = None
-                current_node['forced_branch'] = None
-                current_node['sel_strategy'] = None
-                #
-                if 'var' in current_node.keys() and current_node['ignore'] is False:
-                    var_list.append(current_node['var'])
-                #
-                self.node_number += 1
-                for child in var.get('values'):
-                    value, next_node = child
-                    self.tree.append({'tag':len(self.tree)})
-                    tree_node = self.tree[-1]
-                    tree_node['var'] = var['tag']
-                    tree_node['value'] = value
-                    tree_node['expval'] = None
-                    #
-                    tree_node['ignore'] = var['ignore']
-                    #
-                    if 'next_node' in current_node.keys():
-                        current_node['next_node'].append(len(self.tree) - 1)
-                    else:
-                        current_node['next_node'] = [len(self.tree) - 1]
-                    build_node(current_node=tree_node, var=self.variables[next_node], var_list=var_list.copy())
+            def set_terminal():
+                this_branch['type'] = node.get('type')
+                this_branch['terminal'] = node.get('tag')
+                if this_branch.get('ignore', True) is False:
+                    path.append(this_branch.get('tag'))
+                this_branch['expr'] = '+'.join(path) if node.get('expr') is None else node.get('expr')
 
+            def set_decision():
+                this_branch['type'] = node.get('type')
+                this_branch['forced_branch'] = None
+                this_branch['next_node'] = []
+                this_branch['max'] = node.get('max')
+                if this_branch.get('ignore', True) is False:
+                    path.append(this_branch.get('tag'))
+                #
+                for i, (outcome, next_node) in enumerate(node.get('values')):
+                    #
+                    next_branch_index, next_branch = new_branch()
+                    this_branch['next_node'].append(next_branch_index)
+                    next_branch['ignore'] = node.get('ignore')
+                    next_branch['tag'] = node.get('tag')
+                    next_branch['value'] = outcome
+                    #
+                    set_branch_data(this_branch=next_branch,
+                                 node=self.data[next_node],
+                                 path=path.copy())
+
+            def set_chance():
+                this_branch['type'] = node.get('type')
+                this_branch['forced_branch'] = None
+                this_branch['next_node'] = []
+                if this_branch.get('ignore', True) is False:
+                    path.append(this_branch.get('tag'))
+                #
+                for index, (prob, outcome, next_node) in enumerate(node.get('values')):
+                    #
+                    branch_index, next_branch = new_branch()
+                    this_branch['next_node'].append(branch_index)
+                    next_branch['ignore'] = node.get('ignore')
+                    next_branch['tag'] = node.get('tag')
+                    next_branch['value'] = outcome
+                    next_branch['prob'] = prob
+                    #
+                    set_branch_data(this_branch=next_branch,
+                                 node=self.data[next_node],
+                                 path=path.copy())
+
+            ####
+            if node.get('type') == 'DECISION':
+                set_decision()
+            elif node.get('type') == 'CHANCE':
+                set_chance()
+            elif node.get('type') == 'TERMINAL':
+                set_terminal()
+            else:
+                pass
+        ###
         self.tree = []
-        self.node_number = 0
-        self.tree.append({'tag':0})
-        var_list = []
-        build_node(current_node=self.tree[0], var=self.variables[0], var_list=var_list.copy())
+        path = []
+        _ , this_branch = new_branch()
+        set_branch_data(this_branch=this_branch,
+                        node=self.data[0],
+                        path=path.copy())
+
 
 
     def display_tree(self, maxdeep=None, selected_strategy=False):
@@ -190,8 +179,8 @@ class DecisionTree:
 
 
             ## prints the name and value of the variable
-            if 'var' in node.keys():
-                var = node['var']
+            if 'tag' in node.keys():
+                var = node['tag']
                 if 'value' in node.keys():
                     txt = "| " + var + "=" + str(node['value'])
                 else:
@@ -208,8 +197,8 @@ class DecisionTree:
                 txt = "| PathProb={:1.2f}".format(node['pathprob'])
                 print(prefix + txt)
 
-            if 'expval' in node.keys() and node['expval'] is not None:
-                txt = "| ExpVal={:1.2f}".format(node['expval'])
+            if 'exp_val' in node.keys() and node['exp_val'] is not None:
+                txt = "| ExpVal={:1.2f}".format(node['exp_val'])
                 print(prefix + txt)
 
             if 'risk_profile' in node.keys() and type != 'TERMINAL':
@@ -273,6 +262,8 @@ class DecisionTree:
         print_node(prefix='', node=self.tree[0], last_node=True)
 
 
+
+
     def evaluate(self):
         """Evalute the tree. First, the cumulative probabilities in all nodes
         are calculated. Finally, the algorithm computes the expected values."""
@@ -285,8 +276,8 @@ class DecisionTree:
                 type = node['type']
 
                 if type == 'DECISION':
-                    if 'var' in node.keys():
-                        var = node['var']
+                    if 'tag' in node.keys():
+                        var = node['tag']
                         value = node['value']
                         self.globals[var] = value
                     next_node = node['next_node']
@@ -297,24 +288,24 @@ class DecisionTree:
                         compute_node_value(node=self.tree[numnode])
                         if node['forced_branch'] is None:
                             if expval is None:
-                                expval = self.tree[numnode].get('expval')
+                                expval = self.tree[numnode].get('exp_val')
                                 node['opt_branch'] = index
-                            if ismax is True and expval < self.tree[numnode].get('expval'):
-                                expval = self.tree[numnode].get('expval')
+                            if ismax is True and expval < self.tree[numnode].get('exp_val'):
+                                expval = self.tree[numnode].get('exp_val')
                                 node['opt_branch'] = index
-                            if ismax is False and expval > self.tree[numnode].get('expval'):
-                                expval = self.tree[numnode].get('expval')
+                            if ismax is False and expval > self.tree[numnode].get('exp_val'):
+                                expval = self.tree[numnode].get('exp_val')
                                 node['opt_branch'] = index
                         else:
                             if index == node['forced_branch']:
-                                expval = self.tree[numnode].get('expval')
+                                expval = self.tree[numnode].get('exp_val')
                                 node['opt_branch'] = index
 
-                    node['expval'] = expval
+                    node['exp_val'] = expval
 
 
                 if type == 'CHANCE':
-                    var = node['var']
+                    var = node['tag']
                     value = node['value']
                     self.globals[var] = value
                     next_node = node['next_node']
@@ -322,22 +313,22 @@ class DecisionTree:
                     if node['forced_branch'] is None:
                         for numnode in next_node:
                             compute_node_value(node=self.tree[numnode])
-                            expval += self.tree[numnode].get('expval') * self.tree[numnode].get('prob') / 100
+                            expval += self.tree[numnode].get('exp_val') * self.tree[numnode].get('prob') / 100
                     else:
                         for index, numnode in enumerate(next_node):
                             if index == node['forced_branch']:
                                 compute_node_value(node=self.tree[numnode])
-                                expval += self.tree[numnode].get('expval')
+                                expval += self.tree[numnode].get('exp_val')
                             else:
                                 compute_node_value(node=self.tree[numnode])
                                 expval += 0
-                    node['expval'] = expval
+                    node['exp_val'] = expval
 
                 if type == 'TERMINAL':
-                    var = node['var']
+                    var = node['tag']
                     value = node['value']
                     self.globals[var] = value
-                    node['expval'] = eval(node['expr'], self.globals.copy())
+                    node['exp_val'] = eval(node['expr'], self.globals.copy())
 
             compute_node_value(node=self.tree[0])
 
@@ -431,7 +422,7 @@ class DecisionTree:
 
 
             if node['type'] == 'TERMINAL':
-                node['risk_profile'] = {node['expval']: node['pathprob']}
+                node['risk_profile'] = {node['exp_val']: node['pathprob']}
 
 
         collect(node=self.tree[0])
