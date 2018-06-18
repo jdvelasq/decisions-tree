@@ -5,57 +5,55 @@
 
 
 >>> tree.decision_node(name='BID',
-...                    values=[(500,  1),
+...                    branches=[(500,  1),
 ...                            (700,  1)],
 ...                    max=True)
 
 
 >>> tree.chance_node(name='COMPBID',
-...                  values=[(35.0,  400,  2),
+...                  branches=[(35.0,  400,  2),
 ...                          (50.0,  600,  2),
 ...                          (15.0,  800,  2)])
 
 
 >>> tree.chance_node(name='COST',
-...                  values=[(25.0,  200,  3),
-...                          (50.0,  400,  3),
-...                          (25.0,  600,  3)])
+...                  branches=[(25.0,  200,  3),
+...                            (50.0,  400,  3),
+...                            (25.0,  600,  3)])
 
 
 
->>> tree.terminal_node(name='EXPR',
-...                    expr='(BID-COST) * (1 if BID < COMPBID else 0)')
+>>> tree.terminal_node(expr='(BID-COST) * (1 if BID < COMPBID else 0)')
 
 
->>> tree.display_data() # doctest: +NORMALIZE_WHITESPACE
+>>> tree.display_nodes() # doctest: +NORMALIZE_WHITESPACE
 Node 0
-    Name: BID
     Type: DECISION - Maximum Payoff
+    Name: BID
     Branches:
-                      Outcomes  Sucessor Node
+                         Value  Next Node
                        500.000  1
                        700.000  1
 <BLANKLINE>
 Node 1
-    Name: COMPBID
     Type: CHANCE
+    Name: COMPBID
     Branches:
-          Chance       Outcome  Sucessor Node
+          Chance         Value  Next Node
            35.00       400.000  2
            50.00       600.000  2
            15.00       800.000  2
 <BLANKLINE>
 Node 2
-    Name: COST
     Type: CHANCE
+    Name: COST
     Branches:
-          Chance       Outcome  Sucessor Node
+          Chance         Value  Next Node
            25.00       200.000  3
            50.00       400.000  3
            25.00       600.000  3
 <BLANKLINE>
 Node 3
-    Name: EXPR
     Type: TERMINAL
     Expr: (BID-COST) * (1 if BID < COMPBID else 0)
 <BLANKLINE>
@@ -81,17 +79,17 @@ Node 3
         |        |        | #3
         |        |        | COST=200
         |        |        | Prob=25.00
-        |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |        |
         |        |        | #4
         |        |        | COST=400
         |        |        | Prob=50.00
-        |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |        |
         |        |        | #5
         |        |        | COST=600
         |        |        | Prob=25.00
-        |        |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |
         |        | #6
         |        | COMPBID=600
@@ -101,17 +99,17 @@ Node 3
         |        |        | #7
         |        |        | COST=200
         |        |        | Prob=25.00
-        |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |        |
         |        |        | #8
         |        |        | COST=400
         |        |        | Prob=50.00
-        |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |        |
         |        |        | #9
         |        |        | COST=600
         |        |        | Prob=25.00
-        |        |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |
         |        | #10
         |        | COMPBID=800
@@ -121,17 +119,17 @@ Node 3
         |                 | #11
         |                 | COST=200
         |                 | Prob=25.00
-        |                 +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |                 +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |                 |
         |                 | #12
         |                 | COST=400
         |                 | Prob=50.00
-        |                 +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |                 +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |                 |
         |                 | #13
         |                 | COST=600
         |                 | Prob=25.00
-        |                 \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |                 \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |
         | #14
         | BID=700
@@ -145,17 +143,17 @@ Node 3
                  |        | #16
                  |        | COST=200
                  |        | Prob=25.00
-                 |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |        |
                  |        | #17
                  |        | COST=400
                  |        | Prob=50.00
-                 |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |        |
                  |        | #18
                  |        | COST=600
                  |        | Prob=25.00
-                 |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |
                  | #19
                  | COMPBID=600
@@ -165,17 +163,17 @@ Node 3
                  |        | #20
                  |        | COST=200
                  |        | Prob=25.00
-                 |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |        |
                  |        | #21
                  |        | COST=400
                  |        | Prob=50.00
-                 |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |        |
                  |        | #22
                  |        | COST=600
                  |        | Prob=25.00
-                 |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |
                  | #23
                  | COMPBID=800
@@ -185,17 +183,17 @@ Node 3
                           | #24
                           | COST=200
                           | Prob=25.00
-                          +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                          +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                           |
                           | #25
                           | COST=400
                           | Prob=50.00
-                          +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                          +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                           |
                           | #26
                           | COST=600
                           | Prob=25.00
-                          \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                          \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
 
 
 >>> tree.display_tree(maxdeep=0) # doctest: +NORMALIZE_WHITESPACE
@@ -281,17 +279,17 @@ Node 3
         |        |        | #3
         |        |        | COST=200
         |        |        | Prob=25.00
-        |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |        |
         |        |        | #4
         |        |        | COST=400
         |        |        | Prob=50.00
-        |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |        |
         |        |        | #5
         |        |        | COST=600
         |        |        | Prob=25.00
-        |        |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |
         |        | #6
         |        | COMPBID=600
@@ -301,17 +299,17 @@ Node 3
         |        |        | #7
         |        |        | COST=200
         |        |        | Prob=25.00
-        |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |        |
         |        |        | #8
         |        |        | COST=400
         |        |        | Prob=50.00
-        |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |        |
         |        |        | #9
         |        |        | COST=600
         |        |        | Prob=25.00
-        |        |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |        |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |        |
         |        | #10
         |        | COMPBID=800
@@ -321,17 +319,17 @@ Node 3
         |                 | #11
         |                 | COST=200
         |                 | Prob=25.00
-        |                 +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |                 +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |                 |
         |                 | #12
         |                 | COST=400
         |                 | Prob=50.00
-        |                 +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |                 +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |                 |
         |                 | #13
         |                 | COST=600
         |                 | Prob=25.00
-        |                 \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+        |                 \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
         |
         | #14
         | BID=700
@@ -345,17 +343,17 @@ Node 3
                  |        | #16
                  |        | COST=200
                  |        | Prob=25.00
-                 |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |        |
                  |        | #17
                  |        | COST=400
                  |        | Prob=50.00
-                 |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |        |
                  |        | #18
                  |        | COST=600
                  |        | Prob=25.00
-                 |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |
                  | #19
                  | COMPBID=600
@@ -365,17 +363,17 @@ Node 3
                  |        | #20
                  |        | COST=200
                  |        | Prob=25.00
-                 |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |        |
                  |        | #21
                  |        | COST=400
                  |        | Prob=50.00
-                 |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |        |
                  |        | #22
                  |        | COST=600
                  |        | Prob=25.00
-                 |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                 |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                  |
                  | #23
                  | COMPBID=800
@@ -385,17 +383,17 @@ Node 3
                           | #24
                           | COST=200
                           | Prob=25.00
-                          +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                          +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                           |
                           | #25
                           | COST=400
                           | Prob=50.00
-                          +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                          +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                           |
                           | #26
                           | COST=600
                           | Prob=25.00
-                          \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                          \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
 
 
 
@@ -426,7 +424,7 @@ Node 3
          |        |        | PathProb=8.75
          |        |        | ExpVal=0.00
          |        |        | (selected strategy)
-         |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |        |
          |        |        | #4
          |        |        | COST=400
@@ -434,7 +432,7 @@ Node 3
          |        |        | PathProb=17.50
          |        |        | ExpVal=0.00
          |        |        | (selected strategy)
-         |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |        |
          |        |        | #5
          |        |        | COST=600
@@ -442,7 +440,7 @@ Node 3
          |        |        | PathProb=8.75
          |        |        | ExpVal=0.00
          |        |        | (selected strategy)
-         |        |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |
          |        | #6
          |        | COMPBID=600
@@ -457,7 +455,7 @@ Node 3
          |        |        | PathProb=12.50
          |        |        | ExpVal=300.00
          |        |        | (selected strategy)
-         |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |        |
          |        |        | #8
          |        |        | COST=400
@@ -465,7 +463,7 @@ Node 3
          |        |        | PathProb=25.00
          |        |        | ExpVal=100.00
          |        |        | (selected strategy)
-         |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |        |
          |        |        | #9
          |        |        | COST=600
@@ -473,7 +471,7 @@ Node 3
          |        |        | PathProb=12.50
          |        |        | ExpVal=-100.00
          |        |        | (selected strategy)
-         |        |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |
          |        | #10
          |        | COMPBID=800
@@ -488,7 +486,7 @@ Node 3
          |                 | PathProb=3.75
          |                 | ExpVal=300.00
          |                 | (selected strategy)
-         |                 +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |                 +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |                 |
          |                 | #12
          |                 | COST=400
@@ -496,7 +494,7 @@ Node 3
          |                 | PathProb=7.50
          |                 | ExpVal=100.00
          |                 | (selected strategy)
-         |                 +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |                 +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |                 |
          |                 | #13
          |                 | COST=600
@@ -504,7 +502,7 @@ Node 3
          |                 | PathProb=3.75
          |                 | ExpVal=-100.00
          |                 | (selected strategy)
-         |                 \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |                 \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |
          | #14
          | BID=700
@@ -522,21 +520,21 @@ Node 3
                   |        | Prob=25.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #17
                   |        | COST=400
                   |        | Prob=50.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #18
                   |        | COST=600
                   |        | Prob=25.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |
                   | #19
                   | COMPBID=600
@@ -549,21 +547,21 @@ Node 3
                   |        | Prob=25.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #21
                   |        | COST=400
                   |        | Prob=50.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #22
                   |        | COST=600
                   |        | Prob=25.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |
                   | #23
                   | COMPBID=800
@@ -576,21 +574,21 @@ Node 3
                            | Prob=25.00
                            | PathProb=0.00
                            | ExpVal=500.00
-                           +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                           +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                            |
                            | #25
                            | COST=400
                            | Prob=50.00
                            | PathProb=0.00
                            | ExpVal=300.00
-                           +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                           +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                            |
                            | #26
                            | COST=600
                            | Prob=25.00
                            | PathProb=0.00
                            | ExpVal=100.00
-                           \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                           \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
 
 
 >>> tree.display_tree(selected_strategy=True) # doctest: +NORMALIZE_WHITESPACE
@@ -619,7 +617,7 @@ Node 3
                   |        | PathProb=8.75
                   |        | ExpVal=0.00
                   |        | (selected strategy)
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #4
                   |        | COST=400
@@ -627,7 +625,7 @@ Node 3
                   |        | PathProb=17.50
                   |        | ExpVal=0.00
                   |        | (selected strategy)
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #5
                   |        | COST=600
@@ -635,7 +633,7 @@ Node 3
                   |        | PathProb=8.75
                   |        | ExpVal=0.00
                   |        | (selected strategy)
-                  |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |
                   | #6
                   | COMPBID=600
@@ -650,7 +648,7 @@ Node 3
                   |        | PathProb=12.50
                   |        | ExpVal=300.00
                   |        | (selected strategy)
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #8
                   |        | COST=400
@@ -658,7 +656,7 @@ Node 3
                   |        | PathProb=25.00
                   |        | ExpVal=100.00
                   |        | (selected strategy)
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #9
                   |        | COST=600
@@ -666,7 +664,7 @@ Node 3
                   |        | PathProb=12.50
                   |        | ExpVal=-100.00
                   |        | (selected strategy)
-                  |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |
                   | #10
                   | COMPBID=800
@@ -681,7 +679,7 @@ Node 3
                            | PathProb=3.75
                            | ExpVal=300.00
                            | (selected strategy)
-                           +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                           +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                            |
                            | #12
                            | COST=400
@@ -689,7 +687,7 @@ Node 3
                            | PathProb=7.50
                            | ExpVal=100.00
                            | (selected strategy)
-                           +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                           +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                            |
                            | #13
                            | COST=600
@@ -697,7 +695,7 @@ Node 3
                            | PathProb=3.75
                            | ExpVal=-100.00
                            | (selected strategy)
-                           \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                           \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
 
 
 >>> tree.compute_risk_profile()
@@ -743,7 +741,7 @@ Node 3
          |        |        | PathProb=8.75
          |        |        | ExpVal=0.00
          |        |        | (selected strategy)
-         |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |        |
          |        |        | #4
          |        |        | COST=400
@@ -751,7 +749,7 @@ Node 3
          |        |        | PathProb=17.50
          |        |        | ExpVal=0.00
          |        |        | (selected strategy)
-         |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |        |
          |        |        | #5
          |        |        | COST=600
@@ -759,7 +757,7 @@ Node 3
          |        |        | PathProb=8.75
          |        |        | ExpVal=0.00
          |        |        | (selected strategy)
-         |        |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |
          |        | #6
          |        | COMPBID=600
@@ -779,7 +777,7 @@ Node 3
          |        |        | PathProb=12.50
          |        |        | ExpVal=300.00
          |        |        | (selected strategy)
-         |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |        |
          |        |        | #8
          |        |        | COST=400
@@ -787,7 +785,7 @@ Node 3
          |        |        | PathProb=25.00
          |        |        | ExpVal=100.00
          |        |        | (selected strategy)
-         |        |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |        |
          |        |        | #9
          |        |        | COST=600
@@ -795,7 +793,7 @@ Node 3
          |        |        | PathProb=12.50
          |        |        | ExpVal=-100.00
          |        |        | (selected strategy)
-         |        |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |        |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |        |
          |        | #10
          |        | COMPBID=800
@@ -815,7 +813,7 @@ Node 3
          |                 | PathProb=3.75
          |                 | ExpVal=300.00
          |                 | (selected strategy)
-         |                 +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |                 +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |                 |
          |                 | #12
          |                 | COST=400
@@ -823,7 +821,7 @@ Node 3
          |                 | PathProb=7.50
          |                 | ExpVal=100.00
          |                 | (selected strategy)
-         |                 +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |                 +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |                 |
          |                 | #13
          |                 | COST=600
@@ -831,7 +829,7 @@ Node 3
          |                 | PathProb=3.75
          |                 | ExpVal=-100.00
          |                 | (selected strategy)
-         |                 \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+         |                 \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
          |
          | #14
          | BID=700
@@ -849,21 +847,21 @@ Node 3
                   |        | Prob=25.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #17
                   |        | COST=400
                   |        | Prob=50.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #18
                   |        | COST=600
                   |        | Prob=25.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |
                   | #19
                   | COMPBID=600
@@ -876,21 +874,21 @@ Node 3
                   |        | Prob=25.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #21
                   |        | COST=400
                   |        | Prob=50.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |        |
                   |        | #22
                   |        | COST=600
                   |        | Prob=25.00
                   |        | PathProb=0.00
                   |        | ExpVal=0.00
-                  |        \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                  |        \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                   |
                   | #23
                   | COMPBID=800
@@ -903,21 +901,21 @@ Node 3
                            | Prob=25.00
                            | PathProb=0.00
                            | ExpVal=500.00
-                           +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                           +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                            |
                            | #25
                            | COST=400
                            | Prob=50.00
                            | PathProb=0.00
                            | ExpVal=300.00
-                           +-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                           +-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
                            |
                            | #26
                            | COST=600
                            | Prob=25.00
                            | PathProb=0.00
                            | ExpVal=100.00
-                           \-------[T] EXPR=(BID-COST) * (1 if BID < COMPBID else 0)
+                           \-------[T] (BID-COST) * (1 if BID < COMPBID else 0)
 
 
 
@@ -929,7 +927,7 @@ Probabilistic senstitivity
 >>> b500 = []
 >>> b700 = []
 >>> for p in range(0, 101, 10):
-...    tree.data[2]['values'] = [(p,  200,  3), (0.0,  400,  3),  (100-p,  600,  3)]
+...    tree.data[2]['branches'] = [(p,  200,  3), (0.0,  400,  3),  (100-p,  600,  3)]
 ...    tree.build_tree()
 ...    tree.evaluate()
 ...    b500.append(tree.tree[1]['exp_val'])

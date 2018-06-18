@@ -5,228 +5,212 @@
 
 #0
 >>> tree.decision_node(name='TEST',
-...                    values=[(-55,  1),
-...                            (  0, 14)],
+...                    branches=[(-55,  1),
+...                              (  0, 14)],
 ...                    max=True)
 
 #1
 >>> tree.chance_node(name='STRUCT',
-...                  values=[(38.0,  0,  2),
-...                          (39.0,  0,  6),
-...                          (23.0,  0, 10)])
+...                  branches=[(38.0,  0,  2),
+...                            (39.0,  0,  6),
+...                            (23.0,  0, 10)])
 
 #2
 >>> tree.decision_node(name='DRILL1',
-...                    values=[(-600,  3),
-...                            (   0,  5)],
+...                    branches=[(-600,  3),
+...                              (   0,  5)],
 ...                    max=True)
 
 #3
 >>> tree.chance_node(name='OILFOUND1',
-...                  values=[(78.95,      0,  4),
-...                          (15.79, 1500,  4),
-...                          (05.26, 3400,  4)])
+...                  branches=[(78.95,    0,  4),
+...                            (15.79, 1500,  4),
+...                            ( 5.26, 3400,  4)])
 
 #4
->>> tree.terminal_node(name='T1',
-...                    expr='TEST+DRILL1+OILFOUND1')
+>>> tree.terminal_node(expr='TEST+DRILL1+OILFOUND1')
 
 #5
->>> tree.terminal_node(name='T2',
-...                    expr='TEST+DRILL1')
+>>> tree.terminal_node(expr='TEST+DRILL1')
 
 
 
 #6
 >>> tree.decision_node(name='DRILL2',
-...                    values=[(-600,   7),
-...                            (   0,   9)],
+...                    branches=[(-600,   7),
+...                              (   0,   9)],
 ...                    max=True)
 
 #7
 >>> tree.chance_node(name='OILFOUND2',
-...                  values=[(38.46,    0,  8),
-...                          (46.15, 1500,  8),
-...                          (15.38, 3400,  8)])
+...                  branches=[(38.46,    0,  8),
+...                            (46.15, 1500,  8),
+...                            (15.38, 3400,  8)])
 
 #8
->>> tree.terminal_node(name='T1',
-...                    expr='TEST+DRILL2+OILFOUND2')
+>>> tree.terminal_node(expr='TEST+DRILL2+OILFOUND2')
 
 #9
->>> tree.terminal_node(name='T2',
-...                    expr='TEST+DRILL2')
+>>> tree.terminal_node(expr='TEST+DRILL2')
 
 
 
 
 #10
 >>> tree.decision_node(name='DRILL3',
-...                    values=[(-600,   11),
-...                            (   0,   13)],
+...                    branches=[(-600,   11),
+...                              (   0,   13)],
 ...                    max=True)
 
 #11
 >>> tree.chance_node(name='OILFOUND3',
-...                  values=[(21.74,    0,  12),
-...                          (26.09, 1500,  12),
-...                          (52.17, 3400,  12)])
+...                  branches=[(21.74,    0,  12),
+...                            (26.09, 1500,  12),
+...                            (52.17, 3400,  12)])
 
 #12
->>> tree.terminal_node(name='T1',
-...                    expr='TEST+DRILL3+OILFOUND3')
+>>> tree.terminal_node(expr='TEST+DRILL3+OILFOUND3')
 
 #13
->>> tree.terminal_node(name='T2',
-...                    expr='TEST+DRILL3')
+>>> tree.terminal_node(expr='TEST+DRILL3')
 
 
 
 
 #14
 >>> tree.decision_node(name='DRILL4',
-...                    values=[(-600,   15),
-...                            (   0,   17)],
+...                    branches=[(-600,   15),
+...                              (   0,   17)],
 ...                    max=True)
 
 #15
 >>> tree.chance_node(name='OILFOUND4',
-...                  values=[(50.0,    0,  16),
-...                          (30.0, 1500,  16),
-...                          (20.0, 3400,  16)])
+...                  branches=[(50.0,    0,  16),
+...                            (30.0, 1500,  16),
+...                            (20.0, 3400,  16)])
 
 #16
->>> tree.terminal_node(name='T1',
-...                    expr='TEST+DRILL4+OILFOUND4')
+>>> tree.terminal_node(expr='TEST+DRILL4+OILFOUND4')
 
 #17
->>> tree.terminal_node(name='T2',
-...                    expr='TEST+DRILL4')
+>>> tree.terminal_node(expr='TEST+DRILL4')
 
 
->>> tree.display_data() # doctest: +NORMALIZE_WHITESPACE
+>>> tree.display_nodes() # doctest: +NORMALIZE_WHITESPACE
 Node 0
-   Name: TEST
    Type: DECISION - Maximum Payoff
+   Name: TEST
    Branches:
-                     Outcomes  Sucessor Node
+                        Value  Next Node
                       -55.000  1
                         0.000  14
 <BLANKLINE>
 Node 1
-   Name: STRUCT
    Type: CHANCE
+   Name: STRUCT
    Branches:
-         Chance       Outcome  Sucessor Node
+         Chance          Value Next Node
           38.00         0.000  2
           39.00         0.000  6
           23.00         0.000  10
 <BLANKLINE>
 Node 2
-   Name: DRILL1
    Type: DECISION - Maximum Payoff
+   Name: DRILL1
    Branches:
-                     Outcomes  Sucessor Node
+                        Value  Next Node
                      -600.000  3
                         0.000  5
 <BLANKLINE>
 Node 3
-   Name: OILFOUND1
    Type: CHANCE
+   Name: OILFOUND1
    Branches:
-         Chance       Outcome  Sucessor Node
+         Chance         Value  Next Node
           78.95         0.000  4
           15.79      1500.000  4
            5.26      3400.000  4
 <BLANKLINE>
 Node 4
-   Name: T1
    Type: TERMINAL
    Expr: TEST+DRILL1+OILFOUND1
 <BLANKLINE>
 Node 5
-   Name: T2
    Type: TERMINAL
    Expr: TEST+DRILL1
 <BLANKLINE>
 Node 6
-   Name: DRILL2
    Type: DECISION - Maximum Payoff
+   Name: DRILL2
    Branches:
-                     Outcomes  Sucessor Node
+                        Value  Next Node
                      -600.000  7
                         0.000  9
 <BLANKLINE>
 Node 7
-   Name: OILFOUND2
    Type: CHANCE
+   Name: OILFOUND2
    Branches:
-         Chance       Outcome  Sucessor Node
+         Chance          Value Next Node
           38.46         0.000  8
           46.15      1500.000  8
           15.38      3400.000  8
 <BLANKLINE>
 Node 8
-   Name: T1
    Type: TERMINAL
    Expr: TEST+DRILL2+OILFOUND2
 <BLANKLINE>
 Node 9
-   Name: T2
    Type: TERMINAL
    Expr: TEST+DRILL2
 <BLANKLINE>
 Node 10
-   Name: DRILL3
    Type: DECISION - Maximum Payoff
+   Name: DRILL3
    Branches:
-                     Outcomes  Sucessor Node
+                        Value  Next Node
                      -600.000  11
                         0.000  13
 <BLANKLINE>
 Node 11
-   Name: OILFOUND3
    Type: CHANCE
+   Name: OILFOUND3
    Branches:
-         Chance       Outcome  Sucessor Node
+         Chance         Value  Next Node
           21.74         0.000  12
           26.09      1500.000  12
           52.17      3400.000  12
 <BLANKLINE>
 Node 12
-   Name: T1
    Type: TERMINAL
    Expr: TEST+DRILL3+OILFOUND3
 <BLANKLINE>
 Node 13
-   Name: T2
    Type: TERMINAL
    Expr: TEST+DRILL3
 <BLANKLINE>
 Node 14
-   Name: DRILL4
    Type: DECISION - Maximum Payoff
+   Name: DRILL4
    Branches:
-                     Outcomes  Sucessor Node
+                        Value  Next Node
                      -600.000  15
                         0.000  17
 <BLANKLINE>
 Node 15
-   Name: OILFOUND4
    Type: CHANCE
+   Name: OILFOUND4
    Branches:
-         Chance       Outcome  Sucessor Node
+         Chance         Value  Next Node
           50.00         0.000  16
           30.00      1500.000  16
           20.00      3400.000  16
 <BLANKLINE>
 Node 16
-   Name: T1
    Type: TERMINAL
    Expr: TEST+DRILL4+OILFOUND4
 <BLANKLINE>
 Node 17
-   Name: T2
    Type: TERMINAL
    Expr: TEST+DRILL4
 <BLANKLINE>
@@ -256,21 +240,21 @@ Node 17
         |        |        |        | #4
         |        |        |        | OILFOUND1=0
         |        |        |        | Prob=78.95
-        |        |        |        +-------[T] T1=TEST+DRILL1+OILFOUND1
+        |        |        |        +-------[T] TEST+DRILL1+OILFOUND1
         |        |        |        |
         |        |        |        | #5
         |        |        |        | OILFOUND1=1500
         |        |        |        | Prob=15.79
-        |        |        |        +-------[T] T1=TEST+DRILL1+OILFOUND1
+        |        |        |        +-------[T] TEST+DRILL1+OILFOUND1
         |        |        |        |
         |        |        |        | #6
         |        |        |        | OILFOUND1=3400
         |        |        |        | Prob=5.26
-        |        |        |        \-------[T] T1=TEST+DRILL1+OILFOUND1
+        |        |        |        \-------[T] TEST+DRILL1+OILFOUND1
         |        |        |
         |        |        | #7
         |        |        | DRILL1=0
-        |        |        \-------[T] T2=TEST+DRILL1
+        |        |        \-------[T] TEST+DRILL1
         |        |
         |        | #8
         |        | STRUCT=0
@@ -284,21 +268,21 @@ Node 17
         |        |        |        | #10
         |        |        |        | OILFOUND2=0
         |        |        |        | Prob=38.46
-        |        |        |        +-------[T] T1=TEST+DRILL2+OILFOUND2
+        |        |        |        +-------[T] TEST+DRILL2+OILFOUND2
         |        |        |        |
         |        |        |        | #11
         |        |        |        | OILFOUND2=1500
         |        |        |        | Prob=46.15
-        |        |        |        +-------[T] T1=TEST+DRILL2+OILFOUND2
+        |        |        |        +-------[T] TEST+DRILL2+OILFOUND2
         |        |        |        |
         |        |        |        | #12
         |        |        |        | OILFOUND2=3400
         |        |        |        | Prob=15.38
-        |        |        |        \-------[T] T1=TEST+DRILL2+OILFOUND2
+        |        |        |        \-------[T] TEST+DRILL2+OILFOUND2
         |        |        |
         |        |        | #13
         |        |        | DRILL2=0
-        |        |        \-------[T] T2=TEST+DRILL2
+        |        |        \-------[T] TEST+DRILL2
         |        |
         |        | #14
         |        | STRUCT=0
@@ -312,21 +296,21 @@ Node 17
         |                 |        | #16
         |                 |        | OILFOUND3=0
         |                 |        | Prob=21.74
-        |                 |        +-------[T] T1=TEST+DRILL3+OILFOUND3
+        |                 |        +-------[T] TEST+DRILL3+OILFOUND3
         |                 |        |
         |                 |        | #17
         |                 |        | OILFOUND3=1500
         |                 |        | Prob=26.09
-        |                 |        +-------[T] T1=TEST+DRILL3+OILFOUND3
+        |                 |        +-------[T] TEST+DRILL3+OILFOUND3
         |                 |        |
         |                 |        | #18
         |                 |        | OILFOUND3=3400
         |                 |        | Prob=52.17
-        |                 |        \-------[T] T1=TEST+DRILL3+OILFOUND3
+        |                 |        \-------[T] TEST+DRILL3+OILFOUND3
         |                 |
         |                 | #19
         |                 | DRILL3=0
-        |                 \-------[T] T2=TEST+DRILL3
+        |                 \-------[T] TEST+DRILL3
         |
         | #20
         | TEST=0
@@ -339,21 +323,21 @@ Node 17
                  |        | #22
                  |        | OILFOUND4=0
                  |        | Prob=50.00
-                 |        +-------[T] T1=TEST+DRILL4+OILFOUND4
+                 |        +-------[T] TEST+DRILL4+OILFOUND4
                  |        |
                  |        | #23
                  |        | OILFOUND4=1500
                  |        | Prob=30.00
-                 |        +-------[T] T1=TEST+DRILL4+OILFOUND4
+                 |        +-------[T] TEST+DRILL4+OILFOUND4
                  |        |
                  |        | #24
                  |        | OILFOUND4=3400
                  |        | Prob=20.00
-                 |        \-------[T] T1=TEST+DRILL4+OILFOUND4
+                 |        \-------[T] TEST+DRILL4+OILFOUND4
                  |
                  | #25
                  | DRILL4=0
-                 \-------[T] T2=TEST+DRILL4
+                 \-------[T] TEST+DRILL4
 
 
 >>> tree.evaluate()
@@ -387,28 +371,28 @@ Node 17
          |        |        |        | Prob=78.95
          |        |        |        | PathProb=0.00
          |        |        |        | ExpVal=-655.00
-         |        |        |        +-------[T] T1=TEST+DRILL1+OILFOUND1
+         |        |        |        +-------[T] TEST+DRILL1+OILFOUND1
          |        |        |        |
          |        |        |        | #5
          |        |        |        | OILFOUND1=1500
          |        |        |        | Prob=15.79
          |        |        |        | PathProb=0.00
          |        |        |        | ExpVal=845.00
-         |        |        |        +-------[T] T1=TEST+DRILL1+OILFOUND1
+         |        |        |        +-------[T] TEST+DRILL1+OILFOUND1
          |        |        |        |
          |        |        |        | #6
          |        |        |        | OILFOUND1=3400
          |        |        |        | Prob=5.26
          |        |        |        | PathProb=0.00
          |        |        |        | ExpVal=2745.00
-         |        |        |        \-------[T] T1=TEST+DRILL1+OILFOUND1
+         |        |        |        \-------[T] TEST+DRILL1+OILFOUND1
          |        |        |
          |        |        | #7
          |        |        | DRILL1=0
          |        |        | PathProb=38.00
          |        |        | ExpVal=-55.00
          |        |        | (selected strategy)
-         |        |        \-------[T] T2=TEST+DRILL1
+         |        |        \-------[T] TEST+DRILL1
          |        |
          |        | #8
          |        | STRUCT=0
@@ -429,7 +413,7 @@ Node 17
          |        |        |        | PathProb=15.00
          |        |        |        | ExpVal=-655.00
          |        |        |        | (selected strategy)
-         |        |        |        +-------[T] T1=TEST+DRILL2+OILFOUND2
+         |        |        |        +-------[T] TEST+DRILL2+OILFOUND2
          |        |        |        |
          |        |        |        | #11
          |        |        |        | OILFOUND2=1500
@@ -437,7 +421,7 @@ Node 17
          |        |        |        | PathProb=18.00
          |        |        |        | ExpVal=845.00
          |        |        |        | (selected strategy)
-         |        |        |        +-------[T] T1=TEST+DRILL2+OILFOUND2
+         |        |        |        +-------[T] TEST+DRILL2+OILFOUND2
          |        |        |        |
          |        |        |        | #12
          |        |        |        | OILFOUND2=3400
@@ -445,13 +429,13 @@ Node 17
          |        |        |        | PathProb=6.00
          |        |        |        | ExpVal=2745.00
          |        |        |        | (selected strategy)
-         |        |        |        \-------[T] T1=TEST+DRILL2+OILFOUND2
+         |        |        |        \-------[T] TEST+DRILL2+OILFOUND2
          |        |        |
          |        |        | #13
          |        |        | DRILL2=0
          |        |        | PathProb=0.00
          |        |        | ExpVal=-55.00
-         |        |        \-------[T] T2=TEST+DRILL2
+         |        |        \-------[T] TEST+DRILL2
          |        |
          |        | #14
          |        | STRUCT=0
@@ -472,7 +456,7 @@ Node 17
          |                 |        | PathProb=5.00
          |                 |        | ExpVal=-655.00
          |                 |        | (selected strategy)
-         |                 |        +-------[T] T1=TEST+DRILL3+OILFOUND3
+         |                 |        +-------[T] TEST+DRILL3+OILFOUND3
          |                 |        |
          |                 |        | #17
          |                 |        | OILFOUND3=1500
@@ -480,7 +464,7 @@ Node 17
          |                 |        | PathProb=6.00
          |                 |        | ExpVal=845.00
          |                 |        | (selected strategy)
-         |                 |        +-------[T] T1=TEST+DRILL3+OILFOUND3
+         |                 |        +-------[T] TEST+DRILL3+OILFOUND3
          |                 |        |
          |                 |        | #18
          |                 |        | OILFOUND3=3400
@@ -488,13 +472,13 @@ Node 17
          |                 |        | PathProb=12.00
          |                 |        | ExpVal=2745.00
          |                 |        | (selected strategy)
-         |                 |        \-------[T] T1=TEST+DRILL3+OILFOUND3
+         |                 |        \-------[T] TEST+DRILL3+OILFOUND3
          |                 |
          |                 | #19
          |                 | DRILL3=0
          |                 | PathProb=0.00
          |                 | ExpVal=-55.00
-         |                 \-------[T] T2=TEST+DRILL3
+         |                 \-------[T] TEST+DRILL3
          |
          | #20
          | TEST=0
@@ -511,27 +495,27 @@ Node 17
                   |        | Prob=50.00
                   |        | PathProb=0.00
                   |        | ExpVal=-600.00
-                  |        +-------[T] T1=TEST+DRILL4+OILFOUND4
+                  |        +-------[T] TEST+DRILL4+OILFOUND4
                   |        |
                   |        | #23
                   |        | OILFOUND4=1500
                   |        | Prob=30.00
                   |        | PathProb=0.00
                   |        | ExpVal=900.00
-                  |        +-------[T] T1=TEST+DRILL4+OILFOUND4
+                  |        +-------[T] TEST+DRILL4+OILFOUND4
                   |        |
                   |        | #24
                   |        | OILFOUND4=3400
                   |        | Prob=20.00
                   |        | PathProb=0.00
                   |        | ExpVal=2800.00
-                  |        \-------[T] T1=TEST+DRILL4+OILFOUND4
+                  |        \-------[T] TEST+DRILL4+OILFOUND4
                   |
                   | #25
                   | DRILL4=0
                   | PathProb=0.00
                   | ExpVal=0.00
-                  \-------[T] T2=TEST+DRILL4
+                  \-------[T] TEST+DRILL4
 
 >>> tree.compute_risk_profile()
 >>> tree.display_tree(selected_strategy=True) # doctest: +NORMALIZE_WHITESPACE
@@ -574,7 +558,7 @@ Node 17
                   |        | PathProb=38.00
                   |        | ExpVal=-55.00
                   |        | (selected strategy)
-                  |        \-------[T] T2=TEST+DRILL1
+                  |        \-------[T] TEST+DRILL1
                   |
                   | #8
                   | STRUCT=0
@@ -605,7 +589,7 @@ Node 17
                   |                 | PathProb=15.00
                   |                 | ExpVal=-655.00
                   |                 | (selected strategy)
-                  |                 +-------[T] T1=TEST+DRILL2+OILFOUND2
+                  |                 +-------[T] TEST+DRILL2+OILFOUND2
                   |                 |
                   |                 | #11
                   |                 | OILFOUND2=1500
@@ -613,7 +597,7 @@ Node 17
                   |                 | PathProb=18.00
                   |                 | ExpVal=845.00
                   |                 | (selected strategy)
-                  |                 +-------[T] T1=TEST+DRILL2+OILFOUND2
+                  |                 +-------[T] TEST+DRILL2+OILFOUND2
                   |                 |
                   |                 | #12
                   |                 | OILFOUND2=3400
@@ -621,7 +605,7 @@ Node 17
                   |                 | PathProb=6.00
                   |                 | ExpVal=2745.00
                   |                 | (selected strategy)
-                  |                 \-------[T] T1=TEST+DRILL2+OILFOUND2
+                  |                 \-------[T] TEST+DRILL2+OILFOUND2
                   |
                   | #14
                   | STRUCT=0
@@ -652,7 +636,7 @@ Node 17
                                     | PathProb=5.00
                                     | ExpVal=-655.00
                                     | (selected strategy)
-                                    +-------[T] T1=TEST+DRILL3+OILFOUND3
+                                    +-------[T] TEST+DRILL3+OILFOUND3
                                     |
                                     | #17
                                     | OILFOUND3=1500
@@ -660,7 +644,7 @@ Node 17
                                     | PathProb=6.00
                                     | ExpVal=845.00
                                     | (selected strategy)
-                                    +-------[T] T1=TEST+DRILL3+OILFOUND3
+                                    +-------[T] TEST+DRILL3+OILFOUND3
                                     |
                                     | #18
                                     | OILFOUND3=3400
@@ -668,7 +652,7 @@ Node 17
                                     | PathProb=12.00
                                     | ExpVal=2745.00
                                     | (selected strategy)
-                                    \-------[T] T1=TEST+DRILL3+OILFOUND3
+                                    \-------[T] TEST+DRILL3+OILFOUND3
 
 
 
@@ -679,158 +663,157 @@ Node 17
 
 #0
 >>> tree.decision_node(name='TEST',
-...                    values=[(-55, 1),
-...                            (  0, 9)],
+...                    branches=[(-55, 1),
+...                              (  0, 9)],
 ...                    max=True)
 
 #1
 >>> tree.chance_node(name='STRUCT',
-...                  values=[(38.0,  0, 2),
-...                          (39.0,  0, 5),
-...                          (23.0,  0, 7)])
+...                  branches=[(38.0,  0, 2),
+...                            (39.0,  0, 5),
+...                            (23.0,  0, 7)])
 
 #2
 >>> tree.decision_node(name='DRILL',
-...                    values=[(-600,  3),
-...                            (   0,  4)],
+...                    branches=[(-600,  3),
+...                              (   0,  4)],
 ...                    max=True)
 
 #3
 >>> tree.chance_node(name='OILFOUND',
-...                  values=[(78.95,    0,  4),
-...                          (15.79, 1500,  4),
-...                          (05.26, 3400,  4)])
+...                  branches=[(78.95,    0,  4),
+...                            (15.79, 1500,  4),
+...                            (05.26, 3400,  4)])
 
 #4
->>> tree.terminal_node(name='T')
+>>> tree.terminal_node()
 
 #5
 >>> tree.decision_node(name='DRILL',
-...                    values=[(-600,   6),
-...                            (   0,   4)],
+...                    branches=[(-600,   6),
+...                              (   0,   4)],
 ...                    max=True)
 
 #6
 >>> tree.chance_node(name='OILFOUND',
-...                  values=[(38.46,    0,  4),
-...                          (46.15, 1500,  4),
-...                          (15.38, 3400,  4)])
+...                  branches=[(38.46,    0,  4),
+...                            (46.15, 1500,  4),
+...                            (15.38, 3400,  4)])
 
 #7
 >>> tree.decision_node(name='DRILL',
-...                    values=[(-600,  8),
-...                            (   0,  4)],
+...                    branches=[(-600,  8),
+...                              (   0,  4)],
 ...                    max=True)
 
 #8
 >>> tree.chance_node(name='OILFOUND',
-...                  values=[(21.74,    0,  4),
-...                          (26.09, 1500,  4),
-...                          (52.17, 3400,  4)])
+...                  branches=[(21.74,    0,  4),
+...                            (26.09, 1500,  4),
+...                            (52.17, 3400,  4)])
 
 #9
 >>> tree.decision_node(name='DRILL',
-...                    values=[(-600, 10),
-...                            (   0,  4)],
+...                    branches=[(-600, 10),
+...                              (   0,  4)],
 ...                    max=True)
 
 #10
 >>> tree.chance_node(name='OILFOUND',
-...                  values=[(50.0,    0,  4),
-...                          (30.0, 1500,  4),
-...                          (20.0, 3400,  4)])
+...                  branches=[(50.0,    0,  4),
+...                            (30.0, 1500,  4),
+...                            (20.0, 3400,  4)])
 
 
 
 
 
->>> tree.display_data() # doctest: +NORMALIZE_WHITESPACE
+>>> tree.display_nodes() # doctest: +NORMALIZE_WHITESPACE
 Node 0
-   Name: TEST
    Type: DECISION - Maximum Payoff
+   Name: TEST
    Branches:
-                     Outcomes  Sucessor Node
+                        Value  Next Node
                       -55.000  1
                         0.000  9
 <BLANKLINE>
 Node 1
-   Name: STRUCT
    Type: CHANCE
+   Name: STRUCT
    Branches:
-         Chance       Outcome  Sucessor Node
+         Chance         Value  Next Node
           38.00         0.000  2
           39.00         0.000  5
           23.00         0.000  7
 <BLANKLINE>
 Node 2
-   Name: DRILL
    Type: DECISION - Maximum Payoff
+   Name: DRILL
    Branches:
-                     Outcomes  Sucessor Node
+                        Value  Next Node
                      -600.000  3
                         0.000  4
 <BLANKLINE>
 Node 3
-   Name: OILFOUND
    Type: CHANCE
+   Name: OILFOUND
    Branches:
-         Chance       Outcome  Sucessor Node
+         Chance         Value  Next Node
           78.95         0.000  4
           15.79      1500.000  4
            5.26      3400.000  4
 <BLANKLINE>
 Node 4
-   Name: T
    Type: TERMINAL
    Expr: (cumulative)
 <BLANKLINE>
 Node 5
-   Name: DRILL
    Type: DECISION - Maximum Payoff
+   Name: DRILL
    Branches:
-                     Outcomes  Sucessor Node
+                        Value  Next Node
                      -600.000  6
                         0.000  4
 <BLANKLINE>
 Node 6
-   Name: OILFOUND
    Type: CHANCE
+   Name: OILFOUND
    Branches:
-         Chance       Outcome  Sucessor Node
+         Chance         Value  Next Node
           38.46         0.000  4
           46.15      1500.000  4
           15.38      3400.000  4
 <BLANKLINE>
 Node 7
-   Name: DRILL
    Type: DECISION - Maximum Payoff
+   Name: DRILL
    Branches:
-                     Outcomes  Sucessor Node
+                        Value  Next Node
                      -600.000  8
                         0.000  4
 <BLANKLINE>
 Node 8
-   Name: OILFOUND
    Type: CHANCE
+   Name: OILFOUND
    Branches:
-         Chance       Outcome  Sucessor Node
+         Chance         Value  Next Node
           21.74         0.000  4
           26.09      1500.000  4
           52.17      3400.000  4
 <BLANKLINE>
 Node 9
-   Name: DRILL
    Type: DECISION - Maximum Payoff
+   Name: DRILL
    Branches:
-                     Outcomes  Sucessor Node
+                        Value  Next Node
                      -600.000  10
                         0.000  4
 <BLANKLINE>
 Node 10
-   Name: OILFOUND
    Type: CHANCE
+   Name: OILFOUND
    Branches:
-         Chance       Outcome  Sucessor Node
+         Chance         Value  Next Node
           50.00         0.000  4
           30.00      1500.000  4
           20.00      3400.000  4
@@ -862,21 +845,21 @@ Node 10
          |        |        |        | #4
          |        |        |        | OILFOUND=0
          |        |        |        | Prob=78.95
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #5
          |        |        |        | OILFOUND=1500
          |        |        |        | Prob=15.79
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #6
          |        |        |        | OILFOUND=3400
          |        |        |        | Prob=5.26
-         |        |        |        \-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        \-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |
          |        |        | #7
          |        |        | DRILL=0
-         |        |        \-------[T] T=TEST+STRUCT+DRILL
+         |        |        \-------[T] TEST+STRUCT+DRILL
          |        |
          |        | #8
          |        | STRUCT=0
@@ -890,21 +873,21 @@ Node 10
          |        |        |        | #10
          |        |        |        | OILFOUND=0
          |        |        |        | Prob=38.46
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #11
          |        |        |        | OILFOUND=1500
          |        |        |        | Prob=46.15
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #12
          |        |        |        | OILFOUND=3400
          |        |        |        | Prob=15.38
-         |        |        |        \-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        \-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |
          |        |        | #13
          |        |        | DRILL=0
-         |        |        \-------[T] T=TEST+STRUCT+DRILL
+         |        |        \-------[T] TEST+STRUCT+DRILL
          |        |
          |        | #14
          |        | STRUCT=0
@@ -918,21 +901,21 @@ Node 10
          |                 |        | #16
          |                 |        | OILFOUND=0
          |                 |        | Prob=21.74
-         |                 |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |                 |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |                 |        |
          |                 |        | #17
          |                 |        | OILFOUND=1500
          |                 |        | Prob=26.09
-         |                 |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |                 |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |                 |        |
          |                 |        | #18
          |                 |        | OILFOUND=3400
          |                 |        | Prob=52.17
-         |                 |        \-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |                 |        \-------[T] TEST+STRUCT+DRILL+OILFOUND
          |                 |
          |                 | #19
          |                 | DRILL=0
-         |                 \-------[T] T=TEST+STRUCT+DRILL
+         |                 \-------[T] TEST+STRUCT+DRILL
          |
          | #20
          | TEST=0
@@ -945,21 +928,21 @@ Node 10
                   |        | #22
                   |        | OILFOUND=0
                   |        | Prob=50.00
-                  |        +-------[T] T=TEST+DRILL+OILFOUND
+                  |        +-------[T] TEST+DRILL+OILFOUND
                   |        |
                   |        | #23
                   |        | OILFOUND=1500
                   |        | Prob=30.00
-                  |        +-------[T] T=TEST+DRILL+OILFOUND
+                  |        +-------[T] TEST+DRILL+OILFOUND
                   |        |
                   |        | #24
                   |        | OILFOUND=3400
                   |        | Prob=20.00
-                  |        \-------[T] T=TEST+DRILL+OILFOUND
+                  |        \-------[T] TEST+DRILL+OILFOUND
                   |
                   | #25
                   | DRILL=0
-                  \-------[T] T=TEST+DRILL
+                  \-------[T] TEST+DRILL
 
 
 >>> tree.evaluate()
@@ -993,28 +976,28 @@ Node 10
          |        |        |        | Prob=78.95
          |        |        |        | PathProb=0.00
          |        |        |        | ExpVal=-655.00
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #5
          |        |        |        | OILFOUND=1500
          |        |        |        | Prob=15.79
          |        |        |        | PathProb=0.00
          |        |        |        | ExpVal=845.00
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #6
          |        |        |        | OILFOUND=3400
          |        |        |        | Prob=5.26
          |        |        |        | PathProb=0.00
          |        |        |        | ExpVal=2745.00
-         |        |        |        \-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        \-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |
          |        |        | #7
          |        |        | DRILL=0
          |        |        | PathProb=38.00
          |        |        | ExpVal=-55.00
          |        |        | (selected strategy)
-         |        |        \-------[T] T=TEST+STRUCT+DRILL
+         |        |        \-------[T] TEST+STRUCT+DRILL
          |        |
          |        | #8
          |        | STRUCT=0
@@ -1035,7 +1018,7 @@ Node 10
          |        |        |        | PathProb=15.00
          |        |        |        | ExpVal=-655.00
          |        |        |        | (selected strategy)
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #11
          |        |        |        | OILFOUND=1500
@@ -1043,7 +1026,7 @@ Node 10
          |        |        |        | PathProb=18.00
          |        |        |        | ExpVal=845.00
          |        |        |        | (selected strategy)
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #12
          |        |        |        | OILFOUND=3400
@@ -1051,13 +1034,13 @@ Node 10
          |        |        |        | PathProb=6.00
          |        |        |        | ExpVal=2745.00
          |        |        |        | (selected strategy)
-         |        |        |        \-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        \-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |
          |        |        | #13
          |        |        | DRILL=0
          |        |        | PathProb=0.00
          |        |        | ExpVal=-55.00
-         |        |        \-------[T] T=TEST+STRUCT+DRILL
+         |        |        \-------[T] TEST+STRUCT+DRILL
          |        |
          |        | #14
          |        | STRUCT=0
@@ -1078,7 +1061,7 @@ Node 10
          |                 |        | PathProb=5.00
          |                 |        | ExpVal=-655.00
          |                 |        | (selected strategy)
-         |                 |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |                 |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |                 |        |
          |                 |        | #17
          |                 |        | OILFOUND=1500
@@ -1086,7 +1069,7 @@ Node 10
          |                 |        | PathProb=6.00
          |                 |        | ExpVal=845.00
          |                 |        | (selected strategy)
-         |                 |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |                 |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |                 |        |
          |                 |        | #18
          |                 |        | OILFOUND=3400
@@ -1094,13 +1077,13 @@ Node 10
          |                 |        | PathProb=12.00
          |                 |        | ExpVal=2745.00
          |                 |        | (selected strategy)
-         |                 |        \-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |                 |        \-------[T] TEST+STRUCT+DRILL+OILFOUND
          |                 |
          |                 | #19
          |                 | DRILL=0
          |                 | PathProb=0.00
          |                 | ExpVal=-55.00
-         |                 \-------[T] T=TEST+STRUCT+DRILL
+         |                 \-------[T] TEST+STRUCT+DRILL
          |
          | #20
          | TEST=0
@@ -1117,27 +1100,27 @@ Node 10
                   |        | Prob=50.00
                   |        | PathProb=0.00
                   |        | ExpVal=-600.00
-                  |        +-------[T] T=TEST+DRILL+OILFOUND
+                  |        +-------[T] TEST+DRILL+OILFOUND
                   |        |
                   |        | #23
                   |        | OILFOUND=1500
                   |        | Prob=30.00
                   |        | PathProb=0.00
                   |        | ExpVal=900.00
-                  |        +-------[T] T=TEST+DRILL+OILFOUND
+                  |        +-------[T] TEST+DRILL+OILFOUND
                   |        |
                   |        | #24
                   |        | OILFOUND=3400
                   |        | Prob=20.00
                   |        | PathProb=0.00
                   |        | ExpVal=2800.00
-                  |        \-------[T] T=TEST+DRILL+OILFOUND
+                  |        \-------[T] TEST+DRILL+OILFOUND
                   |
                   | #25
                   | DRILL=0
                   | PathProb=0.00
                   | ExpVal=0.00
-                  \-------[T] T=TEST+DRILL
+                  \-------[T] TEST+DRILL
 
 
 
@@ -1147,40 +1130,40 @@ Node 10
 
 #0
 >>> tree.decision_node(name='TEST',
-...                    values=[(-55, 1),
-...                            (  0, 5)],
+...                    branches=[(-55, 1),
+...                              (  0, 5)],
 ...                    max=True)
 
 #1
 >>> tree.chance_node(name='STRUCT',
-...                  values=[(38.0,  0, 2),
-...                          (39.0,  0, 2),
-...                          (23.0,  0, 2)])
+...                  branches=[(38.0,  0, 2),
+...                            (39.0,  0, 2),
+...                            (23.0,  0, 2)])
 
 #2
 >>> tree.decision_node(name='DRILL',
-...                    values=[(-600,  3),
+...                    branches=[(-600,  3),
 ...                            (   0,  4)],
 ...                    max=True)
 
 #3
 >>> tree.chance_node(name='OILFOUND',
-...                  values=[((1, [78.95, 38.46, 21.74]),    0,  4),
+...                  branches=[((1, [78.95, 38.46, 21.74]),    0,  4),
 ...                          ((1, [15.79, 46.15, 26.09]), 1500,  4),
 ...                          ((1, [05.26, 15.38, 52.17]), 3400,  4)])
 
 #4
->>> tree.terminal_node(name='T')
+>>> tree.terminal_node()
 
 #5
 >>> tree.decision_node(name='DRILL',
-...                    values=[(-600, 6),
+...                    branches=[(-600, 6),
 ...                            (   0, 4)],
 ...                    max=True)
 
 #6
 >>> tree.chance_node(name='OILFOUND',
-...                  values=[(50.0,    0,  4),
+...                  branches=[(50.0,    0,  4),
 ...                          (30.0, 1500,  4),
 ...                          (20.0, 3400,  4)])
 
@@ -1217,28 +1200,28 @@ Node 10
          |        |        |        | Prob=78.95
          |        |        |        | PathProb=0.00
          |        |        |        | ExpVal=-655.00
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #5
          |        |        |        | OILFOUND=1500
          |        |        |        | Prob=15.79
          |        |        |        | PathProb=0.00
          |        |        |        | ExpVal=845.00
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #6
          |        |        |        | OILFOUND=3400
          |        |        |        | Prob=5.26
          |        |        |        | PathProb=0.00
          |        |        |        | ExpVal=2745.00
-         |        |        |        \-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        \-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |
          |        |        | #7
          |        |        | DRILL=0
          |        |        | PathProb=38.00
          |        |        | ExpVal=-55.00
          |        |        | (selected strategy)
-         |        |        \-------[T] T=TEST+STRUCT+DRILL
+         |        |        \-------[T] TEST+STRUCT+DRILL
          |        |
          |        | #8
          |        | STRUCT=0
@@ -1259,7 +1242,7 @@ Node 10
          |        |        |        | PathProb=15.00
          |        |        |        | ExpVal=-655.00
          |        |        |        | (selected strategy)
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #11
          |        |        |        | OILFOUND=1500
@@ -1267,7 +1250,7 @@ Node 10
          |        |        |        | PathProb=18.00
          |        |        |        | ExpVal=845.00
          |        |        |        | (selected strategy)
-         |        |        |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |        |
          |        |        |        | #12
          |        |        |        | OILFOUND=3400
@@ -1275,13 +1258,13 @@ Node 10
          |        |        |        | PathProb=6.00
          |        |        |        | ExpVal=2745.00
          |        |        |        | (selected strategy)
-         |        |        |        \-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |        |        |        \-------[T] TEST+STRUCT+DRILL+OILFOUND
          |        |        |
          |        |        | #13
          |        |        | DRILL=0
          |        |        | PathProb=0.00
          |        |        | ExpVal=-55.00
-         |        |        \-------[T] T=TEST+STRUCT+DRILL
+         |        |        \-------[T] TEST+STRUCT+DRILL
          |        |
          |        | #14
          |        | STRUCT=0
@@ -1302,7 +1285,7 @@ Node 10
          |                 |        | PathProb=5.00
          |                 |        | ExpVal=-655.00
          |                 |        | (selected strategy)
-         |                 |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |                 |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |                 |        |
          |                 |        | #17
          |                 |        | OILFOUND=1500
@@ -1310,7 +1293,7 @@ Node 10
          |                 |        | PathProb=6.00
          |                 |        | ExpVal=845.00
          |                 |        | (selected strategy)
-         |                 |        +-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |                 |        +-------[T] TEST+STRUCT+DRILL+OILFOUND
          |                 |        |
          |                 |        | #18
          |                 |        | OILFOUND=3400
@@ -1318,13 +1301,13 @@ Node 10
          |                 |        | PathProb=12.00
          |                 |        | ExpVal=2745.00
          |                 |        | (selected strategy)
-         |                 |        \-------[T] T=TEST+STRUCT+DRILL+OILFOUND
+         |                 |        \-------[T] TEST+STRUCT+DRILL+OILFOUND
          |                 |
          |                 | #19
          |                 | DRILL=0
          |                 | PathProb=0.00
          |                 | ExpVal=-55.00
-         |                 \-------[T] T=TEST+STRUCT+DRILL
+         |                 \-------[T] TEST+STRUCT+DRILL
          |
          | #20
          | TEST=0
@@ -1341,27 +1324,27 @@ Node 10
                   |        | Prob=50.00
                   |        | PathProb=0.00
                   |        | ExpVal=-600.00
-                  |        +-------[T] T=TEST+DRILL+OILFOUND
+                  |        +-------[T] TEST+DRILL+OILFOUND
                   |        |
                   |        | #23
                   |        | OILFOUND=1500
                   |        | Prob=30.00
                   |        | PathProb=0.00
                   |        | ExpVal=900.00
-                  |        +-------[T] T=TEST+DRILL+OILFOUND
+                  |        +-------[T] TEST+DRILL+OILFOUND
                   |        |
                   |        | #24
                   |        | OILFOUND=3400
                   |        | Prob=20.00
                   |        | PathProb=0.00
                   |        | ExpVal=2800.00
-                  |        \-------[T] T=TEST+DRILL+OILFOUND
+                  |        \-------[T] TEST+DRILL+OILFOUND
                   |
                   | #25
                   | DRILL=0
                   | PathProb=0.00
                   | ExpVal=0.00
-                  \-------[T] T=TEST+DRILL
+                  \-------[T] TEST+DRILL
 
 
 
