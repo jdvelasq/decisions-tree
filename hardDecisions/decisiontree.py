@@ -64,6 +64,7 @@ class DecisionTree:
             square_root (logical, None): When it is True, the square root utility
                 function is used for computing the expected utility in the nodes
                 of the tree.
+            R (float): Value of the R parameter of the utility function.
 
         Returns:
             None.
@@ -90,6 +91,27 @@ class DecisionTree:
 
     def terminal_node(self, expr=None):
         """Creates a decision tree's terminal node.
+
+        Args:
+            expr (string, None): It is a valid python code used for computing
+                the value of the terminal node in the tree. The name of the
+                nodes can be used in the expression. When the value is `None`,
+                the expression is created as a sum of the names of the
+                branches in the tree.
+
+        Returns: None.
+
+        The following example creates a simple terminal node.
+
+        >>> tree = DecisionTree()
+        >>> tree.terminal_node(expr='python code')
+        >>> tree.display_nodes() # doctest: +NORMALIZE_WHITESPACE
+        Node 0
+            Type: TERMINAL
+            Expr: python code
+        <BLANKLINE>
+
+
         """
         self.data.append({'type':'TERMINAL',
                           'expr':expr,
@@ -97,6 +119,43 @@ class DecisionTree:
 
     def chance_node(self, name=None, branches=None, ignore=False):
         """Creates a decisions tree's internal chance node.
+
+        Args:
+            name (string): A valid name for variablesl in Python.
+            branches (list): A list of tuples, where each tuple contains the
+                corresponding information of each branch in the node. Each tuple
+                has the probability, the value of the branch and the index of
+                the next node.
+            ignore (bool): When it is `True`, the name of the node is not used
+                for creating the default expression for the terminal nodes in
+                the path containing this node.
+
+        Returns: None.
+
+        The following example creates a tree with a chance node in the root with
+        four branches finished in the same terminal node.
+
+        >>> tree = DecisionTree()
+        >>> tree.chance_node(name='ChanceNode',
+        ...                  branches=[(20.0, 100,  1),
+        ...                            (30.0, 200,  1),
+        ...                            (50.0, 300,  1)])
+        >>> tree.terminal_node()
+        >>> tree.display_nodes() # doctest: +NORMALIZE_WHITESPACE
+        Node 0
+            Type: CHANCE
+            Name: ChanceNode
+            Branches:
+                  Chance         Value  Next Node
+                   20.00       100.000  1
+                   30.00       200.000  1
+                   50.00       300.000  1
+        <BLANKLINE>
+        Node 1
+            Type: TERMINAL
+            Expr: (cumulative)
+        <BLANKLINE>
+
         """
         self.data.append({'tag':name,
                           'type':'CHANCE',
@@ -106,6 +165,48 @@ class DecisionTree:
 
     def decision_node(self, name=None, branches=None, max=True, ignore=False):
         """Creates a decisions tree's internal decision node.
+
+        Args:
+            name (string): A valid name for variablesl in Python.
+            branches (list): A list of tuples, where each tuple contains the
+                corresponding information of each branch in the node. Each tuple
+                has the value of the branch and the index of
+                the next node.
+            max (bool): When it is `True`, selects the branch with the
+                maximum expected value.
+            ignore (bool): When it is `True`, the name of the node is not used
+                for creating the default expression for the terminal nodes in
+                the path containing this node.
+
+        Returns: None.
+
+        The following example creates a tree with a decision node in the root with
+        four branches finished in the same terminal node.
+
+        >>> tree = DecisionTree()
+        >>> tree.decision_node(name='DecisionNode',
+        ...                    branches=[(100,  1),
+        ...                              (200,  1),
+        ...                              (300,  1),
+        ...                              (400,  1)],
+        ...                    max=True)
+        >>> tree.terminal_node()
+        >>> tree.display_nodes() # doctest: +NORMALIZE_WHITESPACE
+        Node 0
+            Type: DECISION - Maximum Payoff
+            Name: DecisionNode
+            Branches:
+                                 Value  Next Node
+                               100.000  1
+                               200.000  1
+                               300.000  1
+                               400.000  1
+        <BLANKLINE>
+        Node 1
+            Type: TERMINAL
+            Expr: (cumulative)
+        <BLANKLINE>
+
         """
         self.data.append({'tag':name,
                           'type':'DECISION',
@@ -115,7 +216,14 @@ class DecisionTree:
                           'id':len(self.data)})
 
     def display_nodes(self):
-        """Display all the data nodes in the decision tree.
+        """Display all the data nodes in the decision tree. See other functions
+        for examples.
+
+        Args:
+            None.
+
+        Returns:
+            None.
         """
         txt = []
         for index, node in enumerate(self.data):
@@ -161,6 +269,13 @@ class DecisionTree:
     ##
     def build_tree(self):
         """Builds the decision tree using the information in the variables.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+
         """
         def get_current_branch(id):
             for var_id, var_branch in self.stack:
@@ -177,8 +292,7 @@ class DecisionTree:
 
 
         def new_branch():
-            """Creates a new branch in the tree.
-            """
+            ### Creates a new branch in the tree.
             self.tree.append({'exp_val':None,
                               'sel_strategy':None,
                               'id':len(self.tree)})
@@ -266,6 +380,45 @@ class DecisionTree:
 
     def display_tree(self, maxdeep=None, selected_strategy=False):
         """Prints the tree as text.
+
+        Args:
+            maxdeep (int, None): maximum deep of tree to print.
+            selected_strategy (bool): When it is `True`, only the
+                optimal (or forced branches) in the tree are displayed.
+
+        Returns:
+            None.
+
+
+        >>> tree = DecisionTree()
+        >>> tree.decision_node(name='DecisionNode',
+        ...                    branches=[(100,  1),
+        ...                              (200,  1),
+        ...                              (300,  1),
+        ...                              (400,  1)],
+        ...                    max=True)
+        >>> tree.terminal_node()
+        >>> tree.build_tree()
+        >>> tree.display_tree()  # doctest: +NORMALIZE_WHITESPACE
+        |
+        | #0
+        \-------[D]
+                 |
+                 | #1
+                 | DecisionNode=100
+                 +-------[T] DecisionNode
+                 |
+                 | #2
+                 | DecisionNode=200
+                 +-------[T] DecisionNode
+                 |
+                 | #3
+                 | DecisionNode=300
+                 +-------[T] DecisionNode
+                 |
+                 | #4
+                 | DecisionNode=400
+                 \-------[T] DecisionNode
         """
 
         def print_branch(prefix, this_branch, is_node_last_branch):
@@ -373,7 +526,15 @@ class DecisionTree:
 
     def evaluate(self):
         """Evalute the tree. First, the cumulative probabilities in all nodes
-        are calculated. Finally, the algorithm computes the expected values."""
+        are calculated. Finally, the algorithm computes the expected values.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+
+        """
 
         def compute_expected_values():
             """computes expected values.
@@ -560,6 +721,13 @@ class DecisionTree:
 
     def compute_risk_profile(self):
         """Computes the risk profile for the selected strategy.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+            
         """
 
         def collect(this_branch):
