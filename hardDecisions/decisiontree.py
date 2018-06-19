@@ -1,5 +1,5 @@
 """
-Functions in this Module
+Functions
 ==============================================================================
 
 
@@ -22,27 +22,27 @@ class DecisionTree:
 
 
     def exponential_utility_fcn(self, x):
-        """Computes the exponential utility function."""
+        """Computes the exponential utility function defined as `1 - exp(-x/R)`."""
         return 1 - math.exp(-x / self.R)
 
     def inv_exponential_utility_fcn(self, u):
-        """Computes the inverse exponential utility function."""
+        """Computes the inverse exponential utility function defined as `-R * log(1 - U)`."""
         return -self.R * math.log(1 - u)
 
     def logarithmic_utility_fcn(self, x):
-        """Computes the logarithmic utility function."""
+        """Computes the logarithmic utility function defined as `log(x + R)`."""
         return math.log(x + self.R)
 
     def inv_logarithmic_utility_fcn(self, u):
-        """Computes the inverse logarithmic utility function."""
+        """Computes the inverse logarithmic utility function defined as `exp(U) - R`."""
         return math.exp(u) - self.R
 
     def square_root_utility_fcn(self, x):
-        """Computes the square root utility function."""
+        """Computes the square root utility function defined as `sqrt(x + R)`."""
         return math.sqrt(x + self.R)
 
     def inv_square_root_utility_fcn(self, u):
-        """Computes the inverse square root utility function."""
+        """Computes the inverse square root utility function defined as `U**2 - R`."""
         return math.pow(u, 2) - self.R
 
 
@@ -216,14 +216,7 @@ class DecisionTree:
                           'id':len(self.data)})
 
     def display_nodes(self):
-        """Display all the data nodes in the decision tree. See other functions
-        for examples.
-
-        Args:
-            None.
-
-        Returns:
-            None.
+        """Display all the data nodes in the decision tree.
         """
         txt = []
         for index, node in enumerate(self.data):
@@ -269,13 +262,6 @@ class DecisionTree:
     ##
     def build_tree(self):
         """Builds the decision tree using the information in the variables.
-
-        Args:
-            None.
-
-        Returns:
-            None.
-
         """
         def get_current_branch(id):
             for var_id, var_branch in self.stack:
@@ -379,7 +365,7 @@ class DecisionTree:
 
 
     def display_tree(self, maxdeep=None, selected_strategy=False):
-        """Prints the tree as text.
+        """Prints the tree as a text diagram.
 
         Args:
             maxdeep (int, None): maximum deep of tree to print.
@@ -389,6 +375,10 @@ class DecisionTree:
         Returns:
             None.
 
+        The following example creates a decision tree with a unique decision
+        node at the root of the tree. When the tree has not been evaluated,
+        this function shows only the number of the branch and the name and
+        value of the variable representing the type of node.
 
         >>> tree = DecisionTree()
         >>> tree.decision_node(name='DecisionNode',
@@ -418,6 +408,64 @@ class DecisionTree:
                  |
                  | #4
                  | DecisionNode=400
+                 \-------[T] DecisionNode
+
+        When the tree is evaluated, additional information is displayed for
+        each branch. `PathProb` is the path probability for the corresponding
+        branch of the tree. `ExpVal` is the expected value of the node.
+        `(selected strategy)` indicates the branches corresponding to the
+        optimal (or forced) decision strategy.
+
+        >>> tree.evaluate()
+        >>> tree.display_tree()  # doctest: +NORMALIZE_WHITESPACE
+        |
+        | #0
+        | ExpVal=400.00
+        | (selected strategy)
+        \-------[D]
+                 |
+                 | #1
+                 | DecisionNode=100
+                 | PathProb=0.00
+                 | ExpVal=100.00
+                 +-------[T] DecisionNode
+                 |
+                 | #2
+                 | DecisionNode=200
+                 | PathProb=0.00
+                 | ExpVal=200.00
+                 +-------[T] DecisionNode
+                 |
+                 | #3
+                 | DecisionNode=300
+                 | PathProb=0.00
+                 | ExpVal=300.00
+                 +-------[T] DecisionNode
+                 |
+                 | #4
+                 | DecisionNode=400
+                 | PathProb=100.00
+                 | ExpVal=400.00
+                 | (selected strategy)
+                 \-------[T] DecisionNode
+
+
+        The parameter `selected_strategy` are used to print the branches of
+        tree in the optimal decision strategy. This option allows the user
+        to analyze the sequence of optimal decisions.
+
+        >>> tree.display_tree(selected_strategy=True)  # doctest: +NORMALIZE_WHITESPACE
+        |
+        | #0
+        | ExpVal=400.00
+        | (selected strategy)
+        \-------[D]
+                 |
+                 | #4
+                 | DecisionNode=400
+                 | PathProb=100.00
+                 | ExpVal=400.00
+                 | (selected strategy)
                  \-------[T] DecisionNode
         """
 
@@ -722,12 +770,113 @@ class DecisionTree:
     def compute_risk_profile(self):
         """Computes the risk profile for the selected strategy.
 
-        Args:
-            None.
+        In the following example, a decision tree with a decision node in the
+        root followed by a chance node is created and evaluated.
 
-        Returns:
-            None.
-            
+
+        >>> tree = DecisionTree()
+        >>> tree.decision_node(name='DecisionNode',
+        ...                    branches=[(100,  1),
+        ...                              (200,  1)],
+        ...                    max=True)
+        >>> tree.chance_node(name='ChanceNode',
+        ...                  branches=[(25, 300,  2),
+        ...                            (50, 400,  2),
+        ...                            (25, 500,  2)])
+        >>> tree.terminal_node()
+        >>> tree.build_tree()
+        >>> tree.evaluate()
+
+        Next, the risk profile for the branches corresponding to the sequence of
+        optimal decisions is computed.
+
+        >>> tree.compute_risk_profile()
+        >>> tree.display_tree()  # doctest: +NORMALIZE_WHITESPACE
+        |
+        | #0
+        | ExpVal=600.00
+        | Risk Profile:
+        |      Value  Prob
+        |     500.00 25.00
+        |     600.00 50.00
+        |     700.00 25.00
+        | (selected strategy)
+        \-------[D]
+                 |
+                 | #1
+                 | DecisionNode=100
+                 | ExpVal=500.00
+                 +-------[C]
+                 |        |
+                 |        | #2
+                 |        | ChanceNode=300
+                 |        | Prob=25.00
+                 |        | PathProb=0.00
+                 |        | ExpVal=400.00
+                 |        +-------[T] DecisionNode+ChanceNode
+                 |        |
+                 |        | #3
+                 |        | ChanceNode=400
+                 |        | Prob=50.00
+                 |        | PathProb=0.00
+                 |        | ExpVal=500.00
+                 |        +-------[T] DecisionNode+ChanceNode
+                 |        |
+                 |        | #4
+                 |        | ChanceNode=500
+                 |        | Prob=25.00
+                 |        | PathProb=0.00
+                 |        | ExpVal=600.00
+                 |        \-------[T] DecisionNode+ChanceNode
+                 |
+                 | #5
+                 | DecisionNode=200
+                 | ExpVal=600.00
+                 | Risk Profile:
+                 |      Value  Prob
+                 |     500.00 25.00
+                 |     600.00 50.00
+                 |     700.00 25.00
+                 | (selected strategy)
+                 \-------[C]
+                          |
+                          | #6
+                          | ChanceNode=300
+                          | Prob=25.00
+                          | PathProb=25.00
+                          | ExpVal=500.00
+                          | (selected strategy)
+                          +-------[T] DecisionNode+ChanceNode
+                          |
+                          | #7
+                          | ChanceNode=400
+                          | Prob=50.00
+                          | PathProb=50.00
+                          | ExpVal=600.00
+                          | (selected strategy)
+                          +-------[T] DecisionNode+ChanceNode
+                          |
+                          | #8
+                          | ChanceNode=500
+                          | Prob=25.00
+                          | PathProb=25.00
+                          | ExpVal=700.00
+                          | (selected strategy)
+                          \-------[T] DecisionNode+ChanceNode
+
+
+        Risk profile values can be acceced using the `risk_profile` variable
+        of the nodes in the optimal sequence of decisions. In the following  code
+        the risk profile is obtained for the root node. Risk profile is retuned
+        as a dictionary where the keys are the expected values and the values
+        stored in the dictionary are the probabilities of the corresponding
+        expected values.
+
+        >>> tree.tree[0]['risk_profile'] # doctest: +NORMALIZE_WHITESPACE
+        {500: 25.0, 600: 50.0, 700: 25.0}
+
+
+
         """
 
         def collect(this_branch):
