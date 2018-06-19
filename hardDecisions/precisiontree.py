@@ -1131,7 +1131,7 @@ Node 10
 #0
 >>> tree.decision_node(name='TEST',
 ...                    branches=[(-55, 1),
-...                              (  0, 5)],
+...                              (  0, 2)],
 ...                    max=True)
 
 #1
@@ -1147,30 +1147,20 @@ Node 10
 ...                    max=True)
 
 #3
+>>> prob_branch_1 = (0, [(1, [78.95, 38.46, 21.74]), 50.00])
+>>> prob_branch_2 = (0, [(1, [15.79, 46.15, 26.09]), 30.00])
+>>> prob_branch_3 = (0, [(1, [05.26, 15.38, 52.17]), 20.00])
 >>> tree.chance_node(name='OILFOUND',
-...                  branches=[((1, [78.95, 38.46, 21.74]),    0,  4),
-...                          ((1, [15.79, 46.15, 26.09]), 1500,  4),
-...                          ((1, [05.26, 15.38, 52.17]), 3400,  4)])
+...                  branches=[(prob_branch_1,    0,  4),
+...                            (prob_branch_2, 1500,  4),
+...                            (prob_branch_3, 3400,  4)])
 
 #4
 >>> tree.terminal_node()
 
-#5
->>> tree.decision_node(name='DRILL',
-...                    branches=[(-600, 6),
-...                            (   0, 4)],
-...                    max=True)
-
-#6
->>> tree.chance_node(name='OILFOUND',
-...                  branches=[(50.0,    0,  4),
-...                          (30.0, 1500,  4),
-...                          (20.0, 3400,  4)])
-
-
-### >>> tree.build_tree()
-### >>> tree.evaluate()
-### >>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
+>>> tree.build_tree()
+>>> tree.evaluate()
+>>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
 |
 | #0
 | ExpVal=544.92

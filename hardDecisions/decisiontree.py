@@ -5,6 +5,8 @@ Functions in this Module
 
 """
 
+import math
+
 class DecisionTree:
     """Creates and evaluates a decision tree model. """
 
@@ -14,12 +16,84 @@ class DecisionTree:
         self.data = []
         self.tree = []
         self.globals = {}
+        self.utility_function = None
+        self.inv_utility_function = None
+        self.R = None
+
+
+    def exponential_utility_fcn(self, x):
+        """Computes the exponential utility function."""
+        return 1 - math.exp(-x / self.R)
+
+    def inv_exponential_utility_fcn(self, u):
+        """Computes the inverse exponential utility function."""
+        return -self.R * math.log(1 - u)
+
+    def logarithmic_utility_fcn(self, x):
+        """Computes the logarithmic utility function."""
+        return math.log(x + self.R)
+
+    def inv_logarithmic_utility_fcn(self, u):
+        """Computes the inverse logarithmic utility function."""
+        return math.exp(u) - self.R
+
+    def square_root_utility_fcn(self, x):
+        """Computes the square root utility function."""
+        return math.sqrt(x + self.R)
+
+    def inv_square_root_utility_fcn(self, u):
+        """Computes the inverse square root utility function."""
+        return math.pow(u, 2) - self.R
+
+
+    def use_utility_function(self,
+                             exponential=None,
+                             logarithmic=None,
+                             square_root=None,
+                             R = None):
+        """This function specify the use of utility functions for all
+        internal computations in the decision tree.
+
+        Args:
+            exponential (logical, None): When it is True, the exponential utility
+                function is used for computing the expected utility in the nodes
+                of the tree.
+            logarithmic (logical, None): When it is True, the logarithmic utility
+                function is used for computing the expected utility in the nodes
+                of the tree.
+            square_root (logical, None): When it is True, the square root utility
+                function is used for computing the expected utility in the nodes
+                of the tree.
+
+        Returns:
+            None.
+
+        """
+        self.utility_function = None
+        self.inv_utility_function = None
+        self.R = None
+        if exponential is True:
+            self.utility_function = self.exponential_utility_fcn
+            self.inv_utility_function = self.inv_exponential_utility_fcn
+            self.R = R
+            return
+        if logarithmic is True:
+            self.utility_function = self.logarithmic_utility_fcn
+            self.inv_utility_function = self.inv_logarithmic_utility_fcn
+            self.R = R
+            return
+        if square_root is True:
+            self.utility_function = self.square_root_utility_fcn
+            self.inv_utility_function = self.inv_square_root_utility_fcn
+            self.R = R
+            return
 
     def terminal_node(self, expr=None):
         """Creates a decision tree's terminal node.
         """
         self.data.append({'type':'TERMINAL',
-                          'expr':expr})
+                          'expr':expr,
+                          'id':len(self.data)})
 
     def chance_node(self, name=None, branches=None, ignore=False):
         """Creates a decisions tree's internal chance node.
@@ -27,7 +101,8 @@ class DecisionTree:
         self.data.append({'tag':name,
                           'type':'CHANCE',
                           'branches':branches,
-                          'ignore':ignore})
+                          'ignore':ignore,
+                          'id':len(self.data)})
 
     def decision_node(self, name=None, branches=None, max=True, ignore=False):
         """Creates a decisions tree's internal decision node.
@@ -36,7 +111,8 @@ class DecisionTree:
                           'type':'DECISION',
                           'branches':branches,
                           'max':max,
-                          'ignore':ignore})
+                          'ignore':ignore,
+                          'id':len(self.data)})
 
     def display_nodes(self):
         """Display all the data nodes in the decision tree.
@@ -86,6 +162,19 @@ class DecisionTree:
     def build_tree(self):
         """Builds the decision tree using the information in the variables.
         """
+        def get_current_branch(id):
+            for var_id, var_branch in self.stack:
+                if var_id == id:
+                    return var_branch
+            return None
+
+
+        def find_value(data):
+            if isinstance(data, tuple):
+                id, values = data
+                return find_value(values[get_current_branch(id)])
+            return data
+
 
         def new_branch():
             """Creates a new branch in the tree.
@@ -101,12 +190,12 @@ class DecisionTree:
 
             def set_terminal():
                 this_branch['type'] = this_node.get('type')
-                ### this_branch['terminal'] = this_node.get('tag')
                 if this_branch.get('ignore', True) is False:
                     path.append(this_branch.get('tag'))
                 this_branch['expr'] = '+'.join(path) if this_node.get('expr') is None else this_node.get('expr')
 
             def set_decision():
+                #
                 this_branch['type'] = this_node.get('type')
                 this_branch['forced_branch_idx'] = None
                 this_branch['next_branches'] = []
@@ -116,17 +205,22 @@ class DecisionTree:
                 #
                 for idx, (value, next_node) in enumerate(this_node.get('branches')):
                     #
+                    self.stack.append((this_node['id'], idx))
+                    #
                     next_branch_id, next_branch = new_branch()
                     this_branch['next_branches'].append(next_branch_id)
                     next_branch['ignore'] = this_node.get('ignore')
                     next_branch['tag'] = this_node.get('tag')
-                    next_branch['value'] = value
+                    next_branch['value'] = find_value(value)
                     #
                     set_branch_data(this_branch=next_branch,
                                     this_node=self.data[next_node],
                                     path=path.copy())
+                    #
+                    self.stack.pop()
 
             def set_chance():
+                #
                 this_branch['type'] = this_node.get('type')
                 this_branch['forced_branch_idx'] = None
                 this_branch['next_branches'] = []
@@ -135,17 +229,20 @@ class DecisionTree:
                 #
                 for idx, (prob, value, next_node) in enumerate(this_node.get('branches')):
                     #
+                    self.stack.append((this_node['id'], idx))
+                    #
                     next_branch_id, next_branch = new_branch()
                     this_branch['next_branches'].append(next_branch_id)
                     next_branch['ignore'] = this_node.get('ignore')
                     next_branch['tag'] = this_node.get('tag')
-                    next_branch['value'] = value
-                    next_branch['prob'] = prob
+                    next_branch['value'] = find_value(value)
+                    next_branch['prob'] = find_value(prob)
                     #
                     set_branch_data(this_branch=next_branch,
                                     this_node=self.data[next_node],
                                     path=path.copy())
-
+                    #
+                    self.stack.pop()
             ####
             if this_node.get('type') == 'DECISION':
                 set_decision()
@@ -156,12 +253,14 @@ class DecisionTree:
             else:
                 pass
         ###
+        self.stack = []
         self.tree = []
         path = []
         _ , this_branch = new_branch()
         set_branch_data(this_branch=this_branch,
                         this_node=self.data[0],
                         path=path.copy())
+        del self.stack
 
 
 
@@ -199,6 +298,15 @@ class DecisionTree:
             if 'exp_val' in this_branch.keys() and this_branch['exp_val'] is not None:
                 txt = "| ExpVal={:1.2f}".format(this_branch['exp_val'])
                 print(prefix + txt)
+
+            if 'exp_utl' in this_branch.keys() and this_branch['exp_utl'] is not None:
+                txt = "| ExpUtl={:1.2f}".format(this_branch['exp_utl'])
+                print(prefix + txt)
+
+            if 'CE' in this_branch.keys() and this_branch['CE'] is not None:
+                txt = "| CE={:1.2f}".format(this_branch['CE'])
+                print(prefix + txt)
+
 
             if 'risk_profile' in this_branch.keys() and type != 'TERMINAL':
                 print(prefix + "| Risk Profile:")
@@ -273,53 +381,119 @@ class DecisionTree:
             def compute_branch_expvalue(this_branch):
 
                 if this_branch.get('type') == 'DECISION':
+                    #
                     if 'tag' in this_branch.keys():
                         self.globals[this_branch['tag']] = this_branch['value']
                     ismax = this_branch['max']
                     expval = None
+                    exputl = None
+                    CE = None
+                    #
+                    if self.utility_function is None:
 
-                    for branch_idx, branch_id in enumerate(this_branch['next_branches']):
-                        compute_branch_expvalue(this_branch=self.tree[branch_id])
-                        if this_branch['forced_branch_idx'] is None:
-                            if expval is None:
-                                expval = self.tree[branch_id].get('exp_val')
-                                this_branch['opt_branch_idx'] = branch_idx
-                            if ismax is True and expval < self.tree[branch_id].get('exp_val'):
-                                expval = self.tree[branch_id].get('exp_val')
-                                this_branch['opt_branch_idx'] = branch_idx
-                            if ismax is False and expval > self.tree[branch_id].get('exp_val'):
-                                expval = self.tree[branch_id].get('exp_val')
-                                this_branch['opt_branch_idx'] = branch_idx
-                        else:
-                            if branch_idx == this_branch['forced_branch_idx']:
-                                expval = self.tree[branch_id].get('exp_val')
-                                this_branch['opt_branch_idx'] = branch_idx
+                        for branch_idx, branch_id in enumerate(this_branch['next_branches']):
+                            compute_branch_expvalue(this_branch=self.tree[branch_id])
+                            if this_branch['forced_branch_idx'] is None:
+                                    if expval is None:
+                                        expval = self.tree[branch_id].get('exp_val')
+                                        this_branch['opt_branch_idx'] = branch_idx
+                                    if ismax is True and expval < self.tree[branch_id].get('exp_val'):
+                                        expval = self.tree[branch_id].get('exp_val')
+                                        this_branch['opt_branch_idx'] = branch_idx
+                                    if ismax is False and expval > self.tree[branch_id].get('exp_val'):
+                                        expval = self.tree[branch_id].get('exp_val')
+                                        this_branch['opt_branch_idx'] = branch_idx
+                            else:
+                                if branch_idx == this_branch['forced_branch_idx']:
+                                    expval = self.tree[branch_id].get('exp_val')
+                                    this_branch['opt_branch_idx'] = branch_idx
 
-                    this_branch['exp_val'] = expval
+                        this_branch['exp_val'] = expval
+
+                    else:
+
+                        for branch_idx, branch_id in enumerate(this_branch['next_branches']):
+                            compute_branch_expvalue(this_branch=self.tree[branch_id])
+                            if this_branch['forced_branch_idx'] is None:
+                                if expval is None:
+                                    expval = self.tree[branch_id].get('exp_val')
+                                    exputl = self.tree[branch_id].get('exp_utl')
+                                    CE = self.tree[branch_id].get('CE')
+                                    this_branch['opt_branch_idx'] = branch_idx
+                                if exputl < self.tree[branch_id].get('exp_utl'):
+                                    expval = self.tree[branch_id].get('exp_val')
+                                    exputl = self.tree[branch_id].get('exp_utl')
+                                    CE = self.tree[branch_id].get('CE')
+                                    this_branch['opt_branch_idx'] = branch_idx
+                            else:
+                                if branch_idx == this_branch['forced_branch_idx']:
+                                    expval = self.tree[branch_id].get('exp_val')
+                                    exputl = self.tree[branch_id].get('exp_utl')
+                                    CE = self.tree[branch_id].get('CE')
+                                    this_branch['opt_branch_idx'] = branch_idx
+
+
+                        this_branch['exp_val'] = expval
+                        this_branch['exp_utl'] = exputl
+                        this_branch['CE'] = CE
 
 
                 if this_branch.get('type') == 'CHANCE':
+
                     self.globals[this_branch['tag']] = this_branch['value']
                     expval = 0
-                    if this_branch['forced_branch_idx'] is None:
-                        for branch_id in this_branch['next_branches']:
-                            compute_branch_expvalue(this_branch=self.tree[branch_id])
-                            expval += self.tree[branch_id].get('exp_val') * self.tree[branch_id].get('prob') / 100
+                    exputl = 0
+                    CE = None
+                    #
+                    if self.utility_function is None:
+
+                        if this_branch['forced_branch_idx'] is None:
+                            for branch_id in this_branch['next_branches']:
+                                compute_branch_expvalue(this_branch=self.tree[branch_id])
+                                expval += self.tree[branch_id].get('exp_val') * self.tree[branch_id].get('prob') / 100
+                        else:
+                            for branch_idx, branch_id in enumerate(this_branch['next_branches']):
+                                if branch_idx == this_branch['forced_branch_idx']:
+                                    compute_branch_expvalue(this_branch=self.tree[branch_id])
+                                    expval += self.tree[branch_id].get('exp_val')
+                                else:
+                                    compute_branch_expvalue(this_branch=self.tree[branch_id])
+                                    expval += 0
+                        this_branch['exp_val'] = expval
+
                     else:
-                        for branch_idx, branch_id in enumerate(this_branch['next_branches']):
-                            if branch_idx == this_branch['forced_branch_idx']:
+
+                        if this_branch['forced_branch_idx'] is None:
+                            for branch_id in this_branch['next_branches']:
                                 compute_branch_expvalue(this_branch=self.tree[branch_id])
-                                expval += self.tree[branch_id].get('exp_val')
-                            else:
-                                compute_branch_expvalue(this_branch=self.tree[branch_id])
-                                expval += 0
-                    this_branch['exp_val'] = expval
+                                expval += self.tree[branch_id].get('exp_val') * self.tree[branch_id].get('prob') / 100
+                                exputl += self.tree[branch_id].get('exp_utl') * self.tree[branch_id].get('prob') / 100
+
+                        else:
+                            for branch_idx, branch_id in enumerate(this_branch['next_branches']):
+                                if branch_idx == this_branch['forced_branch_idx']:
+                                    compute_branch_expvalue(this_branch=self.tree[branch_id])
+                                    expval += self.tree[branch_id].get('exp_val')
+                                    exputl += self.tree[branch_id].get('exp_utl')
+                                else:
+                                    compute_branch_expvalue(this_branch=self.tree[branch_id])
+                                    expval += 0
+                                    exputl += 0
+
+                        this_branch['exp_val'] = expval
+                        this_branch['exp_utl'] = exputl
+                        this_branch['CE'] = self.inv_utility_function(exputl)
 
                 if this_branch.get('type') == 'TERMINAL':
                     var = this_branch['tag']
                     value = this_branch['value']
                     self.globals[var] = value
                     this_branch['exp_val'] = eval(this_branch['expr'], self.globals.copy())
+
+                    if self.utility_function is not None:
+                        this_branch['exp_utl'] = self.utility_function(this_branch['exp_val'])
+                        this_branch['CE'] = this_branch['exp_val']
+
 
             compute_branch_expvalue(this_branch=self.tree[0])
 
