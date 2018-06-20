@@ -763,7 +763,7 @@ Node 9
 ...    tree17.data[1]['branches'] = [(p,  600,  3), (100-p,  100,  3)]
 ...    tree17.build_tree()
 ...    tree17.evaluate()
-...    sensitivity.append(tree17.tree[0]['exp_val'])
+...    sensitivity.append(tree17.tree[0]['ExpVal'])
 >>> sensitivity
 [0, 0, 0, 0, 0.0, 50.0, 100.0, 150.0, 200.0, 250.0, 300.0]
 
@@ -795,6 +795,370 @@ Node 9
 
 
 
+>>> tree = DecisionTree()
+>>> tree.decision_node(name='DecisionNode',
+...                    branches=[(100,  1),
+...                              (200,  1)],
+...                    max=True)
+>>> tree.chance_node(name='ChanceNode',
+...                  branches=[(20.0, 300,  2),
+...                            (30.0, 400,  2),
+...                            (50.0, 500,  2)])
+>>> tree.terminal_node()
+>>> tree.build_tree()
+>>> tree.display_tree()  # doctest: +NORMALIZE_WHITESPACE
+|
+| #0
+\-------[D]
+         |
+         | #1
+         | DecisionNode=100
+         +-------[C]
+         |        |
+         |        | #2
+         |        | ChanceNode=300
+         |        | Prob=20.00
+         |        +-------[T] DecisionNode+ChanceNode
+         |        |
+         |        | #3
+         |        | ChanceNode=400
+         |        | Prob=30.00
+         |        +-------[T] DecisionNode+ChanceNode
+         |        |
+         |        | #4
+         |        | ChanceNode=500
+         |        | Prob=50.00
+         |        \-------[T] DecisionNode+ChanceNode
+         |
+         | #5
+         | DecisionNode=200
+         \-------[C]
+                  |
+                  | #6
+                  | ChanceNode=300
+                  | Prob=20.00
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #7
+                  | ChanceNode=400
+                  | Prob=30.00
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #8
+                  | ChanceNode=500
+                  | Prob=50.00
+                  \-------[T] DecisionNode+ChanceNode
+
+>>> tree.evaluate()
+>>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
+|
+| #0
+| ExpVal=630.00
+| (selected strategy)
+\-------[D]
+         |
+         | #1
+         | DecisionNode=100
+         | ExpVal=530.00
+         +-------[C]
+         |        |
+         |        | #2
+         |        | ChanceNode=300
+         |        | Prob=20.00
+         |        | PathProb=0.00
+         |        | ExpVal=400.00
+         |        +-------[T] DecisionNode+ChanceNode
+         |        |
+         |        | #3
+         |        | ChanceNode=400
+         |        | Prob=30.00
+         |        | PathProb=0.00
+         |        | ExpVal=500.00
+         |        +-------[T] DecisionNode+ChanceNode
+         |        |
+         |        | #4
+         |        | ChanceNode=500
+         |        | Prob=50.00
+         |        | PathProb=0.00
+         |        | ExpVal=600.00
+         |        \-------[T] DecisionNode+ChanceNode
+         |
+         | #5
+         | DecisionNode=200
+         | ExpVal=630.00
+         | (selected strategy)
+         \-------[C]
+                  |
+                  | #6
+                  | ChanceNode=300
+                  | Prob=20.00
+                  | PathProb=20.00
+                  | ExpVal=500.00
+                  | (selected strategy)
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #7
+                  | ChanceNode=400
+                  | Prob=30.00
+                  | PathProb=30.00
+                  | ExpVal=600.00
+                  | (selected strategy)
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #8
+                  | ChanceNode=500
+                  | Prob=50.00
+                  | PathProb=50.00
+                  | ExpVal=700.00
+                  | (selected strategy)
+                  \-------[T] DecisionNode+ChanceNode
+
+
+>>> tree.display_tree(maxdeep=1) # doctest: +NORMALIZE_WHITESPACE
+|
+| #0
+| ExpVal=630.00
+| (selected strategy)
+\-------[D]
+         |
+         | #1
+         | DecisionNode=100
+         | ExpVal=530.00
+         +-------[C]
+         |
+         | #5
+         | DecisionNode=200
+         | ExpVal=630.00
+         | (selected strategy)
+         \-------[C]
+
+>>> tree.display_tree(selected_strategy=True) # doctest: +NORMALIZE_WHITESPACE
+|
+| #0
+| ExpVal=630.00
+| (selected strategy)
+\-------[D]
+         |
+         | #5
+         | DecisionNode=200
+         | ExpVal=630.00
+         | (selected strategy)
+         \-------[C]
+                  |
+                  | #6
+                  | ChanceNode=300
+                  | Prob=20.00
+                  | PathProb=20.00
+                  | ExpVal=500.00
+                  | (selected strategy)
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #7
+                  | ChanceNode=400
+                  | Prob=30.00
+                  | PathProb=30.00
+                  | ExpVal=600.00
+                  | (selected strategy)
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #8
+                  | ChanceNode=500
+                  | Prob=50.00
+                  | PathProb=50.00
+                  | ExpVal=700.00
+                  | (selected strategy)
+                  \-------[T] DecisionNode+ChanceNode
+
+
+>>> tree.tree[8]['ExpVal'] # doctest: +NORMALIZE_WHITESPACE
+700
+>>> tree.tree[8]['PathProb'] # doctest: +NORMALIZE_WHITESPACE
+50.0
+
+>>> tree.force_branch(branch_idx=0, branch_id=0)
+>>> tree.evaluate()
+>>> tree.display_tree(selected_strategy=True) # doctest: +NORMALIZE_WHITESPACE
+|
+| #0
+| ExpVal=530.00
+| (selected strategy)
+| (forced branch = 0)
+\-------[D]
+         |
+         | #1
+         | DecisionNode=100
+         | ExpVal=530.00
+         | (selected strategy)
+         \-------[C]
+                  |
+                  | #2
+                  | ChanceNode=300
+                  | Prob=20.00
+                  | PathProb=20.00
+                  | ExpVal=400.00
+                  | (selected strategy)
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #3
+                  | ChanceNode=400
+                  | Prob=30.00
+                  | PathProb=30.00
+                  | ExpVal=500.00
+                  | (selected strategy)
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #4
+                  | ChanceNode=500
+                  | Prob=50.00
+                  | PathProb=50.00
+                  | ExpVal=600.00
+                  | (selected strategy)
+                  \-------[T] DecisionNode+ChanceNode
+
+>>> tree.force_branch(branch_id=0)
+>>> tree.evaluate()
+
+
+
+>>> tree.compute_risk_profile()
+>>> tree.display_tree() # doctest: +NORMALIZE_WHITESPACE
+|
+| #0
+| ExpVal=630.00
+| Risk Profile:
+|      Value  Prob
+|     500.00 20.00
+|     600.00 30.00
+|     700.00 50.00
+| (selected strategy)
+\-------[D]
+         |
+         | #1
+         | DecisionNode=100
+         | ExpVal=530.00
+         +-------[C]
+         |        |
+         |        | #2
+         |        | ChanceNode=300
+         |        | Prob=20.00
+         |        | PathProb=0.00
+         |        | ExpVal=400.00
+         |        +-------[T] DecisionNode+ChanceNode
+         |        |
+         |        | #3
+         |        | ChanceNode=400
+         |        | Prob=30.00
+         |        | PathProb=0.00
+         |        | ExpVal=500.00
+         |        +-------[T] DecisionNode+ChanceNode
+         |        |
+         |        | #4
+         |        | ChanceNode=500
+         |        | Prob=50.00
+         |        | PathProb=0.00
+         |        | ExpVal=600.00
+         |        \-------[T] DecisionNode+ChanceNode
+         |
+         | #5
+         | DecisionNode=200
+         | ExpVal=630.00
+         | Risk Profile:
+         |      Value  Prob
+         |     500.00 20.00
+         |     600.00 30.00
+         |     700.00 50.00
+         | (selected strategy)
+         \-------[C]
+                  |
+                  | #6
+                  | ChanceNode=300
+                  | Prob=20.00
+                  | PathProb=20.00
+                  | ExpVal=500.00
+                  | (selected strategy)
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #7
+                  | ChanceNode=400
+                  | Prob=30.00
+                  | PathProb=30.00
+                  | ExpVal=600.00
+                  | (selected strategy)
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #8
+                  | ChanceNode=500
+                  | Prob=50.00
+                  | PathProb=50.00
+                  | ExpVal=700.00
+                  | (selected strategy)
+                  \-------[T] DecisionNode+ChanceNode
+
+
+>>> tree.tree[5]['RiskProfile'] # doctest: +NORMALIZE_WHITESPACE
+{500: 20.0, 600: 30.0, 700: 50.0}
+
+
+>>> tree.use_utility_function(exponential=True, R=100)
+>>> tree.evaluate()
+>>> tree.display_tree(selected_strategy=True) # doctest: +NORMALIZE_WHITESPACE
+|
+| #0
+| ExpVal=630.00
+| ExpUtl=1.00
+| CE=597.28
+| (selected strategy)
+\-------[D]
+         |
+         | #5
+         | DecisionNode=200
+         | ExpVal=630.00
+         | ExpUtl=1.00
+         | CE=597.28
+         | (selected strategy)
+         \-------[C]
+                  |
+                  | #6
+                  | ChanceNode=300
+                  | Prob=20.00
+                  | PathProb=20.00
+                  | ExpVal=500.00
+                  | ExpUtl=0.99
+                  | CE=500.00
+                  | (selected strategy)
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #7
+                  | ChanceNode=400
+                  | Prob=30.00
+                  | PathProb=30.00
+                  | ExpVal=600.00
+                  | ExpUtl=1.00
+                  | CE=600.00
+                  | (selected strategy)
+                  +-------[T] DecisionNode+ChanceNode
+                  |
+                  | #8
+                  | ChanceNode=500
+                  | Prob=50.00
+                  | PathProb=50.00
+                  | ExpVal=700.00
+                  | ExpUtl=1.00
+                  | CE=700.00
+                  | (selected strategy)
+                  \-------[T] DecisionNode+ChanceNode
+
+
+>>> tree.use_utility_function()
+>>> tree.evaluate()
+
+>>> CE = []
+>>> for R in range(100, 501, 100):
+...    tree.use_utility_function(exponential=True, R=R)
+...    tree.evaluate()
+...    CE.append(tree.tree[0]['CE'])
+>>> CE   # doctest: +ELLIPSIS
+[597.27..., 613.86..., 619.39..., 622.11..., 623.73...]
 
 
 """

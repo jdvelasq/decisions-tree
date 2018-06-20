@@ -930,8 +930,8 @@ Probabilistic senstitivity
 ...    tree.data[2]['branches'] = [(p,  200,  3), (0.0,  400,  3),  (100-p,  600,  3)]
 ...    tree.build_tree()
 ...    tree.evaluate()
-...    b500.append(tree.tree[1]['exp_val'])
-...    b700.append(tree.tree[14]['exp_val'])
+...    b500.append(tree.tree[1]['ExpVal'])
+...    b700.append(tree.tree[14]['ExpVal'])
 
 >>> tree.data[2]['branches'] = [(25,  200,  3), (50,  400,  3),  (25,  600,  3)]
 >>> tree.build_tree()
