@@ -572,7 +572,7 @@ class DecisionTree:
 
 
 
-    def evaluate(self):
+    def evaluate(self, locals=locals()):
         """Evalute the tree. First, the cumulative probabilities in all nodes
         are calculated. Finally, the algorithm computes the expected values.
 
@@ -693,15 +693,36 @@ class DecisionTree:
                         this_branch['ExpUtl'] = exputl
                         this_branch['CE'] = self.inv_utility_function(exputl)
 
+                # if this_branch.get('type') == 'TERMINAL':
+                #     var = this_branch['tag']
+                #     value = this_branch['value']
+                #     self.globals[var] = value
+                #     glb = self.globals.copy()
+                #     glb.update(locals().copy())
+                #     # this_branch['ExpVal'] = eval(this_branch['expr'], self.globals.copy())
+                #     this_branch['ExpVal'] = eval(this_branch['expr'], glb.copy())
+                #
+                #     if self.utility_function is not None:
+                #         this_branch['ExpUtl'] = self.utility_function(this_branch['ExpVal'])
+                #         this_branch['CE'] = this_branch['ExpVal']
+
                 if this_branch.get('type') == 'TERMINAL':
                     var = this_branch['tag']
                     value = this_branch['value']
                     self.globals[var] = value
-                    this_branch['ExpVal'] = eval(this_branch['expr'], self.globals.copy())
+                    #
+                    #globals = globals()
+                    #self.globals.copy()
+                    #for var in self.globals:
+                    #    eval(var + ' = ' + str(self.globals[var]))
+                    #
+                    this_branch['ExpVal'] = eval(this_branch['expr'], self.globals.copy(), locals.copy())
+
 
                     if self.utility_function is not None:
                         this_branch['ExpUtl'] = self.utility_function(this_branch['ExpVal'])
                         this_branch['CE'] = this_branch['ExpVal']
+
 
 
             compute_branch_expvalue(this_branch=self.tree[0])

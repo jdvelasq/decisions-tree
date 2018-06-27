@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='hardDecisions',
-      version='0.0.0',
+      version='0.0.2',
       description='Decision making tree modeling using Python',
       long_description='Decision making tree modeling using Python',
       classifiers=[
