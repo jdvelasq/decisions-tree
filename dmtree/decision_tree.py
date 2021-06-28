@@ -2,10 +2,11 @@
 Decision Tree Model
 ==============================================================================
 
-
 """
+# import math
 from typing import Any, List
-import math
+
+# import numpy as np
 
 
 class DecisionTree:
@@ -14,58 +15,115 @@ class DecisionTree:
     def __init__(self):
         """Decision tree constructor."""
 
-        #
-        # data is a dict with the properties of the node.
-        #
-        # Terminal:
-        #     - type: TERMINAL
-        #     - expr: math expr (TODO: replace)
-        #     - id:  node id (by position)
-        #
-        self.data = []
+        self.data: List = []
 
-        #
-        self.tree = []
-        self.globals = {}
-        self.utility_function = None
-        self.inv_utility_function = None
-        self.R: float = 0
+        # self.tree: List = []
+        # self.globals = {}
+        # self.utility_function = None
+        # self.inv_utility_function = None
+        # self.R: float = 0
+
+    def display_nodes(self) -> None:
+        """Display all the data nodes in the decision tree."""
+
+        def display_decision_node(node):
+            txt = []
+            txt.append("    Type: " + node.get("type"))
+            txt[-1] += (
+                " - Maximum Payoff" if node.get("max") is True else " - Minimum Payoff"
+            )
+            txt.append("    Name: " + node.get("tag"))
+            txt.append("    Branches:")
+            txt.append("                         Value  Next Node")
+            for (outcome, next_node) in node.get("branches"):
+                txt.append(
+                    "                  {:12.3f}  {:d}".format(outcome, next_node)
+                )
+            txt.append("")
+            return txt
+
+        def display_chance_node(node):
+            txt = []
+            txt.append("    Type: " + node.get("type"))
+            txt.append("    Name: " + node.get("tag"))
+            txt.append("    Branches:")
+            txt.append("          Chance         Value  Next Node")
+            for (prob, outcome, next_node) in node.get("branches"):
+                txt.append(
+                    "           {:5.2f}  {:12.3f}  {:d}".format(
+                        prob, outcome, next_node
+                    )
+                )
+            txt.append("")
+            return txt
+
+        def display_terminal_node(node):
+            txt = []
+            txt.append("    Type: " + node.get("type"))
+            if node.get("expr") is None:
+                txt.append("    Expr: (cumulative)")
+            else:
+                txt.append("    Expr: (User fn)")
+            txt.append("")
+            return txt
+
+        txt = []
+        for index, node in enumerate(self.data):
+
+            txt.append("Node {:d}".format(index))
+
+            if node.get("type") == "DECISION":
+                txt += display_decision_node(node)
+
+            elif node.get("type") == "CHANCE":
+                txt += display_chance_node(node)
+
+            elif node.get("type") == "TERMINAL":
+                txt += display_terminal_node(node)
+
+            else:
+
+                raise ValueError(
+                    "Node type unknown: " + node.tag + ", " + node.get("type")
+                )
+
+        print("\n".join(txt))
+
+    def terminal_node(
+        self,
+        expr: Any = None,
+    ) -> None:
+        """Creates a decision tree's terminal node.
+
+        Args:
+        :param expr:
+            It is a valid python code used for computing the value of the
+            terminal node in the tree. The name of the nodes can be used in the
+            expression. When the value is `None`, the expression is created as
+            a sum of the names of the branches in the tree.
+
+        The following example creates a simple terminal node.
+
+        >>> tree = DecisionTree()
+        >>> tree.terminal_node(expr='python code')
+        >>> tree.display_nodes() # doctest: +NORMALIZE_WHITESPACE
+        Node 0
+            Type: TERMINAL
+            Expr: python code
+        <BLANKLINE>
 
 
-#     def terminal_node(
-#         self,
-#         expr: Any = None,
-#     ) -> None:
-#         """Creates a decision tree's terminal node.
+        """
+        self.data.append(
+            {
+                "type": "TERMINAL",
+                "expr": expr,
+                "id": len(
+                    self.data,
+                ),
+            }
+        )
 
-#         Args:
-#         :param expr:
-#             It is a valid python code used for computing the value of the
-#             terminal node in the tree. The name of the nodes can be used in the
-#             expression. When the value is `None`, the expression is created as
-#             a sum of the names of the branches in the tree.
-
-#         The following example creates a simple terminal node.
-
-#         >>> tree = DecisionTree()
-#         >>> tree.terminal_node(expr='python code')
-#         >>> tree.display_nodes() # doctest: +NORMALIZE_WHITESPACE
-#         Node 0
-#             Type: TERMINAL
-#             Expr: python code
-#         <BLANKLINE>
-
-
-#         """
-#         self.data.append(
-#             {
-#                 "type": "TERMINAL",
-#                 "expr": expr,
-#                 "id": len(
-#                     self.data,
-#                 ),
-#             }
-#         )
 
 #     def chance_node(
 #         self,
@@ -200,59 +258,6 @@ class DecisionTree:
 #             }
 #         )
 
-#     def display_nodes(self) -> None:
-#         """Display all the data nodes in the decision tree."""
-
-#         txt = []
-#         for index, node in enumerate(self.data):
-
-#             txt.append("Node {:d}".format(index))
-
-#             if node.get("type") == "DECISION":
-#                 #
-#                 txt.append("    Type: " + node.get("type"))
-#                 txt[-1] += (
-#                     " - Maximum Payoff"
-#                     if node.get("max") is True
-#                     else " - Minimum Payoff"
-#                 )
-#                 txt.append("    Name: " + node.get("tag"))
-#                 txt.append("    Branches:")
-#                 txt.append("                         Value  Next Node")
-#                 for (outcome, next_node) in node.get("branches"):
-#                     txt.append(
-#                         "                  {:12.3f}  {:d}".format(outcome, next_node)
-#                     )
-#                 txt.append("")
-#                 #
-#             elif node.get("type") == "CHANCE":
-#                 #
-#                 txt.append("    Type: " + node.get("type"))
-#                 txt.append("    Name: " + node.get("tag"))
-#                 txt.append("    Branches:")
-#                 txt.append("          Chance         Value  Next Node")
-#                 for (prob, outcome, next_node) in node.get("branches"):
-#                     txt.append(
-#                         "           {:5.2f}  {:12.3f}  {:d}".format(
-#                             prob, outcome, next_node
-#                         )
-#                     )
-#                 txt.append("")
-#                 #
-#             elif node.get("type") == "TERMINAL":
-#                 #
-#                 txt.append("    Type: " + node.get("type"))
-#                 if node.get("expr") is None:
-#                     txt.append("    Expr: (cumulative)")
-#                 else:
-#                     txt.append("    Expr: " + node.get("expr"))
-#                 txt.append("")
-#                 #
-#             else:
-#                 raise ValueError(
-#                     "Node type unknown: " + node.tag + ", " + node.get("type")
-#                 )
-#         print("\n".join(txt))
 
 #     def build_tree(self) -> None:
 #         """Builds the decision tree using the information in the variables."""
@@ -1084,13 +1089,8 @@ class DecisionTree:
 #             self.R = R
 #             return
 
-#     ##
-#     ##
-#     ##
-
 #     def force_branch(self, branch_id, branch_idx=None):
 #         self.tree[branch_id]["forced_branch_idx"] = branch_idx
-
 
 # if __name__ == "__main__":
 #     import doctest

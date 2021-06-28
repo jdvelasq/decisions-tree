@@ -1,6 +1,10 @@
 {
+    "editor.formatOnSave": true,
+    "python.linting.pylintArgs": [
+        "--init-hook",
+        "import sys; sys.path.append('${workspaceFolder}')"
+    ],
     "python.testing.pytestArgs": [
-        "--doctest-modules",
         "tests",
         "."
     ],
